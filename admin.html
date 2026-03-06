@@ -1,0 +1,902 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін-панель | Захід Дрон</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        :root {
+            --primary: #0f172a;
+            --accent: #f97316;
+            --light: #f8fafc;
+            --text: #1e293b;
+            --white: #ffffff;
+            --shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+        }
+
+        body {
+            background: var(--light);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 2.2rem;
+        }
+
+        .logo span:first-child {
+            color: var(--white);
+        }
+
+        .logo span:last-child {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        /* Main content */
+        .admin-container {
+            padding: 3rem 5%;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem 1rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .sidebar h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu a {
+            display: block;
+            padding: 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 15px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: var(--gradient);
+            color: var(--white);
+        }
+
+        .sidebar-menu i {
+            margin-right: 0.8rem;
+            width: 20px;
+        }
+
+        /* Content */
+        .admin-content {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-section {
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-section h2 {
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        /* Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card h3 {
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card p {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Forms */
+        .admin-form {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .admin-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            background: var(--gradient);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-right: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px -5px rgba(249,115,22,0.4);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .variant-row {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .variant-row input {
+            flex: 1;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            text-align: left;
+            padding: 1rem;
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btns button {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .edit-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 1rem 0;
+            border-radius: 10px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <i class="fas fa-drone"></i>
+            <span>ЗАХІД</span>
+            <span>ДРОН</span>
+        </a>
+        <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Вийти</button>
+    </header>
+
+    <div class="admin-container">
+        <div class="sidebar">
+            <h3>Адмін-панель</h3>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="showSection('dashboard')"><i class="fas fa-chart-line"></i> Дашборд</a></li>
+                <li><a href="#" onclick="showSection('categories')"><i class="fas fa-tags"></i> Категорії</a></li>
+                <li><a href="#" onclick="showSection('products')"><i class="fas fa-box"></i> Товари</a></li>
+                <li><a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i> Про нас</a></li>
+                <li><a href="#" onclick="showSection('contacts')"><i class="fas fa-address-book"></i> Контакти</a></li>
+                <li><a href="#" onclick="showSection('orders')"><i class="fas fa-shopping-cart"></i> Замовлення</a></li>
+            </ul>
+        </div>
+
+        <div class="admin-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="admin-section active">
+                <h2>Дашборд</h2>
+                <div class="stats-grid" id="stats">
+                    <!-- Статистика завантажується динамічно -->
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div id="categories" class="admin-section">
+                <h2>Управління категоріями</h2>
+                
+                <div class="admin-form">
+                    <h3>Додати категорію</h3>
+                    <div class="form-group">
+                        <input type="text" id="newCategory" placeholder="Назва категорії">
+                    </div>
+                    <button class="btn" onclick="addCategory()">Додати категорію</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Назва</th>
+                            <th>К-сть товарів</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesList">
+                        <!-- Список категорій -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Products Section -->
+            <div id="products" class="admin-section">
+                <h2>Управління товарами</h2>
+                
+                <div class="admin-form">
+                    <h3>Додати товар</h3>
+                    <div class="form-group">
+                        <label>Категорія</label>
+                        <select id="productCategory"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Назва товару</label>
+                        <input type="text" id="productName" placeholder="Назва">
+                    </div>
+                    <div class="form-group">
+                        <label>Ціна (грн)</label>
+                        <input type="number" id="productPrice" placeholder="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Опис</label>
+                        <textarea id="productDescription" rows="4" placeholder="Опис товару"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Варіанти</label>
+                        <div id="variantsContainer">
+                            <div class="variant-row">
+                                <input type="text" placeholder="Варіант (напр. Small)">
+                                <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button class="btn" onclick="addVariantField()" style="margin-top: 0.5rem;">+ Додати варіант</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Зображення</label>
+                        <input type="file" id="productImage" accept="image/*">
+                        <img id="imagePreview" class="image-preview">
+                    </div>
+                    <button class="btn" onclick="addProduct()">Додати товар</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Фото</th>
+                            <th>Назва</th>
+                            <th>Категорія</th>
+                            <th>Ціна</th>
+                            <th>Варіанти</th>
+                            <th>Дії</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsList">
+                        <!-- Список товарів -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- About Section -->
+            <div id="about" class="admin-section">
+                <h2>Редагування сторінки "Про нас"</h2>
+                <div class="admin-form">
+                    <div class="form-group">
+                        <textarea id="aboutText" rows="10" style="width: 100%;"></textarea>
+                    </div>
+                    <button class="btn" onclick="saveAbout()">Зберегти зміни</button>
+                </div>
+            </div>
+
+            <!-- Contacts Section -->
+            <div id="contacts" class="admin-section">
+                <h2>Редагування контактів</h2>
+                <div class="admin-form">
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="text" id="contactPhone" placeholder="Телефон">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="contactEmail" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label>Графік роботи</label>
+                        <input type="text" id="contactSchedule" placeholder="Графік">
+                    </div>
+                    <button class="btn" onclick="saveContact()">Зберегти зміни</button>
+                </div>
+            </div>
+
+            <!-- Orders Section -->
+            <div id="orders" class="admin-section">
+                <h2>Замовлення</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Товар</th>
+                            <th>Ім'я</th>
+                            <th>Телефон</th>
+                            <th>Варіант</th>
+                            <th>Дата</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersList">
+                        <!-- Список замовлень -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let categories = [];
+        let products = [];
+        let orders = [];
+
+        // Перевірка авторизації
+        async function checkAuth() {
+            try {
+                const response = await fetch('/api/user');
+                if (!response.ok) {
+                    window.location.href = '/';
+                    return false;
+                }
+                const user = await response.json();
+                if (!user.isAdmin) {
+                    window.location.href = '/';
+                    return false;
+                }
+                return true;
+            } catch {
+                window.location.href = '/';
+                return false;
+            }
+        }
+
+        // Завантаження даних
+        async function loadData() {
+            if (!await checkAuth()) return;
+
+            try {
+                const [categoriesRes, productsRes, aboutRes, contactRes, ordersRes] = await Promise.all([
+                    fetch('/api/categories'),
+                    fetch('/api/products'),
+                    fetch('/api/about'),
+                    fetch('/api/contact'),
+                    fetch('/api/orders')
+                ]);
+                
+                categories = await categoriesRes.json();
+                products = await productsRes.json();
+                orders = await ordersRes.json();
+                
+                const aboutText = await aboutRes.text();
+                const contactText = await contactRes.text();
+                
+                // Оновлюємо UI
+                updateDashboard();
+                updateCategoriesList();
+                updateProductsList();
+                updateOrdersList();
+                updateCategorySelect();
+                
+                document.getElementById('aboutText').value = aboutText;
+                
+                // Парсимо контакти
+                const contactLines = contactText.split('\n');
+                document.getElementById('contactPhone').value = contactLines.find(l => l.includes('Телефон') || l.includes('+380'))?.replace('Телефон:', '').trim() || '';
+                document.getElementById('contactEmail').value = contactLines.find(l => l.includes('Email') || l.includes('@'))?.replace('Email:', '').trim() || '';
+                document.getElementById('contactSchedule').value = contactLines.find(l => l.includes('Графік'))?.replace('Графік:', '').trim() || '';
+            } catch (error) {
+                console.error('Помилка завантаження даних:', error);
+            }
+        }
+
+        // Оновлення дашборду
+        function updateDashboard() {
+            const stats = document.getElementById('stats');
+            stats.innerHTML = `
+                <div class="stat-card">
+                    <i class="fas fa-box"></i>
+                    <h3>Товарів</h3>
+                    <p>${products.length}</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-tags"></i>
+                    <h3>Категорій</h3>
+                    <p>${categories.length}</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Замовлень</h3>
+                    <p>${orders.length}</p>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Варіантів</h3>
+                    <p>${products.reduce((acc, p) => acc + p.variants.length, 0)}</p>
+                </div>
+            `;
+        }
+
+        // Оновлення списку категорій
+        function updateCategoriesList() {
+            const tbody = document.getElementById('categoriesList');
+            tbody.innerHTML = categories.map(cat => {
+                const productCount = products.filter(p => p.category === cat).length;
+                return `
+                    <tr>
+                        <td>${cat}</td>
+                        <td>${productCount}</td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="delete-btn" onclick="deleteCategory('${cat}')" ${productCount > 0 ? 'disabled title="Спочатку видаліть товари в цій категорії"' : ''}>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Оновлення списку товарів
+        function updateProductsList() {
+            const tbody = document.getElementById('productsList');
+            tbody.innerHTML = products.map(p => `
+                <tr>
+                    <td><img src="${p.image || 'https://via.placeholder.com/50'}" alt=""></td>
+                    <td>${p.name}</td>
+                    <td>${p.category}</td>
+                    <td>${p.price} грн</td>
+                    <td>${p.variants.join(', ')}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="edit-btn" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Оновлення списку замовлень
+        function updateOrdersList() {
+            const tbody = document.getElementById('ordersList');
+            tbody.innerHTML = orders.map(o => {
+                const product = products.find(p => p.id == o.productId);
+                return `
+                    <tr>
+                        <td>#${o.id}</td>
+                        <td>${product?.name || 'Невідомий товар'}</td>
+                        <td>${o.name}</td>
+                        <td>${o.phone}</td>
+                        <td>${o.variant}</td>
+                        <td>${new Date(o.date).toLocaleString('uk-UA')}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Оновлення селекту категорій
+        function updateCategorySelect() {
+            const select = document.getElementById('productCategory');
+            select.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        // Додавання варіанту
+        window.addVariantField = function() {
+            const container = document.getElementById('variantsContainer');
+            const div = document.createElement('div');
+            div.className = 'variant-row';
+            div.innerHTML = `
+                <input type="text" placeholder="Варіант">
+                <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        // Додавання категорії
+        window.addCategory = async function() {
+            const category = document.getElementById('newCategory').value.trim();
+            if (!category) return alert('Введіть назву категорії');
+            
+            try {
+                const response = await fetch('/api/categories', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category })
+                });
+                
+                if (response.ok) {
+                    alert('Категорію додано!');
+                    document.getElementById('newCategory').value = '';
+                    loadData();
+                }
+            } catch (error) {
+                alert('Помилка при додаванні категорії');
+            }
+        }
+
+        // Видалення категорії
+        window.deleteCategory = async function(category) {
+            if (!confirm(`Видалити категорію "${category}"?`)) return;
+            
+            try {
+                const response = await fetch(`/api/categories/${encodeURIComponent(category)}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    alert('Категорію видалено!');
+                    loadData();
+                }
+            } catch (error) {
+                alert('Помилка при видаленні категорії');
+            }
+        }
+
+        // Додавання товару
+        window.addProduct = async function() {
+            const formData = new FormData();
+            formData.append('category', document.getElementById('productCategory').value);
+            formData.append('name', document.getElementById('productName').value);
+            formData.append('price', document.getElementById('productPrice').value);
+            formData.append('description', document.getElementById('productDescription').value);
+            
+            const variants = [];
+            document.querySelectorAll('#variantsContainer input').forEach(input => {
+                if (input.value.trim()) variants.push(input.value.trim());
+            });
+            formData.append('variants', JSON.stringify(variants));
+            
+            const imageFile = document.getElementById('productImage').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+            
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    alert('Товар додано!');
+                    // Очищаємо форму
+                    document.getElementById('productName').value = '';
+                    document.getElementById('productPrice').value = '';
+                    document.getElementById('productDescription').value = '';
+                    document.getElementById('variantsContainer').innerHTML = `
+                        <div class="variant-row">
+                            <input type="text" placeholder="Варіант">
+                            <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                        </div>
+                    `;
+                    document.getElementById('productImage').value = '';
+                    document.getElementById('imagePreview').style.display = 'none';
+                    loadData();
+                }
+            } catch (error) {
+                alert('Помилка при додаванні товару');
+            }
+        }
+
+        // Видалення товару
+        window.deleteProduct = async function(productId) {
+            if (!confirm('Видалити товар?')) return;
+            
+            try {
+                const response = await fetch(`/api/products/${productId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    alert('Товар видалено!');
+                    loadData();
+                }
+            } catch (error) {
+                alert('Помилка при видаленні товару');
+            }
+        }
+
+        // Видалення варіанту товару
+        window.deleteVariant = async function(productId, variantIndex) {
+            if (!confirm('Видалити цей варіант?')) return;
+            
+            try {
+                const response = await fetch(`/api/products/${productId}/variant/${variantIndex}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    alert('Варіант видалено!');
+                    loadData();
+                }
+            } catch (error) {
+                alert('Помилка при видаленні варіанту');
+            }
+        }
+
+        // Редагування товару
+        window.editProduct = function(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Заповнюємо форму для редагування
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productDescription').value = product.description || '';
+            
+            const container = document.getElementById('variantsContainer');
+            container.innerHTML = '';
+            product.variants.forEach(v => {
+                const div = document.createElement('div');
+                div.className = 'variant-row';
+                div.innerHTML = `
+                    <input type="text" value="${v}" placeholder="Варіант">
+                    <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                `;
+                container.appendChild(div);
+            });
+            
+            // Прокручуємо до форми
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Збереження "Про нас"
+        window.saveAbout = async function() {
+            const text = document.getElementById('aboutText').value;
+            
+            try {
+                const response = await fetch('/api/about', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                
+                if (response.ok) {
+                    alert('Текст збережено!');
+                }
+            } catch (error) {
+                alert('Помилка при збереженні');
+            }
+        }
+
+        // Збереження контактів
+        window.saveContact = async function() {
+            const phone = document.getElementById('contactPhone').value;
+            const email = document.getElementById('contactEmail').value;
+            const schedule = document.getElementById('contactSchedule').value;
+            
+            const text = `Телефон: ${phone}\nEmail: ${email}\nГрафік: ${schedule}`;
+            
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text })
+                });
+                
+                if (response.ok) {
+                    alert('Контакти збережено!');
+                }
+            } catch (error) {
+                alert('Помилка при збереженні');
+            }
+        }
+
+        // Перемикання секцій
+        window.showSection = function(sectionId) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Вихід
+        window.logout = async function() {
+            await fetch('/api/logout', { method: 'POST' });
+            window.location.href = '/';
+        }
+
+        // Preview зображення
+        document.getElementById('productImage')?.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('imagePreview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            if (e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
+        // Завантаження даних при старті
+        loadData();
+    </script>
+</body>
+</html>
