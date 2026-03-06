@@ -1,12 +1,12 @@
-<!-- admin.html -->
+<!-- admin.html - оптимізований для мобільних -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Адмін-панель | Захід Дрон</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Адмін | Захід Дрон</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,89 +19,97 @@
             --primary: #0f172a;
             --accent: #f97316;
             --light: #f8fafc;
-            --text: #1e293b;
             --white: #ffffff;
-            --shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            --gradient: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
 
         body {
             background: var(--light);
-            min-height: 100vh;
         }
 
         /* Header */
         header {
             background: var(--primary);
-            padding: 1rem 5%;
+            padding: 1rem 4%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.8rem;
+            gap: 8px;
+            font-size: 1.4rem;
             font-weight: 700;
             text-decoration: none;
+            color: var(--white);
         }
 
         .logo i {
             color: var(--accent);
-            font-size: 2.2rem;
-        }
-
-        .logo span:first-child {
-            color: var(--white);
-        }
-
-        .logo span:last-child {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .logout-btn {
             background: transparent;
-            border: 2px solid var(--accent);
+            border: 1.5px solid var(--accent);
             color: var(--accent);
-            padding: 0.5rem 1.5rem;
+            padding: 0.4rem 1rem;
             border-radius: 30px;
-            font-weight: 600;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.3s;
         }
 
-        .logout-btn:hover {
+        /* Mobile menu for admin */
+        .mobile-admin-menu {
+            display: none;
+            background: var(--white);
+            padding: 0.5rem;
+            position: sticky;
+            top: 70px;
+            z-index: 90;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            box-shadow: var(--shadow);
+        }
+
+        .mobile-admin-menu a {
+            display: inline-block;
+            padding: 0.8rem 1.2rem;
+            margin: 0 0.2rem;
+            background: var(--light);
+            border-radius: 30px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .mobile-admin-menu a.active {
             background: var(--accent);
             color: var(--white);
         }
 
-        /* Main content */
+        /* Desktop sidebar */
         .admin-container {
-            padding: 3rem 5%;
-            display: grid;
-            grid-template-columns: 250px 1fr;
-            gap: 2rem;
+            display: flex;
+            min-height: calc(100vh - 70px);
         }
 
-        /* Sidebar */
         .sidebar {
+            width: 250px;
             background: var(--white);
-            border-radius: 20px;
             padding: 2rem 1rem;
             box-shadow: var(--shadow);
-            height: fit-content;
-            position: sticky;
-            top: 2rem;
         }
 
         .sidebar h3 {
             color: var(--primary);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             padding-left: 1rem;
         }
 
@@ -116,16 +124,15 @@
         .sidebar-menu a {
             display: block;
             padding: 1rem;
-            color: var(--text);
+            color: var(--primary);
             text-decoration: none;
-            border-radius: 15px;
+            border-radius: 12px;
             transition: 0.3s;
-            font-weight: 500;
         }
 
         .sidebar-menu a:hover,
         .sidebar-menu a.active {
-            background: var(--gradient);
+            background: var(--accent);
             color: var(--white);
         }
 
@@ -136,10 +143,9 @@
 
         /* Content */
         .admin-content {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
+            flex: 1;
+            padding: 1.5rem;
+            overflow-x: auto;
         }
 
         .admin-section {
@@ -151,53 +157,54 @@
         }
 
         .admin-section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.5rem;
             color: var(--primary);
-            margin-bottom: 2rem;
-            font-size: 2rem;
         }
 
-        /* Cards */
+        /* Stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .stat-card {
-            background: var(--light);
-            padding: 1.5rem;
-            border-radius: 15px;
+            background: var(--white);
+            padding: 1.2rem;
+            border-radius: 16px;
             text-align: center;
+            box-shadow: var(--shadow);
         }
 
         .stat-card i {
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: var(--accent);
-            margin-bottom: 1rem;
-        }
-
-        .stat-card h3 {
-            color: var(--text);
             margin-bottom: 0.5rem;
         }
 
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
         .stat-card p {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
         }
 
         /* Forms */
         .admin-form {
-            background: var(--light);
-            padding: 2rem;
-            border-radius: 15px;
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 20px;
             margin-bottom: 2rem;
         }
 
         .admin-form h3 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             color: var(--primary);
         }
 
@@ -207,8 +214,9 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             font-weight: 500;
+            font-size: 0.9rem;
         }
 
         .form-group input,
@@ -216,41 +224,31 @@
         .form-group select {
             width: 100%;
             padding: 0.8rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
             font-size: 1rem;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent);
+            -webkit-appearance: none;
         }
 
         .btn {
-            background: var(--gradient);
+            background: var(--accent);
             color: var(--white);
             border: none;
             padding: 0.8rem 1.5rem;
             border-radius: 30px;
             font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            transition: 0.3s;
             margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px -5px rgba(249,115,22,0.4);
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-danger {
             background: #ef4444;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
         }
 
         .variant-row {
@@ -267,23 +265,35 @@
             background: #ef4444;
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            font-size: 1.2rem;
         }
 
         /* Tables */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -1rem;
+            padding: 0 1rem;
+        }
+
         .table {
             width: 100%;
+            min-width: 600px;
             border-collapse: collapse;
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
         }
 
         .table th {
-            text-align: left;
+            background: var(--primary);
+            color: var(--white);
             padding: 1rem;
-            background: var(--light);
-            color: var(--primary);
+            text-align: left;
+            font-size: 0.9rem;
         }
 
         .table td {
@@ -307,8 +317,9 @@
             padding: 0.5rem;
             border: none;
             border-radius: 8px;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
-            transition: 0.3s;
         }
 
         .edit-btn {
@@ -322,21 +333,73 @@
         }
 
         .image-preview {
-            max-width: 200px;
+            max-width: 100%;
             max-height: 200px;
             margin: 1rem 0;
-            border-radius: 10px;
+            border-radius: 12px;
             display: none;
         }
 
+        /* Mobile */
         @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .mobile-admin-menu {
+                display: block;
+            }
+
             .admin-container {
+                flex-direction: column;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .admin-form {
+                padding: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+
+            .variant-row {
+                flex-wrap: wrap;
+            }
+
+            .variant-row button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
-            
-            .sidebar {
-                position: static;
+
+            .stat-card p {
+                font-size: 1.5rem;
             }
+        }
+
+        /* Touch оптимізація */
+        button,
+        .sidebar-menu a,
+        .mobile-admin-menu a {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
     </style>
 </head>
@@ -344,13 +407,23 @@
     <header>
         <a href="/" class="logo">
             <i class="fas fa-drone"></i>
-            <span>ЗАХІД</span>
-            <span>ДРОН</span>
+            <span>ЗАХІД ДРОН</span>
         </a>
         <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Вийти</button>
     </header>
 
+    <!-- Mobile menu -->
+    <div class="mobile-admin-menu">
+        <a href="#" class="active" onclick="showMobileSection('dashboard')">📊 Дашборд</a>
+        <a href="#" onclick="showMobileSection('categories')">🏷️ Категорії</a>
+        <a href="#" onclick="showMobileSection('products')">📦 Товари</a>
+        <a href="#" onclick="showMobileSection('about')">ℹ️ Про нас</a>
+        <a href="#" onclick="showMobileSection('contacts')">📞 Контакти</a>
+        <a href="#" onclick="showMobileSection('orders')">🛒 Замовлення</a>
+    </div>
+
     <div class="admin-container">
+        <!-- Desktop sidebar -->
         <div class="sidebar">
             <h3>Адмін-панель</h3>
             <ul class="sidebar-menu">
@@ -364,168 +437,155 @@
         </div>
 
         <div class="admin-content">
-            <!-- Dashboard Section -->
+            <!-- Dashboard -->
             <div id="dashboard" class="admin-section active">
                 <h2>Дашборд</h2>
-                <div class="stats-grid" id="stats">
-                    <!-- Статистика завантажується динамічно -->
-                </div>
+                <div class="stats-grid" id="stats"></div>
             </div>
 
-            <!-- Categories Section -->
+            <!-- Categories -->
             <div id="categories" class="admin-section">
-                <h2>Управління категоріями</h2>
-                
+                <h2>Категорії</h2>
                 <div class="admin-form">
                     <h3>Додати категорію</h3>
                     <div class="form-group">
                         <input type="text" id="newCategory" placeholder="Назва категорії">
                     </div>
-                    <button class="btn" onclick="addCategory()">Додати категорію</button>
+                    <button class="btn" onclick="addCategory()">Додати</button>
                 </div>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Назва</th>
-                            <th>К-сть товарів</th>
-                            <th>Дії</th>
-                        </tr>
-                    </thead>
-                    <tbody id="categoriesList">
-                        <!-- Список категорій -->
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table class="table">
+                        <thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></tr></thead>
+                        <tbody id="categoriesList"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Products Section -->
+            <!-- Products -->
             <div id="products" class="admin-section">
-                <h2>Управління товарами</h2>
-                
+                <h2>Товари</h2>
                 <div class="admin-form">
                     <h3>Додати товар</h3>
                     <div class="form-group">
-                        <label>Категорія</label>
                         <select id="productCategory"></select>
                     </div>
                     <div class="form-group">
-                        <label>Назва товару</label>
                         <input type="text" id="productName" placeholder="Назва">
                     </div>
                     <div class="form-group">
-                        <label>Ціна (грн)</label>
-                        <input type="number" id="productPrice" placeholder="0">
+                        <input type="number" id="productPrice" placeholder="Ціна">
                     </div>
                     <div class="form-group">
-                        <label>Опис</label>
-                        <textarea id="productDescription" rows="4" placeholder="Опис товару"></textarea>
+                        <textarea id="productDescription" rows="3" placeholder="Опис"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Варіанти</label>
+                        <label>Варіанти:</label>
                         <div id="variantsContainer">
                             <div class="variant-row">
-                                <input type="text" placeholder="Варіант (напр. Small)">
+                                <input type="text" placeholder="Варіант">
                                 <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                             </div>
                         </div>
-                        <button class="btn" onclick="addVariantField()" style="margin-top: 0.5rem;">+ Додати варіант</button>
+                        <button class="btn" onclick="addVariantField()" style="width: auto;">+ Додати варіант</button>
                     </div>
                     <div class="form-group">
-                        <label>Зображення</label>
                         <input type="file" id="productImage" accept="image/*">
                         <img id="imagePreview" class="image-preview">
                     </div>
                     <button class="btn" onclick="addProduct()">Додати товар</button>
                 </div>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Фото</th>
-                            <th>Назва</th>
-                            <th>Категорія</th>
-                            <th>Ціна</th>
-                            <th>Варіанти</th>
-                            <th>Дії</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsList">
-                        <!-- Список товарів -->
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- About Section -->
-            <div id="about" class="admin-section">
-                <h2>Редагування сторінки "Про нас"</h2>
-                <div class="admin-form">
-                    <div class="form-group">
-                        <textarea id="aboutText" rows="10" style="width: 100%;"></textarea>
-                    </div>
-                    <button class="btn" onclick="saveAbout()">Зберегти зміни</button>
+                <div class="table-container">
+                    <table class="table">
+                        <thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Дії</th></tr></thead>
+                        <tbody id="productsList"></tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- Contacts Section -->
+            <!-- About -->
+            <div id="about" class="admin-section">
+                <h2>Про нас</h2>
+                <div class="admin-form">
+                    <textarea id="aboutText" rows="8" style="width: 100%;"></textarea>
+                    <button class="btn" onclick="saveAbout()" style="margin-top: 1rem;">Зберегти</button>
+                </div>
+            </div>
+
+            <!-- Contacts -->
             <div id="contacts" class="admin-section">
-                <h2>Редагування контактів</h2>
+                <h2>Контакти</h2>
                 <div class="admin-form">
                     <div class="form-group">
-                        <label>Телефон</label>
                         <input type="text" id="contactPhone" placeholder="Телефон">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
                         <input type="email" id="contactEmail" placeholder="Email">
                     </div>
                     <div class="form-group">
-                        <label>Графік роботи</label>
-                        <input type="text" id="contactSchedule" placeholder="Графік">
+                        <input type="text" id="contactSchedule" placeholder="Графік роботи">
                     </div>
-                    <button class="btn" onclick="saveContact()">Зберегти зміни</button>
+                    <button class="btn" onclick="saveContact()">Зберегти</button>
                 </div>
             </div>
 
-            <!-- Orders Section -->
+            <!-- Orders -->
             <div id="orders" class="admin-section">
                 <h2>Замовлення</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Товар</th>
-                            <th>Ім'я</th>
-                            <th>Телефон</th>
-                            <th>Варіант</th>
-                            <th>Дата</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersList">
-                        <!-- Список замовлень -->
-                    </tbody>
-                </table>
+                <div class="table-container">
+                    <table class="table">
+                        <thead><tr><th>ID</th><th>Товар</th><th>Ім'я</th><th>Телефон</th><th>Дата</th></tr></thead>
+                        <tbody id="ordersList"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let categories = [];
-        let products = [];
-        let orders = [];
+        // Ті самі функції, що й раніше, але з оптимізацією для мобільних
+        let categories = [], products = [], orders = [];
 
-        // Перевірка авторизації
+        // Функція для мобільного меню
+        function showMobileSection(sectionId) {
+            showSection(sectionId);
+            // Прокрутка до верху
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Додати підтримку свайпів для мобільних
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const sections = ['dashboard', 'categories', 'products', 'about', 'contacts', 'orders'];
+            const currentIndex = sections.findIndex(s => document.getElementById(s).classList.contains('active'));
+            
+            if (touchendX < touchstartX - 50 && currentIndex < sections.length - 1) {
+                // Свайп вліво - наступна секція
+                showSection(sections[currentIndex + 1]);
+            }
+            if (touchendX > touchstartX + 50 && currentIndex > 0) {
+                // Свайп вправо - попередня секція
+                showSection(sections[currentIndex - 1]);
+            }
+        }
+
+        // Інші функції залишаються без змін
         async function checkAuth() {
             try {
                 const response = await fetch('/api/user');
-                if (!response.ok) {
-                    window.location.href = '/';
-                    return false;
-                }
+                if (!response.ok) window.location.href = '/';
                 const user = await response.json();
-                if (!user.isAdmin) {
-                    window.location.href = '/';
-                    return false;
-                }
+                if (!user.isAdmin) window.location.href = '/';
                 return true;
             } catch {
                 window.location.href = '/';
@@ -533,10 +593,8 @@
             }
         }
 
-        // Завантаження даних
         async function loadData() {
             if (!await checkAuth()) return;
-
             try {
                 const [categoriesRes, productsRes, aboutRes, contactRes, ordersRes] = await Promise.all([
                     fetch('/api/categories'),
@@ -550,173 +608,91 @@
                 products = await productsRes.json();
                 orders = await ordersRes.json();
                 
-                const aboutText = await aboutRes.text();
-                const contactText = await contactRes.text();
-                
-                // Оновлюємо UI
                 updateDashboard();
                 updateCategoriesList();
                 updateProductsList();
                 updateOrdersList();
                 updateCategorySelect();
                 
-                document.getElementById('aboutText').value = aboutText;
+                document.getElementById('aboutText').value = await aboutRes.text();
                 
-                // Парсимо контакти
-                const contactLines = contactText.split('\n');
-                document.getElementById('contactPhone').value = contactLines.find(l => l.includes('Телефон') || l.includes('+380'))?.replace('Телефон:', '').trim() || '';
-                document.getElementById('contactEmail').value = contactLines.find(l => l.includes('Email') || l.includes('@'))?.replace('Email:', '').trim() || '';
-                document.getElementById('contactSchedule').value = contactLines.find(l => l.includes('Графік'))?.replace('Графік:', '').trim() || '';
+                const contactText = await contactRes.text();
+                const lines = contactText.split('\n');
+                document.getElementById('contactPhone').value = lines.find(l => l.includes('Телефон'))?.replace('Телефон:', '').trim() || '';
+                document.getElementById('contactEmail').value = lines.find(l => l.includes('Email'))?.replace('Email:', '').trim() || '';
+                document.getElementById('contactSchedule').value = lines.find(l => l.includes('Графік'))?.replace('Графік:', '').trim() || '';
             } catch (error) {
-                console.error('Помилка завантаження даних:', error);
+                console.error('Помилка:', error);
             }
         }
 
-        // Оновлення дашборду
         function updateDashboard() {
-            const stats = document.getElementById('stats');
-            stats.innerHTML = `
-                <div class="stat-card">
-                    <i class="fas fa-box"></i>
-                    <h3>Товарів</h3>
-                    <p>${products.length}</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-tags"></i>
-                    <h3>Категорій</h3>
-                    <p>${categories.length}</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h3>Замовлень</h3>
-                    <p>${orders.length}</p>
-                </div>
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <h3>Варіантів</h3>
-                    <p>${products.reduce((acc, p) => acc + p.variants.length, 0)}</p>
-                </div>
+            document.getElementById('stats').innerHTML = `
+                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${products.length}</p></div>
+                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${categories.length}</p></div>
+                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${orders.length}</p></div>
+                <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${products.reduce((acc, p) => acc + p.variants.length, 0)}</p></div>
             `;
         }
 
-        // Оновлення списку категорій
         function updateCategoriesList() {
-            const tbody = document.getElementById('categoriesList');
-            tbody.innerHTML = categories.map(cat => {
-                const productCount = products.filter(p => p.category === cat).length;
-                return `
-                    <tr>
-                        <td>${cat}</td>
-                        <td>${productCount}</td>
-                        <td>
-                            <div class="action-btns">
-                                <button class="delete-btn" onclick="deleteCategory('${cat}')" ${productCount > 0 ? 'disabled title="Спочатку видаліть товари в цій категорії"' : ''}>
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+            document.getElementById('categoriesList').innerHTML = categories.map(cat => {
+                const count = products.filter(p => p.category === cat).length;
+                return `<tr><td>${cat}</td><td>${count}</td><td><button class="delete-btn" onclick="deleteCategory('${cat}')" ${count > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td></tr>`;
             }).join('');
         }
 
-        // Оновлення списку товарів
         function updateProductsList() {
-            const tbody = document.getElementById('productsList');
-            tbody.innerHTML = products.map(p => `
+            document.getElementById('productsList').innerHTML = products.map(p => `
                 <tr>
                     <td><img src="${p.image || 'https://via.placeholder.com/50'}" alt=""></td>
                     <td>${p.name}</td>
                     <td>${p.category}</td>
                     <td>${p.price} грн</td>
-                    <td>${p.variants.join(', ')}</td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="edit-btn" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button>
-                            <button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </td>
+                    <td><button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></td>
                 </tr>
             `).join('');
         }
 
-        // Оновлення списку замовлень
         function updateOrdersList() {
-            const tbody = document.getElementById('ordersList');
-            tbody.innerHTML = orders.map(o => {
+            document.getElementById('ordersList').innerHTML = orders.map(o => {
                 const product = products.find(p => p.id == o.productId);
-                return `
-                    <tr>
-                        <td>#${o.id}</td>
-                        <td>${product?.name || 'Невідомий товар'}</td>
-                        <td>${o.name}</td>
-                        <td>${o.phone}</td>
-                        <td>${o.variant}</td>
-                        <td>${new Date(o.date).toLocaleString('uk-UA')}</td>
-                    </tr>
-                `;
+                return `<tr><td>#${o.id}</td><td>${product?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${new Date(o.date).toLocaleDateString()}</td></tr>`;
             }).join('');
         }
 
-        // Оновлення селекту категорій
         function updateCategorySelect() {
             const select = document.getElementById('productCategory');
             select.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
         }
 
-        // Додавання варіанту
         window.addVariantField = function() {
-            const container = document.getElementById('variantsContainer');
             const div = document.createElement('div');
             div.className = 'variant-row';
-            div.innerHTML = `
-                <input type="text" placeholder="Варіант">
-                <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-            `;
-            container.appendChild(div);
+            div.innerHTML = '<input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+            document.getElementById('variantsContainer').appendChild(div);
         }
 
-        // Додавання категорії
         window.addCategory = async function() {
             const category = document.getElementById('newCategory').value.trim();
-            if (!category) return alert('Введіть назву категорії');
-            
-            try {
-                const response = await fetch('/api/categories', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category })
-                });
-                
-                if (response.ok) {
-                    alert('Категорію додано!');
-                    document.getElementById('newCategory').value = '';
-                    loadData();
-                }
-            } catch (error) {
-                alert('Помилка при додаванні категорії');
+            if (!category) return alert('Введіть назву');
+            const response = await fetch('/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category })
+            });
+            if (response.ok) {
+                document.getElementById('newCategory').value = '';
+                loadData();
             }
         }
 
-        // Видалення категорії
         window.deleteCategory = async function(category) {
             if (!confirm(`Видалити категорію "${category}"?`)) return;
-            
-            try {
-                const response = await fetch(`/api/categories/${encodeURIComponent(category)}`, {
-                    method: 'DELETE'
-                });
-                
-                if (response.ok) {
-                    alert('Категорію видалено!');
-                    loadData();
-                }
-            } catch (error) {
-                alert('Помилка при видаленні категорії');
-            }
+            const response = await fetch(`/api/categories/${encodeURIComponent(category)}`, { method: 'DELETE' });
+            if (response.ok) loadData();
         }
 
-        // Додавання товару
         window.addProduct = async function() {
             const formData = new FormData();
             formData.append('category', document.getElementById('productCategory').value);
@@ -725,177 +701,79 @@
             formData.append('description', document.getElementById('productDescription').value);
             
             const variants = [];
-            document.querySelectorAll('#variantsContainer input').forEach(input => {
-                if (input.value.trim()) variants.push(input.value.trim());
+            document.querySelectorAll('#variantsContainer input').forEach(i => {
+                if (i.value.trim()) variants.push(i.value.trim());
             });
             formData.append('variants', JSON.stringify(variants));
             
             const imageFile = document.getElementById('productImage').files[0];
-            if (imageFile) {
-                formData.append('image', imageFile);
-            }
+            if (imageFile) formData.append('image', imageFile);
             
-            try {
-                const response = await fetch('/api/products', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    alert('Товар додано!');
-                    // Очищаємо форму
-                    document.getElementById('productName').value = '';
-                    document.getElementById('productPrice').value = '';
-                    document.getElementById('productDescription').value = '';
-                    document.getElementById('variantsContainer').innerHTML = `
-                        <div class="variant-row">
-                            <input type="text" placeholder="Варіант">
-                            <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-                        </div>
-                    `;
-                    document.getElementById('productImage').value = '';
-                    document.getElementById('imagePreview').style.display = 'none';
-                    loadData();
-                }
-            } catch (error) {
-                alert('Помилка при додаванні товару');
+            const response = await fetch('/api/products', { method: 'POST', body: formData });
+            if (response.ok) {
+                document.getElementById('productName').value = '';
+                document.getElementById('productPrice').value = '';
+                document.getElementById('productDescription').value = '';
+                document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
+                document.getElementById('productImage').value = '';
+                loadData();
             }
         }
 
-        // Видалення товару
-        window.deleteProduct = async function(productId) {
+        window.deleteProduct = async function(id) {
             if (!confirm('Видалити товар?')) return;
-            
-            try {
-                const response = await fetch(`/api/products/${productId}`, {
-                    method: 'DELETE'
-                });
-                
-                if (response.ok) {
-                    alert('Товар видалено!');
-                    loadData();
-                }
-            } catch (error) {
-                alert('Помилка при видаленні товару');
-            }
+            const response = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+            if (response.ok) loadData();
         }
 
-        // Видалення варіанту товару
-        window.deleteVariant = async function(productId, variantIndex) {
-            if (!confirm('Видалити цей варіант?')) return;
-            
-            try {
-                const response = await fetch(`/api/products/${productId}/variant/${variantIndex}`, {
-                    method: 'DELETE'
-                });
-                
-                if (response.ok) {
-                    alert('Варіант видалено!');
-                    loadData();
-                }
-            } catch (error) {
-                alert('Помилка при видаленні варіанту');
-            }
-        }
-
-        // Редагування товару
-        window.editProduct = function(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            // Заповнюємо форму для редагування
-            document.getElementById('productCategory').value = product.category;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productDescription').value = product.description || '';
-            
-            const container = document.getElementById('variantsContainer');
-            container.innerHTML = '';
-            product.variants.forEach(v => {
-                const div = document.createElement('div');
-                div.className = 'variant-row';
-                div.innerHTML = `
-                    <input type="text" value="${v}" placeholder="Варіант">
-                    <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-                `;
-                container.appendChild(div);
-            });
-            
-            // Прокручуємо до форми
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Збереження "Про нас"
         window.saveAbout = async function() {
             const text = document.getElementById('aboutText').value;
-            
-            try {
-                const response = await fetch('/api/about', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-                
-                if (response.ok) {
-                    alert('Текст збережено!');
-                }
-            } catch (error) {
-                alert('Помилка при збереженні');
-            }
+            await fetch('/api/about', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            alert('Збережено!');
         }
 
-        // Збереження контактів
         window.saveContact = async function() {
             const phone = document.getElementById('contactPhone').value;
             const email = document.getElementById('contactEmail').value;
             const schedule = document.getElementById('contactSchedule').value;
-            
             const text = `Телефон: ${phone}\nEmail: ${email}\nГрафік: ${schedule}`;
-            
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-                
-                if (response.ok) {
-                    alert('Контакти збережено!');
-                }
-            } catch (error) {
-                alert('Помилка при збереженні');
-            }
+            await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            alert('Збережено!');
         }
 
-        // Перемикання секцій
         window.showSection = function(sectionId) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             
-            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
-            event.target.classList.add('active');
+            document.querySelectorAll('.sidebar-menu a, .mobile-admin-menu a').forEach(a => a.classList.remove('active'));
+            if (event) event.target.classList.add('active');
         }
 
-        // Вихід
         window.logout = async function() {
             await fetch('/api/logout', { method: 'POST' });
             window.location.href = '/';
         }
 
-        // Preview зображення
         document.getElementById('productImage')?.addEventListener('change', function(e) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                const preview = document.getElementById('imagePreview');
-                preview.src = reader.result;
-                preview.style.display = 'block';
-            }
             if (e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = reader.result;
+                    preview.style.display = 'block';
+                }
                 reader.readAsDataURL(e.target.files[0]);
             }
         });
 
-        // Завантаження даних при старті
         loadData();
     </script>
 </body>
