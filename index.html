@@ -1,4 +1,4 @@
-<!-- index.html - оптимізований для мобільних -->
+<!-- index.html - виправлене мобільне меню та соцмережі -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -32,12 +32,15 @@
             flex-direction: column;
         }
 
-        /* Мобільне меню */
+        /* Мобільне меню - виправлено */
         .mobile-menu-toggle {
             display: none;
             font-size: 1.8rem;
             color: var(--white);
             cursor: pointer;
+            padding: 10px;
+            margin: -10px;
+            z-index: 1002;
         }
 
         /* Header */
@@ -98,19 +101,20 @@
             background: var(--accent);
         }
 
-        /* Мобільне меню */
+        /* Мобільне меню - виправлено */
         .mobile-nav {
             display: none;
             position: fixed;
             top: 0;
-            left: -100%;
-            width: 80%;
+            left: -280px;
+            width: 280px;
             height: 100vh;
             background: var(--primary);
             z-index: 1001;
-            padding: 2rem;
-            transition: 0.3s;
+            padding: 2rem 1.5rem;
+            transition: left 0.3s ease;
             box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+            overflow-y: auto;
         }
 
         .mobile-nav.active {
@@ -122,21 +126,36 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-nav-header .logo {
+            font-size: 1.2rem;
         }
 
         .mobile-nav-close {
             color: var(--white);
             font-size: 2rem;
             cursor: pointer;
+            padding: 5px;
+            line-height: 1;
         }
 
         .mobile-nav a {
             display: block;
             color: var(--white);
             text-decoration: none;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             padding: 1rem 0;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+
+        .mobile-nav a:hover,
+        .mobile-nav a:active {
+            color: var(--accent);
+            padding-left: 10px;
         }
 
         .mobile-nav-overlay {
@@ -148,6 +167,7 @@
             height: 100%;
             background: rgba(0,0,0,0.5);
             z-index: 1000;
+            backdrop-filter: blur(3px);
         }
 
         .mobile-nav-overlay.active {
@@ -346,31 +366,119 @@
             transform: scale(0.98);
         }
 
-        /* About & Contacts */
+        /* About & Contacts з соцмережами */
         .about-content,
         .contact-content {
             background: var(--white);
-            padding: 1.5rem;
-            border-radius: 20px;
-            line-height: 1.6;
+            padding: 2rem;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .about-text {
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 2rem;
+            font-size: 1rem;
         }
 
         .contact-info {
-            display: grid;
-            gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 2rem 0;
         }
 
         .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
             background: #f8fafc;
-            padding: 1.5rem;
             border-radius: 16px;
-            text-align: center;
         }
 
         .contact-item i {
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .contact-item div {
+            flex: 1;
+        }
+
+        .contact-item h3 {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.2rem;
+        }
+
+        .contact-item p {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Соціальні мережі */
+        .social-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .social-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1.5rem;
+            background: #f8fafc;
+            border-radius: 50px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: 0.3s;
+            flex: 1;
+            min-width: 140px;
+        }
+
+        .social-link i {
+            font-size: 1.4rem;
+        }
+
+        .social-link.telegram i { color: #0088cc; }
+        .social-link.instagram i { color: #e4405f; }
+        .social-link.facebook i { color: #1877f2; }
+        .social-link.viber i { color: #665cac; }
+        .social-link.whatsapp i { color: #25D366; }
+        .social-link.tiktok i { color: #000000; }
+        .social-link.youtube i { color: #ff0000; }
+
+        .social-link:hover {
+            background: var(--gradient);
+            color: var(--white);
+        }
+
+        .social-link:hover i {
+            color: var(--white);
         }
 
         /* Modal */
@@ -460,6 +568,10 @@
                 display: block;
             }
 
+            .mobile-nav {
+                display: block;
+            }
+
             .auth-buttons button {
                 padding: 0.3rem 0.8rem;
                 font-size: 0.8rem;
@@ -471,6 +583,10 @@
 
             .product-page-image {
                 height: 250px;
+            }
+
+            .social-link {
+                min-width: 100%;
             }
         }
 
@@ -498,9 +614,13 @@
         .product-card,
         .variant-btn,
         .order-btn,
-        .auth-buttons button {
+        .auth-buttons button,
+        .mobile-menu-toggle,
+        .mobile-nav-close,
+        .social-link {
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
         }
 
         /* Pull-to-refresh захист */
@@ -511,7 +631,7 @@
 </head>
 <body>
     <header>
-        <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <div class="mobile-menu-toggle" id="mobileMenuToggle">
             <i class="fas fa-bars"></i>
         </div>
 
@@ -534,20 +654,20 @@
         </div>
     </header>
 
-    <!-- Мобільне меню -->
-    <div class="mobile-nav-overlay" onclick="toggleMobileMenu()"></div>
-    <div class="mobile-nav">
+    <!-- Мобільне меню - виправлено -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+    <div class="mobile-nav" id="mobileNav">
         <div class="mobile-nav-header">
             <span class="logo">
                 <i class="fas fa-drone"></i>
                 <span>ЗАХІД ДРОН</span>
             </span>
-            <span class="mobile-nav-close" onclick="toggleMobileMenu()">&times;</span>
+            <span class="mobile-nav-close" id="mobileNavClose">&times;</span>
         </div>
-        <a href="/" onclick="toggleMobileMenu()">Головна</a>
-        <a href="/catalog" onclick="toggleMobileMenu()">Каталог</a>
-        <a href="/about" onclick="toggleMobileMenu()">Про нас</a>
-        <a href="/contacts" onclick="toggleMobileMenu()">Контакти</a>
+        <a href="/" class="mobile-nav-link">Головна</a>
+        <a href="/catalog" class="mobile-nav-link">Каталог</a>
+        <a href="/about" class="mobile-nav-link">Про нас</a>
+        <a href="/contacts" class="mobile-nav-link">Контакти</a>
     </div>
 
     <main id="main-content">
@@ -555,7 +675,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Захід Дрон. Всі права захищені.</p>
+        <p>&copy; 2024 Захід Дрон. Всі права захищені.</p>
     </footer>
 
     <!-- Login Modal -->
@@ -586,27 +706,78 @@
         let products = [];
         let aboutText = '';
         let contactInfo = '';
+        let socialLinks = [];
 
-        // Мобільне меню
-        function toggleMobileMenu() {
-            document.querySelector('.mobile-nav').classList.toggle('active');
-            document.querySelector('.mobile-nav-overlay').classList.toggle('active');
+        // Виправлена функція для мобільного меню
+        function initMobileMenu() {
+            const toggle = document.getElementById('mobileMenuToggle');
+            const close = document.getElementById('mobileNavClose');
+            const nav = document.getElementById('mobileNav');
+            const overlay = document.getElementById('mobileNavOverlay');
+            
+            if (!toggle || !close || !nav || !overlay) return;
+
+            function openMenu() {
+                nav.classList.add('active');
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                nav.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openMenu();
+            });
+
+            close.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
+
+            // Закриття при кліку на посилання
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+
+            // Запобігаємо закриттю при кліку на меню
+            nav.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
         }
+
+        // Соціальні мережі за замовчуванням
+        const defaultSocialLinks = [
+            { platform: 'telegram', url: 'https://t.me/zahid_dron', icon: 'fa-brands fa-telegram', name: 'Telegram' },
+            { platform: 'instagram', url: 'https://instagram.com/zahid_dron', icon: 'fa-brands fa-instagram', name: 'Instagram' },
+            { platform: 'facebook', url: 'https://facebook.com/zahid.dron', icon: 'fa-brands fa-facebook', name: 'Facebook' },
+            { platform: 'viber', url: 'viber://chat?number=380991234567', icon: 'fa-brands fa-viber', name: 'Viber' },
+            { platform: 'whatsapp', url: 'https://wa.me/380991234567', icon: 'fa-brands fa-whatsapp', name: 'WhatsApp' }
+        ];
 
         async function loadData() {
             try {
-                const [categoriesRes, productsRes, aboutRes, contactRes, userRes] = await Promise.all([
+                const [categoriesRes, productsRes, aboutRes, contactRes, userRes, socialRes] = await Promise.all([
                     fetch('/api/categories'),
                     fetch('/api/products'),
                     fetch('/api/about'),
                     fetch('/api/contact'),
-                    fetch('/api/user').catch(() => null)
+                    fetch('/api/user').catch(() => null),
+                    fetch('/api/social').catch(() => ({ json: () => defaultSocialLinks }))
                 ]);
                 
                 categories = await categoriesRes.json();
                 products = await productsRes.json();
                 aboutText = await aboutRes.text();
                 contactInfo = await contactRes.text();
+                
+                try {
+                    socialLinks = await socialRes.json();
+                } catch {
+                    socialLinks = defaultSocialLinks;
+                }
                 
                 if (userRes && userRes.ok) {
                     currentUser = await userRes.json();
@@ -622,6 +793,14 @@
             const path = window.location.pathname;
             const main = document.getElementById('main-content');
             
+            // Оновлюємо активні посилання
+            document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === path) {
+                    link.classList.add('active');
+                }
+            });
+            
             if (path === '/' || path === '/catalog') {
                 renderCatalog(main);
             } else if (path === '/about') {
@@ -636,6 +815,10 @@
 
         function renderCatalog(main) {
             let html = '<h1>Каталог</h1>';
+            
+            if (products.length === 0) {
+                html += '<p style="text-align: center; padding: 2rem;">Товари поки відсутні</p>';
+            }
             
             categories.forEach(cat => {
                 const catProducts = products.filter(p => p.category === cat);
@@ -667,7 +850,19 @@
             main.innerHTML = `
                 <h1>Про нас</h1>
                 <div class="about-content">
-                    ${aboutText.replace(/\n/g, '<br>')}
+                    <div class="about-text">${aboutText.replace(/\n/g, '<br>')}</div>
+                    
+                    <div class="social-section">
+                        <h3>Ми в соціальних мережах</h3>
+                        <div class="social-links">
+                            ${socialLinks.map(social => `
+                                <a href="${social.url}" target="_blank" rel="noopener noreferrer" class="social-link ${social.platform}">
+                                    <i class="${social.icon}"></i>
+                                    <span>${social.name}</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -677,16 +872,54 @@
             
             main.innerHTML = `
                 <h1>Контакти</h1>
-                <div class="contact-info">
-                    ${lines.map(line => {
-                        if (line.includes('@')) {
-                            return `<div class="contact-item"><i class="fas fa-envelope"></i><h3>Email</h3><p>${line.replace('Email:', '').trim()}</p></div>`;
-                        } else if (line.includes('+380') || line.includes('Телефон')) {
-                            return `<div class="contact-item"><i class="fas fa-phone"></i><h3>Телефон</h3><p>${line.replace('Телефон:', '').trim()}</p></div>`;
-                        } else {
-                            return `<div class="contact-item"><i class="fas fa-clock"></i><h3>Графік</h3><p>${line.replace('Графік:', '').trim()}</p></div>`;
-                        }
-                    }).join('')}
+                <div class="contact-content">
+                    <div class="contact-info">
+                        ${lines.map(line => {
+                            if (line.includes('@')) {
+                                return `
+                                    <div class="contact-item">
+                                        <i class="fas fa-envelope"></i>
+                                        <div>
+                                            <h3>Email</h3>
+                                            <p>${line.replace('Email:', '').trim()}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            } else if (line.includes('+380') || line.includes('Телефон')) {
+                                return `
+                                    <div class="contact-item">
+                                        <i class="fas fa-phone"></i>
+                                        <div>
+                                            <h3>Телефон</h3>
+                                            <p>${line.replace('Телефон:', '').trim()}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                return `
+                                    <div class="contact-item">
+                                        <i class="fas fa-clock"></i>
+                                        <div>
+                                            <h3>Графік</h3>
+                                            <p>${line.replace('Графік:', '').trim()}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }).join('')}
+                    </div>
+                    
+                    <div class="social-section">
+                        <h3>Напишіть нам</h3>
+                        <div class="social-links">
+                            ${socialLinks.map(social => `
+                                <a href="${social.url}" target="_blank" rel="noopener noreferrer" class="social-link ${social.platform}">
+                                    <i class="${social.icon}"></i>
+                                    <span>${social.name}</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -826,7 +1059,7 @@
         // Обробка навігації
         window.addEventListener('popstate', () => renderPage());
         
-        document.querySelectorAll('.desktop-nav a, .mobile-nav a').forEach(link => {
+        document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const href = link.getAttribute('href');
@@ -839,8 +1072,10 @@
         document.getElementById('loginBtn').onclick = () => document.getElementById('loginModal').classList.add('active');
         document.getElementById('registerBtn').onclick = () => document.getElementById('registerModal').classList.add('active');
         
+        // Викликаємо ініціалізацію мобільного меню після завантаження DOM
+        document.addEventListener('DOMContentLoaded', initMobileMenu);
+        
         renderPage();
     </script>
 </body>
 </html>
-
