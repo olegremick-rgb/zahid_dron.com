@@ -1,4 +1,4 @@
-<!-- index.html - виправлене мобільне меню та соцмережі -->
+<!-- index.html - оновлений з кольорами як на фото та виправленим логотипом -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -16,13 +16,16 @@
         }
 
         :root {
-            --primary: #0f172a;
-            --accent: #f97316;
-            --light: #f8fafc;
-            --text: #1e293b;
+            --primary: #0a1a2b;        /* темно-синій як на фото */
+            --secondary: #1e3a5f;       /* середньо-синій */
+            --accent: #d32f2f;          /* червоний як на фото */
+            --accent-light: #ef5350;     /* світло-червоний */
+            --light: #f5f5f5;            /* світло-сірий */
             --white: #ffffff;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --gradient: linear-gradient(135deg, #f97316, #fb923c);
+            --text: #333333;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #0a1a2b, #1e3a5f);
+            --accent-gradient: linear-gradient(135deg, #d32f2f, #ef5350);
         }
 
         body {
@@ -32,7 +35,7 @@
             flex-direction: column;
         }
 
-        /* Мобільне меню - виправлено */
+        /* Мобільне меню */
         .mobile-menu-toggle {
             display: none;
             font-size: 1.8rem;
@@ -45,8 +48,8 @@
 
         /* Header */
         header {
-            background: var(--primary);
-            padding: 0.8rem 4%;
+            background: var(--gradient);
+            padding: 0.8rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -59,25 +62,43 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 1.4rem;
-            font-weight: 700;
+            gap: 15px;
             text-decoration: none;
         }
 
-        .logo i {
-            color: var(--accent);
-            font-size: 1.8rem;
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 8px;
+            background: var(--white);
+            padding: 3px;
         }
 
-        .logo span:first-child {
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .logo-text .top {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--white);
+            letter-spacing: 1px;
         }
 
-        .logo span:last-child {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .logo-text .bottom {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 2px;
+        }
+
+        .logo-text .ua {
+            font-size: 0.9rem;
+            color: var(--white);
+            opacity: 0.8;
+            margin-top: 2px;
         }
 
         /* Десктоп навігація */
@@ -90,8 +111,8 @@
             color: var(--white);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
-            padding: 0.4rem 0.8rem;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
             transition: 0.3s;
         }
@@ -99,9 +120,10 @@
         .desktop-nav a:hover,
         .desktop-nav a.active {
             background: var(--accent);
+            color: var(--white);
         }
 
-        /* Мобільне меню - виправлено */
+        /* Мобільне меню */
         .mobile-nav {
             display: none;
             position: fixed;
@@ -130,8 +152,8 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .mobile-nav-header .logo {
-            font-size: 1.2rem;
+        .mobile-nav-header .logo-img {
+            height: 40px;
         }
 
         .mobile-nav-close {
@@ -181,12 +203,12 @@
 
         .auth-buttons button {
             background: transparent;
-            border: 1.5px solid var(--accent);
+            border: 2px solid var(--accent);
             color: var(--accent);
-            padding: 0.4rem 1rem;
+            padding: 0.5rem 1.2rem;
             border-radius: 30px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: 0.3s;
             white-space: nowrap;
@@ -200,17 +222,29 @@
         /* Основний контент */
         main {
             flex: 1;
-            padding: 1.5rem 4%;
+            padding: 2rem 5%;
         }
 
         h1 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
             color: var(--primary);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent);
         }
 
         h2 {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             margin: 1.5rem 0 1rem;
             color: var(--primary);
         }
@@ -218,9 +252,9 @@
         /* Сітка товарів */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
         }
 
         .product-card {
@@ -228,8 +262,14 @@
             border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: 0.2s;
+            transition: 0.3s;
             cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(211,47,47,0.15);
         }
 
         .product-card:active {
@@ -238,88 +278,172 @@
 
         .product-image {
             width: 100%;
-            height: 150px;
+            height: 200px;
             object-fit: cover;
             background: #e2e8f0;
         }
 
         .product-info {
-            padding: 1rem;
+            padding: 1.5rem;
         }
 
         .product-info h3 {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
             color: var(--primary);
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         .product-price {
             color: var(--accent);
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
         }
 
         .product-category {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: #64748b;
             background: #f1f5f9;
             display: inline-block;
-            padding: 0.2rem 0.8rem;
+            padding: 0.3rem 1rem;
             border-radius: 30px;
             margin-top: 0.5rem;
+        }
+
+        /* Сторінка Про нас - основна */
+        .about-hero {
+            background: var(--gradient);
+            color: var(--white);
+            padding: 4rem 2rem;
+            border-radius: 30px;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .about-hero h1 {
+            color: var(--white);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-hero h1::after {
+            background: var(--accent);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .about-content {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 3rem;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 2rem;
+            background: #f8fafc;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-item i {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-item p {
+            color: #64748b;
         }
 
         /* Сторінка товару */
         .product-page {
             background: var(--white);
-            border-radius: 24px;
+            border-radius: 30px;
             overflow: hidden;
             box-shadow: var(--shadow);
         }
 
         .product-page-image {
             width: 100%;
-            height: 300px;
+            height: 400px;
             object-fit: cover;
         }
 
         .product-page-info {
-            padding: 1.5rem;
+            padding: 2.5rem;
         }
 
         .product-page-info h1 {
-            font-size: 1.6rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-page-price {
-            font-size: 2rem;
-            color: var(--accent);
-            font-weight: 700;
+            font-size: 2.2rem;
             margin-bottom: 1rem;
         }
 
+        .product-page-price {
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
         .variants h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
         }
 
         .variant-options {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.8rem;
             flex-wrap: wrap;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .variant-btn {
-            padding: 0.6rem 1.2rem;
-            border: 1.5px solid #e2e8f0;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #e2e8f0;
             border-radius: 30px;
             background: none;
-            font-size: 0.9rem;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .variant-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .variant-btn.selected {
@@ -330,27 +454,33 @@
 
         .order-form {
             background: #f8fafc;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 20px;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
         }
 
         .order-form h3 {
             margin-bottom: 1rem;
+            color: var(--primary);
         }
 
         .order-form input {
             width: 100%;
             padding: 1rem;
             margin: 0.5rem 0;
-            border: 1.5px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
             border-radius: 16px;
             font-size: 1rem;
             -webkit-appearance: none;
         }
 
+        .order-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
         .order-btn {
-            background: var(--gradient);
+            background: var(--accent-gradient);
             color: var(--white);
             border: none;
             padding: 1rem;
@@ -360,32 +490,26 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 1rem;
+            transition: 0.3s;
         }
 
-        .order-btn:active {
-            transform: scale(0.98);
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(211,47,47,0.3);
         }
 
-        /* About & Contacts з соцмережами */
-        .about-content,
+        /* Контакти */
         .contact-content {
             background: var(--white);
-            padding: 2rem;
-            border-radius: 24px;
+            padding: 3rem;
+            border-radius: 30px;
             box-shadow: var(--shadow);
         }
 
-        .about-text {
-            line-height: 1.8;
-            color: var(--text);
-            margin-bottom: 2rem;
-            font-size: 1rem;
-        }
-
         .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
             margin: 2rem 0;
         }
 
@@ -393,21 +517,27 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            padding: 1rem;
+            padding: 1.5rem;
             background: #f8fafc;
             border-radius: 16px;
+            transition: 0.3s;
+        }
+
+        .contact-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
         }
 
         .contact-item i {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--gradient);
+            background: var(--accent);
             color: var(--white);
             border-radius: 50%;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .contact-item div {
@@ -417,7 +547,7 @@
         .contact-item h3 {
             font-size: 0.9rem;
             color: #64748b;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.3rem;
         }
 
         .contact-item p {
@@ -428,14 +558,14 @@
 
         /* Соціальні мережі */
         .social-section {
-            margin-top: 2rem;
+            margin-top: 3rem;
             padding-top: 2rem;
             border-top: 2px solid #e2e8f0;
         }
 
         .social-section h3 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             color: var(--primary);
         }
 
@@ -456,7 +586,7 @@
             color: var(--primary);
             font-weight: 500;
             transition: 0.3s;
-            flex: 1;
+            flex: 0 1 auto;
             min-width: 140px;
         }
 
@@ -469,11 +599,9 @@
         .social-link.facebook i { color: #1877f2; }
         .social-link.viber i { color: #665cac; }
         .social-link.whatsapp i { color: #25D366; }
-        .social-link.tiktok i { color: #000000; }
-        .social-link.youtube i { color: #ff0000; }
 
         .social-link:hover {
-            background: var(--gradient);
+            background: var(--accent);
             color: var(--white);
         }
 
@@ -519,19 +647,25 @@
 
         .modal-content h2 {
             margin-bottom: 1.5rem;
+            color: var(--primary);
         }
 
         .modal-content input {
             width: 100%;
             padding: 1rem;
             margin: 0.5rem 0;
-            border: 1.5px solid #e2e8f0;
+            border: 2px solid #e2e8f0;
             border-radius: 16px;
             font-size: 1rem;
         }
 
+        .modal-content input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
         .modal-content button {
-            background: var(--gradient);
+            background: var(--accent);
             color: var(--white);
             border: none;
             padding: 1rem;
@@ -540,13 +674,24 @@
             font-weight: 600;
             font-size: 1.1rem;
             margin-top: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .modal-content button:hover {
+            background: #b71c1c;
         }
 
         .close {
             float: right;
-            font-size: 1.8rem;
+            font-size: 2rem;
             cursor: pointer;
             color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: var(--accent);
         }
 
         /* Footer */
@@ -554,8 +699,8 @@
             background: var(--primary);
             color: var(--white);
             text-align: center;
-            padding: 1.5rem;
-            font-size: 0.9rem;
+            padding: 2rem;
+            margin-top: auto;
         }
 
         /* Адаптація */
@@ -572,31 +717,64 @@
                 display: block;
             }
 
+            .logo-img {
+                height: 40px;
+            }
+
+            .logo-text .top {
+                font-size: 1rem;
+            }
+
+            .logo-text .bottom {
+                font-size: 1.4rem;
+            }
+
             .auth-buttons button {
-                padding: 0.3rem 0.8rem;
-                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.85rem;
             }
 
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
             }
 
             .product-page-image {
                 height: 250px;
             }
 
+            .about-hero {
+                padding: 2rem 1rem;
+            }
+
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                padding: 1.5rem;
+            }
+
             .social-link {
                 min-width: 100%;
             }
+
+            .contact-content {
+                padding: 1.5rem;
+            }
         }
 
-        @media (max-width: 380px) {
-            .logo {
-                font-size: 1.2rem;
+        @media (max-width: 480px) {
+            .logo-img {
+                height: 35px;
             }
 
-            .logo i {
-                font-size: 1.5rem;
+            .logo-text .top {
+                font-size: 0.9rem;
+            }
+
+            .logo-text .bottom {
+                font-size: 1.2rem;
             }
 
             .products-grid {
@@ -604,8 +782,16 @@
             }
 
             .auth-buttons button {
-                padding: 0.2rem 0.6rem;
-                font-size: 0.75rem;
+                padding: 0.3rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .auth-buttons button i {
+                margin-right: 0;
+            }
+
+            .auth-buttons button span {
+                display: none;
             }
         }
 
@@ -636,37 +822,37 @@
         </div>
 
         <a href="/" class="logo">
-            <i class="fas fa-drone"></i>
-            <span>ЗАХІД</span>
-            <span>ДРОН</span>
+            <img src="" alt="Логотип" class="logo-img" id="headerLogo" style="display: none;">
+            <div class="logo-text">
+                <span class="top">ЗАХІД</span>
+                <span class="bottom">ДРОН</span>
+                <span class="ua">UA</span>
+            </div>
         </a>
 
         <nav class="desktop-nav">
             <a href="/">Головна</a>
             <a href="/catalog">Каталог</a>
-            <a href="/about">Про нас</a>
+            <a href="/about" class="active">Про нас</a>
             <a href="/contacts">Контакти</a>
         </nav>
 
         <div class="auth-buttons">
-            <button id="loginBtn"><i class="fas fa-sign-in-alt"></i></button>
-            <button id="registerBtn"><i class="fas fa-user-plus"></i></button>
+            <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span>Вхід</span></button>
+            <button id="registerBtn"><i class="fas fa-user-plus"></i> <span>Реєстрація</span></button>
         </div>
     </header>
 
-    <!-- Мобільне меню - виправлено -->
+    <!-- Мобільне меню -->
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
         <div class="mobile-nav-header">
-            <span class="logo">
-                <i class="fas fa-drone"></i>
-                <span>ЗАХІД ДРОН</span>
-            </span>
+            <img src="" alt="Логотип" class="logo-img" id="mobileLogo" style="display: none;">
             <span class="mobile-nav-close" id="mobileNavClose">&times;</span>
         </div>
         <a href="/" class="mobile-nav-link">Головна</a>
         <a href="/catalog" class="mobile-nav-link">Каталог</a>
-        <a href="/about" class="mobile-nav-link">Про нас</a>
+        <a href="/about" class="mobile-nav-link active">Про нас</a>
         <a href="/contacts" class="mobile-nav-link">Контакти</a>
     </div>
 
@@ -708,7 +894,7 @@
         let contactInfo = '';
         let socialLinks = [];
 
-        // Виправлена функція для мобільного меню
+        // Функція для мобільного меню
         function initMobileMenu() {
             const toggle = document.getElementById('mobileMenuToggle');
             const close = document.getElementById('mobileNavClose');
@@ -737,25 +923,36 @@
             close.addEventListener('click', closeMenu);
             overlay.addEventListener('click', closeMenu);
 
-            // Закриття при кліку на посилання
             document.querySelectorAll('.mobile-nav-link').forEach(link => {
                 link.addEventListener('click', closeMenu);
             });
 
-            // Запобігаємо закриттю при кліку на меню
             nav.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
         }
 
-        // Соціальні мережі за замовчуванням
-        const defaultSocialLinks = [
-            { platform: 'telegram', url: 'https://t.me/zahid_dron', icon: 'fa-brands fa-telegram', name: 'Telegram' },
-            { platform: 'instagram', url: 'https://instagram.com/zahid_dron', icon: 'fa-brands fa-instagram', name: 'Instagram' },
-            { platform: 'facebook', url: 'https://facebook.com/zahid.dron', icon: 'fa-brands fa-facebook', name: 'Facebook' },
-            { platform: 'viber', url: 'viber://chat?number=380991234567', icon: 'fa-brands fa-viber', name: 'Viber' },
-            { platform: 'whatsapp', url: 'https://wa.me/380991234567', icon: 'fa-brands fa-whatsapp', name: 'WhatsApp' }
-        ];
+        // Завантаження логотипу
+        async function loadLogo() {
+            try {
+                const response = await fetch('/api/logo');
+                if (response.ok) {
+                    const logoUrl = await response.text();
+                    if (logoUrl && logoUrl !== '') {
+                        const headerLogo = document.getElementById('headerLogo');
+                        const mobileLogo = document.getElementById('mobileLogo');
+                        
+                        headerLogo.src = logoUrl;
+                        headerLogo.style.display = 'block';
+                        
+                        mobileLogo.src = logoUrl;
+                        mobileLogo.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Помилка завантаження логотипу:', error);
+            }
+        }
 
         async function loadData() {
             try {
@@ -765,7 +962,7 @@
                     fetch('/api/about'),
                     fetch('/api/contact'),
                     fetch('/api/user').catch(() => null),
-                    fetch('/api/social').catch(() => ({ json: () => defaultSocialLinks }))
+                    fetch('/api/social').catch(() => ({ json: () => [] }))
                 ]);
                 
                 categories = await categoriesRes.json();
@@ -776,12 +973,16 @@
                 try {
                     socialLinks = await socialRes.json();
                 } catch {
-                    socialLinks = defaultSocialLinks;
+                    socialLinks = [];
                 }
                 
                 if (userRes && userRes.ok) {
                     currentUser = await userRes.json();
                 }
+                
+                // Завантажуємо логотип
+                await loadLogo();
+                
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
             }
@@ -796,15 +997,16 @@
             // Оновлюємо активні посилання
             document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === path) {
+                const href = link.getAttribute('href');
+                if (href === path || (path === '/' && href === '/about')) {
                     link.classList.add('active');
                 }
             });
             
-            if (path === '/' || path === '/catalog') {
-                renderCatalog(main);
-            } else if (path === '/about') {
+            if (path === '/' || path === '/about') {
                 renderAbout(main);
+            } else if (path === '/catalog') {
+                renderCatalog(main);
             } else if (path === '/contacts') {
                 renderContacts(main);
             } else if (path.startsWith('/product/')) {
@@ -813,11 +1015,59 @@
             }
         }
 
+        function renderAbout(main) {
+            main.innerHTML = `
+                <div class="about-hero">
+                    <h1>Про нас</h1>
+                    <p>Ваш надійний партнер у світі дронів та комплектуючих</p>
+                </div>
+                
+                <div class="about-content">
+                    ${aboutText.replace(/\n/g, '<br>')}
+                </div>
+                
+                <div class="about-features">
+                    <div class="feature-item">
+                        <i class="fas fa-truck"></i>
+                        <h3>Швидка доставка</h3>
+                        <p>Доставляємо по всій Україні протягом 1-3 днів</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Гарантія якості</h3>
+                        <p>Всі товари мають офіційну гарантію</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-headset"></i>
+                        <h3>Підтримка 24/7</h3>
+                        <p>Завжди готові допомогти з вибором</p>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-tools"></i>
+                        <h3>Сервісний центр</h3>
+                        <p>Власний сервісний центр та ремонт</p>
+                    </div>
+                </div>
+                
+                <div class="social-section">
+                    <h3>Ми в соціальних мережах</h3>
+                    <div class="social-links">
+                        ${socialLinks.map(social => `
+                            <a href="${social.url}" target="_blank" rel="noopener noreferrer" class="social-link ${social.platform}">
+                                <i class="${social.icon}"></i>
+                                <span>${social.name}</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
         function renderCatalog(main) {
-            let html = '<h1>Каталог</h1>';
+            let html = '<h1>Каталог товарів</h1>';
             
             if (products.length === 0) {
-                html += '<p style="text-align: center; padding: 2rem;">Товари поки відсутні</p>';
+                html += '<p style="text-align: center; padding: 3rem;">Товари поки відсутні</p>';
             }
             
             categories.forEach(cat => {
@@ -844,27 +1094,6 @@
             });
             
             main.innerHTML = html;
-        }
-
-        function renderAbout(main) {
-            main.innerHTML = `
-                <h1>Про нас</h1>
-                <div class="about-content">
-                    <div class="about-text">${aboutText.replace(/\n/g, '<br>')}</div>
-                    
-                    <div class="social-section">
-                        <h3>Ми в соціальних мережах</h3>
-                        <div class="social-links">
-                            ${socialLinks.map(social => `
-                                <a href="${social.url}" target="_blank" rel="noopener noreferrer" class="social-link ${social.platform}">
-                                    <i class="${social.icon}"></i>
-                                    <span>${social.name}</span>
-                                </a>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
         }
 
         function renderContacts(main) {
@@ -895,7 +1124,7 @@
                                         </div>
                                     </div>
                                 `;
-                            } else {
+                            } else if (line.includes('Графік')) {
                                 return `
                                     <div class="contact-item">
                                         <i class="fas fa-clock"></i>
@@ -905,7 +1134,18 @@
                                         </div>
                                     </div>
                                 `;
+                            } else if (line.includes('Адреса')) {
+                                return `
+                                    <div class="contact-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <div>
+                                            <h3>Адреса</h3>
+                                            <p>${line.replace('Адреса:', '').trim()}</p>
+                                        </div>
+                                    </div>
+                                `;
                             }
+                            return '';
                         }).join('')}
                     </div>
                     
@@ -937,7 +1177,7 @@
                     <div class="product-page-info">
                         <h1>${product.name}</h1>
                         <div class="product-page-price">${product.price.toLocaleString()} грн</div>
-                        <p style="color: #475569; line-height: 1.6; margin-bottom: 1.5rem;">${product.description || 'Опис товару відсутній'}</p>
+                        <p style="color: #475569; line-height: 1.8; margin-bottom: 2rem;">${product.description || 'Опис товару відсутній'}</p>
                         
                         <div class="variants">
                             <h3>Варіанти:</h3>
@@ -1073,7 +1313,10 @@
         document.getElementById('registerBtn').onclick = () => document.getElementById('registerModal').classList.add('active');
         
         // Викликаємо ініціалізацію мобільного меню після завантаження DOM
-        document.addEventListener('DOMContentLoaded', initMobileMenu);
+        document.addEventListener('DOMContentLoaded', () => {
+            initMobileMenu();
+            renderPage();
+        });
         
         renderPage();
     </script>
