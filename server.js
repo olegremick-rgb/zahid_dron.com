@@ -1,4 +1,4 @@
-// server.js - повна версія з логотипом, соцмережами та статистикою
+// server.js - повна версія з усіма функціями
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
@@ -15,7 +15,7 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(session({
-    secret: 'your-secret-key-change-this-in-production-2024',
+    secret: 'zahid-dron-secret-key-2024-change-this-in-production',
     resave: false,
     saveUninitialized: false,
     cookie: { 
@@ -83,6 +83,7 @@ async function initData() {
             await fs.writeFile(USERS_FILE, JSON.stringify([
                 { username: 'admin', password: 'admin', isAdmin: true }
             ], null, 2));
+            console.log('✅ Створено файл користувачів');
         }
 
         // Категорії
@@ -90,6 +91,7 @@ async function initData() {
             await fs.access(CATEGORIES_FILE);
         } catch {
             await fs.writeFile(CATEGORIES_FILE, JSON.stringify(['Дрони', 'Реб'], null, 2));
+            console.log('✅ Створено файл категорій');
         }
 
         // Товари
@@ -128,6 +130,7 @@ async function initData() {
                     createdAt: new Date().toISOString()
                 }
             ], null, 2));
+            console.log('✅ Створено файл товарів');
         }
 
         // Про нас
@@ -135,13 +138,15 @@ async function initData() {
             await fs.access(ABOUT_FILE);
         } catch {
             await fs.writeFile(ABOUT_FILE, 'Ми — команда професіоналів, яка займається продажем дронів та реб. Пропонуємо тільки якісну техніку та комплектуючі. Доставка по всій Україні. Працюємо з 2020 року, маємо власний сервісний центр.');
+            console.log('✅ Створено файл "Про нас"');
         }
 
         // Контакти
         try {
             await fs.access(CONTACT_FILE);
         } catch {
-            await fs.writeFile(CONTACT_FILE, 'Телефон: +380 99 123 45 67\nEmail: info@zahidron.ua\nГрафік: Пн-Пт 10:00-19:00, Сб 11:00-16:00');
+            await fs.writeFile(CONTACT_FILE, 'Телефон: +380 99 123 45 67\nEmail: info@zahidron.ua\nГрафік: Пн-Пт 10:00-19:00, Сб 11:00-16:00\nАдреса: м. Львів, вул. Прикладна 1');
+            console.log('✅ Створено файл контактів');
         }
 
         // Замовлення
@@ -149,6 +154,7 @@ async function initData() {
             await fs.access(ORDERS_FILE);
         } catch {
             await fs.writeFile(ORDERS_FILE, JSON.stringify([], null, 2));
+            console.log('✅ Створено файл замовлень');
         }
 
         // Соціальні мережі
@@ -192,6 +198,7 @@ async function initData() {
                     active: true 
                 }
             ], null, 2));
+            console.log('✅ Створено файл соціальних мереж');
         }
 
         // Логотип
@@ -199,9 +206,10 @@ async function initData() {
             await fs.access(LOGO_FILE);
         } catch {
             await fs.writeFile(LOGO_FILE, '');
+            console.log('✅ Створено файл логотипу');
         }
 
-        console.log('✅ Дані успішно ініціалізовано');
+        console.log('✅ Всі дані успішно ініціалізовано');
     } catch (error) {
         console.error('❌ Помилка ініціалізації даних:', error);
     }
@@ -235,6 +243,7 @@ app.post('/api/login', async (req, res) => {
             res.status(401).json({ error: 'Невірний логін або пароль' });
         }
     } catch (error) {
+        console.error('Помилка логіну:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -264,6 +273,60 @@ app.post('/api/register', async (req, res) => {
         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
         res.status(201).json({ success: true });
     } catch (error) {
+        console.error('Помилка реєстрації:', error);
+        res.status(500).json({ error: 'Помилка сервера' });
+    }
+});
+
+// ============ Зміна пароля адміна ============
+
+app.post('/api/admin/change-password', async (req, res) => {
+    if (!req.session.user?.isAdmin) {
+        return res.status(403).json({ error: 'Доступ заборонено' });
+    }
+    
+    try {
+        const { currentPassword, newUsername, newPassword } = req.body;
+        const users = JSON.parse(await fs.readFile(USERS_FILE, 'utf8'));
+        
+        // Знаходимо адміна
+        const adminIndex = users.findIndex(u => u.username === req.session.user.username);
+        
+        if (adminIndex === -1) {
+            return res.status(404).json({ error: 'Користувача не знайдено' });
+        }
+        
+        // Перевіряємо поточний пароль
+        if (users[adminIndex].password !== currentPassword) {
+            return res.status(401).json({ error: 'Невірний поточний пароль' });
+        }
+        
+        // Оновлюємо логін якщо вказано
+        if (newUsername && newUsername.trim() !== '') {
+            // Перевіряємо чи новий логін не зайнятий
+            if (users.some(u => u.username === newUsername && u.username !== req.session.user.username)) {
+                return res.status(400).json({ error: 'Цей логін вже використовується' });
+            }
+            users[adminIndex].username = newUsername;
+        }
+        
+        // Оновлюємо пароль якщо вказано
+        if (newPassword && newPassword.trim() !== '') {
+            if (newPassword.length < 6) {
+                return res.status(400).json({ error: 'Пароль повинен містити щонайменше 6 символів' });
+            }
+            users[adminIndex].password = newPassword;
+        }
+        
+        // Зберігаємо зміни
+        await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
+        
+        // Видаляємо сесію щоб користувач перелогінився
+        req.session.destroy();
+        
+        res.json({ success: true, message: 'Дані оновлено. Будь ласка, увійдіть заново.' });
+    } catch (error) {
+        console.error('Помилка зміни пароля:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -276,6 +339,7 @@ app.get('/api/logo', async (req, res) => {
         const logoPath = await fs.readFile(LOGO_FILE, 'utf8');
         res.send(logoPath || '');
     } catch (error) {
+        console.error('Помилка отримання логотипу:', error);
         res.status(500).send('');
     }
 });
@@ -295,6 +359,7 @@ app.post('/api/logo', upload.single('logo'), async (req, res) => {
         await fs.writeFile(LOGO_FILE, logoPath);
         res.json({ path: logoPath });
     } catch (error) {
+        console.error('Помилка завантаження логотипу:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -309,6 +374,7 @@ app.delete('/api/logo', async (req, res) => {
         await fs.writeFile(LOGO_FILE, '');
         res.json({ success: true });
     } catch (error) {
+        console.error('Помилка видалення логотипу:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -321,6 +387,7 @@ app.get('/api/categories', async (req, res) => {
         const categories = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8'));
         res.json(categories);
     } catch (error) {
+        console.error('Помилка отримання категорій:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -348,6 +415,7 @@ app.post('/api/categories', async (req, res) => {
             res.status(400).json({ error: 'Категорія вже існує' });
         }
     } catch (error) {
+        console.error('Помилка додавання категорії:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -377,6 +445,7 @@ app.delete('/api/categories/:category', async (req, res) => {
             res.status(404).json({ error: 'Категорію не знайдено' });
         }
     } catch (error) {
+        console.error('Помилка видалення категорії:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -389,6 +458,7 @@ app.get('/api/products', async (req, res) => {
         const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
         res.json(products);
     } catch (error) {
+        console.error('Помилка отримання товарів:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -464,6 +534,7 @@ app.delete('/api/products/:id', async (req, res) => {
         await fs.writeFile(PRODUCTS_FILE, JSON.stringify(filtered, null, 2));
         res.json({ success: true });
     } catch (error) {
+        console.error('Помилка видалення товару:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -491,6 +562,7 @@ app.delete('/api/products/:id/variant/:index', async (req, res) => {
             res.status(404).json({ error: 'Товар не знайдено' });
         }
     } catch (error) {
+        console.error('Помилка видалення варіанту:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -502,6 +574,7 @@ app.get('/api/about', async (req, res) => {
         const text = await fs.readFile(ABOUT_FILE, 'utf8');
         res.send(text);
     } catch (error) {
+        console.error('Помилка отримання "Про нас":', error);
         res.status(500).send('Помилка завантаження');
     }
 });
@@ -515,6 +588,7 @@ app.post('/api/about', async (req, res) => {
         await fs.writeFile(ABOUT_FILE, req.body.text);
         res.json({ success: true });
     } catch (error) {
+        console.error('Помилка збереження "Про нас":', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -526,6 +600,7 @@ app.get('/api/contact', async (req, res) => {
         const text = await fs.readFile(CONTACT_FILE, 'utf8');
         res.send(text);
     } catch (error) {
+        console.error('Помилка отримання контактів:', error);
         res.status(500).send('Помилка завантаження');
     }
 });
@@ -539,6 +614,7 @@ app.post('/api/contact', async (req, res) => {
         await fs.writeFile(CONTACT_FILE, req.body.text);
         res.json({ success: true });
     } catch (error) {
+        console.error('Помилка збереження контактів:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -556,6 +632,7 @@ app.get('/api/social', async (req, res) => {
             res.json(social);
         }
     } catch (error) {
+        console.error('Помилка отримання соцмереж:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -570,6 +647,7 @@ app.post('/api/social', async (req, res) => {
         await fs.writeFile(SOCIAL_FILE, JSON.stringify(req.body, null, 2));
         res.json({ success: true });
     } catch (error) {
+        console.error('Помилка оновлення соцмереж:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -586,6 +664,7 @@ app.get('/api/orders', async (req, res) => {
         const orders = JSON.parse(await fs.readFile(ORDERS_FILE, 'utf8'));
         res.json(orders);
     } catch (error) {
+        console.error('Помилка отримання замовлень:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -605,6 +684,7 @@ app.post('/api/orders', async (req, res) => {
         await fs.writeFile(ORDERS_FILE, JSON.stringify(orders, null, 2));
         res.status(201).json(newOrder);
     } catch (error) {
+        console.error('Помилка створення замовлення:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -638,6 +718,7 @@ app.get('/api/stats', async (req, res) => {
             variantsCount
         });
     } catch (error) {
+        console.error('Помилка отримання статистики:', error);
         res.status(500).json({ error: 'Помилка сервера' });
     }
 });
@@ -666,9 +747,10 @@ app.use((err, req, res, next) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log('\n=================================');
     console.log('🚀 Сервер запущено!');
-    console.log(`📌 http://localhost:${PORT}`);
-    console.log(`📌 http://localhost:${PORT}/admin`);
+    console.log(`📌 Основна сторінка: http://localhost:${PORT}`);
+    console.log(`📌 Адмін-панель: http://localhost:${PORT}/admin`);
     console.log('=================================');
-    console.log('👤 Адмін: admin / admin');
+    console.log('👤 Логін: admin');
+    console.log('🔑 Пароль: admin');
     console.log('=================================\n');
 });
