@@ -1,4 +1,4 @@
-// server.js - повна версія з соціальними мережами
+// server.js - повна версія з логотипом, соцмережами та статистикою
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
@@ -15,11 +15,11 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(session({
-    secret: 'your-secret-key-change-this-in-production',
+    secret: 'your-secret-key-change-this-in-production-2024',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        maxAge: 24 * 60 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000, // 24 години
         httpOnly: true,
         secure: false // встановіть true якщо використовуєте HTTPS
     }
@@ -27,31 +27,34 @@ app.use(session({
 
 // Налаштування завантаження файлів
 const storage = multer.diskStorage({
-    destination: './uploads/',
+    destination: (req, file, cb) => {
+        cb(null, './uploads/');
+    },
     filename: (req, file, cb) => {
         // Створюємо унікальне ім'я файлу
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
+        const ext = path.extname(file.originalname);
+        cb(null, uniqueSuffix + ext);
     }
 });
 
 // Фільтр для перевірки типу файлів
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png|gif|webp/;
+    const allowedTypes = /jpeg|jpg|png|gif|webp|svg/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
 
     if (mimetype && extname) {
         return cb(null, true);
     } else {
-        cb(new Error('Дозволені тільки зображення (jpg, jpeg, png, gif, webp)'));
+        cb(new Error('Дозволені тільки зображення (jpg, jpeg, png, gif, webp, svg)'));
     }
 };
 
 const upload = multer({ 
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // ліміт 5MB
+    limits: { fileSize: 10 * 1024 * 1024 } // ліміт 10MB
 });
 
 // Файли даних
@@ -63,6 +66,7 @@ const ABOUT_FILE = path.join(DATA_DIR, 'about.txt');
 const CONTACT_FILE = path.join(DATA_DIR, 'contact.txt');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const SOCIAL_FILE = path.join(DATA_DIR, 'social.json');
+const LOGO_FILE = path.join(DATA_DIR, 'logo.txt');
 
 // Ініціалізація даних
 async function initData() {
@@ -100,7 +104,8 @@ async function initData() {
                     price: 85000,
                     description: 'Професійний дрон з камерою Hasselblad, потрійна камера, 46 хвилин польоту',
                     variants: ['Standard', 'Pro', 'Cine'],
-                    image: null
+                    image: null,
+                    createdAt: new Date().toISOString()
                 },
                 {
                     id: 2,
@@ -109,7 +114,8 @@ async function initData() {
                     price: 1200,
                     description: 'Високоякісні карбонові ребра для FPV дронів, легкі та міцні',
                     variants: ['200mm', '250mm', '300mm', '350mm'],
-                    image: null
+                    image: null,
+                    createdAt: new Date().toISOString()
                 },
                 {
                     id: 3,
@@ -118,7 +124,8 @@ async function initData() {
                     price: 32000,
                     description: 'Готовий до польотів FPV дрон, 6S, з камерою GoPro mount',
                     variants: ['5"', '6"', '7"'],
-                    image: null
+                    image: null,
+                    createdAt: new Date().toISOString()
                 }
             ], null, 2));
         }
@@ -183,27 +190,20 @@ async function initData() {
                     icon: 'fa-brands fa-whatsapp', 
                     name: 'WhatsApp',
                     active: true 
-                },
-                { 
-                    platform: 'tiktok', 
-                    url: 'https://tiktok.com/@zahid.dron', 
-                    icon: 'fa-brands fa-tiktok', 
-                    name: 'TikTok',
-                    active: false 
-                },
-                { 
-                    platform: 'youtube', 
-                    url: 'https://youtube.com/@zahidron', 
-                    icon: 'fa-brands fa-youtube', 
-                    name: 'YouTube',
-                    active: false 
                 }
             ], null, 2));
         }
 
-        console.log('Дані успішно ініціалізовано');
+        // Логотип
+        try {
+            await fs.access(LOGO_FILE);
+        } catch {
+            await fs.writeFile(LOGO_FILE, '');
+        }
+
+        console.log('✅ Дані успішно ініціалізовано');
     } catch (error) {
-        console.error('Помилка ініціалізації даних:', error);
+        console.error('❌ Помилка ініціалізації даних:', error);
     }
 }
 
@@ -268,6 +268,51 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+// ============ Логотип ============
+
+// Отримати логотип
+app.get('/api/logo', async (req, res) => {
+    try {
+        const logoPath = await fs.readFile(LOGO_FILE, 'utf8');
+        res.send(logoPath || '');
+    } catch (error) {
+        res.status(500).send('');
+    }
+});
+
+// Завантажити логотип
+app.post('/api/logo', upload.single('logo'), async (req, res) => {
+    if (!req.session.user?.isAdmin) {
+        return res.status(403).json({ error: 'Доступ заборонено' });
+    }
+    
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'Файл не завантажено' });
+        }
+        
+        const logoPath = `/uploads/${req.file.filename}`;
+        await fs.writeFile(LOGO_FILE, logoPath);
+        res.json({ path: logoPath });
+    } catch (error) {
+        res.status(500).json({ error: 'Помилка сервера' });
+    }
+});
+
+// Видалити логотип
+app.delete('/api/logo', async (req, res) => {
+    if (!req.session.user?.isAdmin) {
+        return res.status(403).json({ error: 'Доступ заборонено' });
+    }
+    
+    try {
+        await fs.writeFile(LOGO_FILE, '');
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: 'Помилка сервера' });
+    }
+});
+
 // ============ Категорії ============
 
 // Отримати всі категорії
@@ -289,7 +334,7 @@ app.post('/api/categories', async (req, res) => {
     try {
         const { category } = req.body;
         
-        if (!category) {
+        if (!category || category.trim() === '') {
             return res.status(400).json({ error: 'Назва категорії обов\'язкова' });
         }
         
@@ -359,13 +404,21 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
         const variants = JSON.parse(req.body.variants || '[]');
         
         // Валідація
-        if (!req.body.name || !req.body.category || !req.body.price) {
-            return res.status(400).json({ error: 'Заповніть обов\'язкові поля' });
+        if (!req.body.name || req.body.name.trim() === '') {
+            return res.status(400).json({ error: 'Назва товару обов\'язкова' });
+        }
+        
+        if (!req.body.category) {
+            return res.status(400).json({ error: 'Категорія обов\'язкова' });
+        }
+        
+        if (!req.body.price || isNaN(req.body.price) || req.body.price <= 0) {
+            return res.status(400).json({ error: 'Коректна ціна обов\'язкова' });
         }
         
         const newProduct = {
             id: Date.now(),
-            name: req.body.name,
+            name: req.body.name.trim(),
             category: req.body.category,
             price: parseFloat(req.body.price),
             description: req.body.description || '',
@@ -391,11 +444,14 @@ app.delete('/api/products/:id', async (req, res) => {
     
     try {
         const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
-        const filtered = products.filter(p => p.id != req.params.id);
+        const product = products.find(p => p.id == req.params.id);
+        
+        if (!product) {
+            return res.status(404).json({ error: 'Товар не знайдено' });
+        }
         
         // Видаляємо зображення якщо воно є
-        const product = products.find(p => p.id == req.params.id);
-        if (product?.image) {
+        if (product.image) {
             const imagePath = path.join(__dirname, product.image);
             try {
                 await fs.unlink(imagePath);
@@ -404,6 +460,7 @@ app.delete('/api/products/:id', async (req, res) => {
             }
         }
         
+        const filtered = products.filter(p => p.id != req.params.id);
         await fs.writeFile(PRODUCTS_FILE, JSON.stringify(filtered, null, 2));
         res.json({ success: true });
     } catch (error) {
@@ -517,43 +574,6 @@ app.post('/api/social', async (req, res) => {
     }
 });
 
-// Додати нову соціальну мережу
-app.post('/api/social/add', async (req, res) => {
-    if (!req.session.user?.isAdmin) {
-        return res.status(403).json({ error: 'Доступ заборонено' });
-    }
-    
-    try {
-        const social = JSON.parse(await fs.readFile(SOCIAL_FILE, 'utf8'));
-        const newSocial = {
-            ...req.body,
-            id: Date.now()
-        };
-        
-        social.push(newSocial);
-        await fs.writeFile(SOCIAL_FILE, JSON.stringify(social, null, 2));
-        res.json(newSocial);
-    } catch (error) {
-        res.status(500).json({ error: 'Помилка сервера' });
-    }
-});
-
-// Видалити соціальну мережу
-app.delete('/api/social/:platform', async (req, res) => {
-    if (!req.session.user?.isAdmin) {
-        return res.status(403).json({ error: 'Доступ заборонено' });
-    }
-    
-    try {
-        const social = JSON.parse(await fs.readFile(SOCIAL_FILE, 'utf8'));
-        const filtered = social.filter(s => s.platform !== req.params.platform);
-        await fs.writeFile(SOCIAL_FILE, JSON.stringify(filtered, null, 2));
-        res.json({ success: true });
-    } catch (error) {
-        res.status(500).json({ error: 'Помилка сервера' });
-    }
-});
-
 // ============ Замовлення ============
 
 // Отримати всі замовлення (тільки для адміна)
@@ -607,12 +627,15 @@ app.get('/api/stats', async (req, res) => {
             return sum + (product?.price || 0);
         }, 0);
         
+        // Обраховуємо загальну кількість варіантів
+        const variantsCount = products.reduce((acc, p) => acc + p.variants.length, 0);
+        
         res.json({
             productsCount: products.length,
             categoriesCount: categories.length,
             ordersCount: orders.length,
             totalOrdersSum,
-            variantsCount: products.reduce((acc, p) => acc + p.variants.length, 0)
+            variantsCount
         });
     } catch (error) {
         res.status(500).json({ error: 'Помилка сервера' });
@@ -635,13 +658,17 @@ app.get('*', (req, res) => {
 
 // Обробка помилок
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('❌ Помилка:', err.stack);
     res.status(500).json({ error: err.message || 'Щось пішло не так' });
 });
 
 // Запуск сервера
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Сервер запущено на http://localhost:${PORT}`);
-    console.log(`📱 Адмін-панель: http://localhost:${PORT}/admin`);
-    console.log(`👤 Логін: admin, Пароль: admin`);
+    console.log('\n=================================');
+    console.log('🚀 Сервер запущено!');
+    console.log(`📌 http://localhost:${PORT}`);
+    console.log(`📌 http://localhost:${PORT}/admin`);
+    console.log('=================================');
+    console.log('👤 Адмін: admin / admin');
+    console.log('=================================\n');
 });
