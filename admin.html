@@ -1,9 +1,9 @@
-<!-- admin.html - з можливістю зміни логіна та пароля -->
+<!-- admin.html - виправлена версія -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Адмін-панель | Захід Дрон</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,6 +31,7 @@
         body {
             background: var(--light);
             min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
         }
 
         /* Header */
@@ -50,6 +51,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            text-decoration: none;
         }
 
         .logo-img {
@@ -128,6 +130,7 @@
             font-weight: 500;
             font-size: 0.9rem;
             transition: 0.3s;
+            cursor: pointer;
         }
 
         .mobile-admin-menu a.active {
@@ -182,6 +185,7 @@
             border-radius: 12px;
             transition: 0.3s;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .sidebar-menu a:hover,
@@ -447,6 +451,35 @@
             background: #b91c1c;
         }
 
+        /* Variant row */
+        .variant-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .variant-row input {
+            flex: 1;
+        }
+
+        .remove-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .remove-btn:hover {
+            background: #b91c1c;
+        }
+
         /* Image preview */
         .image-preview {
             max-width: 200px;
@@ -466,7 +499,7 @@
             padding: 0.5rem;
         }
 
-        /* Password strength meter */
+        /* Password strength */
         .password-strength {
             height: 5px;
             margin-top: 0.5rem;
@@ -581,7 +614,7 @@
             color: white;
         }
 
-        /* Social icon preview */
+        /* Social preview */
         .social-icon-preview {
             display: flex;
             align-items: center;
@@ -594,6 +627,7 @@
 
         .social-icon-preview i {
             font-size: 2rem;
+            color: var(--accent);
         }
 
         /* Modal */
@@ -674,17 +708,12 @@
                 height: 40px;
             }
 
-            .logo-text {
-                font-size: 1.2rem;
+            .logo-text .top {
+                font-size: 1rem;
             }
 
-            .category-tabs {
-                padding: 0.8rem;
-            }
-
-            .category-tab {
-                padding: 0.6rem 1rem;
-                font-size: 0.85rem;
+            .logo-text .bottom {
+                font-size: 1.4rem;
             }
         }
 
@@ -699,6 +728,11 @@
 
             .logo-text {
                 display: none;
+            }
+
+            .auth-buttons button {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -719,32 +753,32 @@
     </header>
 
     <!-- Mobile menu -->
-    <div class="mobile-admin-menu">
-        <a href="#" onclick="showSection('dashboard', event)" class="active">
+    <div class="mobile-admin-menu" id="mobileMenu">
+        <a onclick="showSection('dashboard', this)" class="active">
             <i class="fas fa-chart-line"></i> Дашборд
         </a>
-        <a href="#" onclick="showSection('profile', event)">
+        <a onclick="showSection('profile', this)">
             <i class="fas fa-user-cog"></i> Профіль
         </a>
-        <a href="#" onclick="showSection('logo', event)">
+        <a onclick="showSection('logo', this)">
             <i class="fas fa-image"></i> Логотип
         </a>
-        <a href="#" onclick="showSection('categories', event)">
+        <a onclick="showSection('categories', this)">
             <i class="fas fa-tags"></i> Категорії
         </a>
-        <a href="#" onclick="showSection('products', event)">
+        <a onclick="showSection('products', this)">
             <i class="fas fa-box"></i> Товари
         </a>
-        <a href="#" onclick="showSection('about', event)">
+        <a onclick="showSection('about', this)">
             <i class="fas fa-info-circle"></i> Про нас
         </a>
-        <a href="#" onclick="showSection('contacts', event)">
+        <a onclick="showSection('contacts', this)">
             <i class="fas fa-address-book"></i> Контакти
         </a>
-        <a href="#" onclick="showSection('social', event)">
+        <a onclick="showSection('social', this)">
             <i class="fas fa-share-alt"></i> Соцмережі
         </a>
-        <a href="#" onclick="showSection('orders', event)">
+        <a onclick="showSection('orders', this)">
             <i class="fas fa-shopping-cart"></i> Замовлення
         </a>
     </div>
@@ -754,31 +788,31 @@
         <div class="sidebar">
             <h3>Адмін-панель</h3>
             <ul class="sidebar-menu">
-                <li><a href="#" onclick="showSection('dashboard', event)" class="active">
+                <li><a onclick="showSection('dashboard', this)" class="active">
                     <i class="fas fa-chart-line"></i> Дашборд
                 </a></li>
-                <li><a href="#" onclick="showSection('profile', event)">
-                    <i class="fas fa-user-cog"></i> Профіль адміна
+                <li><a onclick="showSection('profile', this)">
+                    <i class="fas fa-user-cog"></i> Профіль
                 </a></li>
-                <li><a href="#" onclick="showSection('logo', event)">
+                <li><a onclick="showSection('logo', this)">
                     <i class="fas fa-image"></i> Логотип
                 </a></li>
-                <li><a href="#" onclick="showSection('categories', event)">
+                <li><a onclick="showSection('categories', this)">
                     <i class="fas fa-tags"></i> Категорії
                 </a></li>
-                <li><a href="#" onclick="showSection('products', event)">
+                <li><a onclick="showSection('products', this)">
                     <i class="fas fa-box"></i> Товари
                 </a></li>
-                <li><a href="#" onclick="showSection('about', event)">
+                <li><a onclick="showSection('about', this)">
                     <i class="fas fa-info-circle"></i> Про нас
                 </a></li>
-                <li><a href="#" onclick="showSection('contacts', event)">
+                <li><a onclick="showSection('contacts', this)">
                     <i class="fas fa-address-book"></i> Контакти
                 </a></li>
-                <li><a href="#" onclick="showSection('social', event)">
+                <li><a onclick="showSection('social', this)">
                     <i class="fas fa-share-alt"></i> Соцмережі
                 </a></li>
-                <li><a href="#" onclick="showSection('orders', event)">
+                <li><a onclick="showSection('orders', this)">
                     <i class="fas fa-shopping-cart"></i> Замовлення
                 </a></li>
             </ul>
@@ -787,10 +821,7 @@
         <div class="admin-content">
             <!-- Dashboard Section -->
             <div id="dashboard" class="admin-section active">
-                <h2>
-                    <i class="fas fa-chart-line"></i>
-                    Дашборд
-                </h2>
+                <h2><i class="fas fa-chart-line"></i> Дашборд</h2>
                 <div class="stats-grid" id="stats"></div>
                 
                 <div style="margin-top: 2rem;">
@@ -812,12 +843,9 @@
                 </div>
             </div>
 
-            <!-- Profile Section - Нова секція для зміни логіна/пароля -->
+            <!-- Profile Section -->
             <div id="profile" class="admin-section">
-                <h2>
-                    <i class="fas fa-user-cog"></i>
-                    Профіль адміністратора
-                </h2>
+                <h2><i class="fas fa-user-cog"></i> Профіль адміністратора</h2>
                 
                 <div class="admin-form">
                     <h3><i class="fas fa-lock"></i> Зміна пароля</h3>
@@ -856,22 +884,11 @@
                         <i class="fas fa-save"></i> Зберегти зміни
                     </button>
                 </div>
-                
-                <div class="admin-form">
-                    <h3><i class="fas fa-info-circle"></i> Інформація про безпеку</h3>
-                    <p style="color: #64748b; line-height: 1.6;">
-                        <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 0.5rem;"></i>
-                        Рекомендуємо використовувати надійний пароль, який містить щонайменше 8 символів, великі та малі літери, цифри та спеціальні символи.
-                    </p>
-                </div>
             </div>
 
             <!-- Logo Section -->
             <div id="logo" class="admin-section">
-                <h2>
-                    <i class="fas fa-image"></i>
-                    Логотип
-                </h2>
+                <h2><i class="fas fa-image"></i> Логотип</h2>
                 
                 <div class="admin-form">
                     <h3><i class="fas fa-upload"></i> Завантажити логотип</h3>
@@ -902,10 +919,7 @@
 
             <!-- Categories Section -->
             <div id="categories" class="admin-section">
-                <h2>
-                    <i class="fas fa-tags"></i>
-                    Категорії
-                </h2>
+                <h2><i class="fas fa-tags"></i> Категорії</h2>
                 
                 <div class="admin-form">
                     <h3><i class="fas fa-plus-circle"></i> Додати категорію</h3>
@@ -933,10 +947,7 @@
 
             <!-- Products Section -->
             <div id="products" class="admin-section">
-                <h2>
-                    <i class="fas fa-box"></i>
-                    Товари
-                </h2>
+                <h2><i class="fas fa-box"></i> Товари</h2>
                 
                 <div class="admin-form">
                     <h3><i class="fas fa-plus-circle"></i> Додати товар</h3>
@@ -963,14 +974,7 @@
                     
                     <div class="form-group">
                         <label>Варіанти</label>
-                        <div id="variantsContainer">
-                            <div class="variant-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                                <input type="text" placeholder="Варіант (напр. Standard)" style="flex: 1;">
-                                <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
+                        <div id="variantsContainer"></div>
                         <button class="btn btn-secondary" onclick="addVariantField()" style="margin-top: 0.5rem;">
                             <i class="fas fa-plus"></i> Додати варіант
                         </button>
@@ -989,25 +993,18 @@
 
                 <!-- Category tabs for filtering -->
                 <div class="category-tabs" id="categoryTabs"></div>
-
-                <!-- Products by category -->
                 <div id="productsByCategory"></div>
             </div>
 
             <!-- About Section -->
             <div id="about" class="admin-section">
-                <h2>
-                    <i class="fas fa-info-circle"></i>
-                    Про нас
-                </h2>
+                <h2><i class="fas fa-info-circle"></i> Про нас</h2>
                 
                 <div class="admin-form">
                     <div class="form-group">
                         <label>Текст сторінки "Про нас"</label>
                         <textarea id="aboutText" rows="10" style="width: 100%;"></textarea>
-                        <small>Цей текст буде відображатися на головній сторінці "Про нас"</small>
                     </div>
-                    
                     <button class="btn" onclick="saveAbout()">
                         <i class="fas fa-save"></i> Зберегти зміни
                     </button>
@@ -1016,10 +1013,7 @@
 
             <!-- Contacts Section -->
             <div id="contacts" class="admin-section">
-                <h2>
-                    <i class="fas fa-address-book"></i>
-                    Контакти
-                </h2>
+                <h2><i class="fas fa-address-book"></i> Контакти</h2>
                 
                 <div class="admin-form">
                     <div class="form-group">
@@ -1038,7 +1032,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Адреса (опціонально)</label>
+                        <label>Адреса</label>
                         <input type="text" id="contactAddress" placeholder="м. Львів, вул. Прикладна 1">
                     </div>
                     
@@ -1050,10 +1044,7 @@
 
             <!-- Social Media Section -->
             <div id="social" class="admin-section">
-                <h2>
-                    <i class="fas fa-share-alt"></i>
-                    Соціальні мережі
-                </h2>
+                <h2><i class="fas fa-share-alt"></i> Соціальні мережі</h2>
                 
                 <div class="admin-form">
                     <h3><i class="fas fa-plus-circle"></i> Додати соціальну мережу</h3>
@@ -1068,7 +1059,7 @@
                             <option value="whatsapp">WhatsApp</option>
                             <option value="tiktok">TikTok</option>
                             <option value="youtube">YouTube</option>
-                            <option value="custom">Інше (вказати вручну)</option>
+                            <option value="custom">Інше</option>
                         </select>
                     </div>
                     
@@ -1083,19 +1074,18 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Іконка (Font Awesome клас)</label>
+                        <label>Іконка</label>
                         <input type="text" id="socialIcon" placeholder="fa-brands fa-telegram">
-                        <small>Наприклад: fa-brands fa-instagram, fa-brands fa-facebook</small>
                     </div>
                     
                     <div class="form-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="socialActive" checked> Активна (відображати на сайті)
+                        <label>
+                            <input type="checkbox" id="socialActive" checked> Активна
                         </label>
                     </div>
                     
                     <div class="social-icon-preview" id="socialPreview">
-                        <i class="fab fa-telegram" style="color: #d32f2f;"></i>
+                        <i class="fab fa-telegram"></i>
                         <span>Попередній перегляд</span>
                     </div>
                     
@@ -1123,10 +1113,7 @@
 
             <!-- Orders Section -->
             <div id="orders" class="admin-section">
-                <h2>
-                    <i class="fas fa-shopping-cart"></i>
-                    Замовлення
-                </h2>
+                <h2><i class="fas fa-shopping-cart"></i> Замовлення</h2>
                 
                 <div class="table-container">
                     <table class="table">
@@ -1175,15 +1162,15 @@
     </div>
 
     <script>
+        // Глобальні змінні
+        let currentUser = null;
         let categories = [];
         let products = [];
         let orders = [];
         let social = [];
         let currentEditPlatform = null;
-        let currentCategory = 'all';
-        let currentAdmin = null;
 
-        // Перевірка авторизації
+        // Перевірка авторизації при завантаженні
         async function checkAuth() {
             try {
                 const response = await fetch('/api/user');
@@ -1196,38 +1183,17 @@
                     window.location.href = '/';
                     return false;
                 }
-                currentAdmin = user;
+                currentUser = user;
+                document.getElementById('currentUsername').value = user.username;
                 return true;
-            } catch {
+            } catch (error) {
+                console.error('Помилка авторизації:', error);
                 window.location.href = '/';
                 return false;
             }
         }
 
-        // Завантаження логотипу
-        async function loadLogo() {
-            try {
-                const response = await fetch('/api/logo');
-                if (response.ok) {
-                    const logoUrl = await response.text();
-                    const headerLogo = document.getElementById('headerLogo');
-                    const currentLogo = document.getElementById('currentLogo');
-                    const noLogoText = document.getElementById('noLogoText');
-                    
-                    if (logoUrl && logoUrl !== '') {
-                        headerLogo.src = logoUrl;
-                        headerLogo.style.display = 'block';
-                        currentLogo.src = logoUrl;
-                        currentLogo.style.display = 'block';
-                        if (noLogoText) noLogoText.style.display = 'none';
-                    }
-                }
-            } catch (error) {
-                console.error('Помилка завантаження логотипу:', error);
-            }
-        }
-
-        // Завантаження всіх даних
+        // Завантаження даних
         async function loadData() {
             if (!await checkAuth()) return;
 
@@ -1251,11 +1217,9 @@
                 // Оновлюємо всі секції
                 updateDashboard(stats);
                 updateCategoriesList();
-                renderProductsByCategory();
                 updateOrdersList();
                 updateSocialList();
                 updateCategorySelect();
-                updateCategoryTabs();
                 
                 // Заповнюємо текстові поля
                 document.getElementById('aboutText').value = await aboutRes.text();
@@ -1264,12 +1228,7 @@
                 parseContactInfo(contactText);
                 
                 // Завантажуємо логотип
-                await loadLogo();
-                
-                // Заповнюємо поточний логін в профілі
-                if (currentAdmin) {
-                    document.getElementById('currentUsername').value = currentAdmin.username;
-                }
+                loadLogo();
                 
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
@@ -1277,94 +1236,30 @@
             }
         }
 
-        // Перевірка надійності пароля
-        window.checkPasswordStrength = function() {
-            const password = document.getElementById('newPassword').value;
-            const bar = document.getElementById('passwordStrengthBar');
-            const hint = document.getElementById('passwordHint');
-            
-            if (!password) {
-                bar.className = 'password-strength-bar';
-                hint.textContent = '';
-                return;
-            }
-            
-            let strength = 0;
-            
-            // Перевірка довжини
-            if (password.length >= 8) strength++;
-            if (password.length >= 12) strength++;
-            
-            // Перевірка наявності різних типів символів
-            if (/[a-z]/.test(password)) strength++;
-            if (/[A-Z]/.test(password)) strength++;
-            if (/[0-9]/.test(password)) strength++;
-            if (/[^a-zA-Z0-9]/.test(password)) strength++;
-            
-            if (strength <= 2) {
-                bar.className = 'password-strength-bar weak';
-                hint.textContent = 'Слабкий пароль';
-                hint.style.color = '#dc2626';
-            } else if (strength <= 4) {
-                bar.className = 'password-strength-bar medium';
-                hint.textContent = 'Середній пароль';
-                hint.style.color = '#f59e0b';
-            } else {
-                bar.className = 'password-strength-bar strong';
-                hint.textContent = 'Надійний пароль';
-                hint.style.color = '#10b981';
-            }
-        }
-
-        // Зміна пароля
-        window.changePassword = async function() {
-            const currentPassword = document.getElementById('currentPassword').value;
-            const newUsername = document.getElementById('newUsername').value;
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            if (!currentPassword) {
-                showNotification('Введіть поточний пароль', 'warning');
-                return;
-            }
-            
-            if (newPassword && newPassword !== confirmPassword) {
-                showNotification('Новий пароль та підтвердження не співпадають', 'error');
-                return;
-            }
-            
-            if (newPassword && newPassword.length < 6) {
-                showNotification('Пароль повинен містити щонайменше 6 символів', 'warning');
-                return;
-            }
-            
+        // Завантаження логотипу
+        async function loadLogo() {
             try {
-                const response = await fetch('/api/admin/change-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        currentPassword,
-                        newUsername: newUsername || undefined,
-                        newPassword: newPassword || undefined
-                    })
-                });
-                
-                const data = await response.json();
-                
+                const response = await fetch('/api/logo');
                 if (response.ok) {
-                    showNotification('Дані успішно оновлено! Будь ласка, увійдіть заново.', 'success');
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 2000);
-                } else {
-                    showNotification(data.error || 'Помилка при оновленні', 'error');
+                    const logoUrl = await response.text();
+                    if (logoUrl && logoUrl !== '') {
+                        const headerLogo = document.getElementById('headerLogo');
+                        const currentLogo = document.getElementById('currentLogo');
+                        const noLogoText = document.getElementById('noLogoText');
+                        
+                        headerLogo.src = logoUrl;
+                        headerLogo.style.display = 'block';
+                        currentLogo.src = logoUrl;
+                        currentLogo.style.display = 'block';
+                        if (noLogoText) noLogoText.style.display = 'none';
+                    }
                 }
             } catch (error) {
-                showNotification('Помилка при з'єднанні з сервером', 'error');
+                console.error('Помилка завантаження логотипу:', error);
             }
         }
 
-        // Парсинг контактної інформації
+        // Парсинг контактів
         function parseContactInfo(text) {
             const lines = text.split('\n');
             
@@ -1376,7 +1271,7 @@
 
         // Оновлення дашборду
         function updateDashboard(stats) {
-            const statsHtml = `
+            document.getElementById('stats').innerHTML = `
                 <div class="stat-card">
                     <i class="fas fa-box"></i>
                     <h3>Товарів</h3>
@@ -1404,8 +1299,6 @@
                 </div>
             `;
             
-            document.getElementById('stats').innerHTML = statsHtml;
-            
             // Останні 5 замовлень
             const recentOrders = orders.slice(-5).reverse();
             document.getElementById('recentOrders').innerHTML = recentOrders.map(o => {
@@ -1425,6 +1318,8 @@
         // Оновлення списку категорій
         function updateCategoriesList() {
             const tbody = document.getElementById('categoriesList');
+            if (!tbody) return;
+            
             tbody.innerHTML = categories.map(cat => {
                 const productCount = products.filter(p => p.category === cat).length;
                 return `
@@ -1434,7 +1329,7 @@
                         <td>
                             <div class="action-btns">
                                 <button class="delete-btn" onclick="deleteCategory('${cat}')" 
-                                    ${productCount > 0 ? 'disabled title="Спочатку видаліть товари в цій категорії"' : ''}>
+                                    ${productCount > 0 ? 'disabled title="Спочатку видаліть товари"' : ''}>
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -1444,110 +1339,11 @@
             }).join('');
         }
 
-        // Оновлення вкладок категорій
-        function updateCategoryTabs() {
-            const tabsContainer = document.getElementById('categoryTabs');
-            if (!tabsContainer) return;
-            
-            let tabsHtml = `
-                <button class="category-tab ${currentCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all')">
-                    <i class="fas fa-list"></i> Всі товари (${products.length})
-                </button>
-            `;
-            
-            categories.forEach(cat => {
-                const count = products.filter(p => p.category === cat).length;
-                if (count > 0) {
-                    tabsHtml += `
-                        <button class="category-tab ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">
-                            <i class="fas fa-tag"></i> ${cat} (${count})
-                        </button>
-                    `;
-                }
-            });
-            
-            tabsContainer.innerHTML = tabsHtml;
-        }
-
-        // Фільтрація по категорії
-        window.filterByCategory = function(category) {
-            currentCategory = category;
-            updateCategoryTabs();
-            renderProductsByCategory();
-        }
-
-        // Відображення товарів по категоріях
-        function renderProductsByCategory() {
-            const container = document.getElementById('productsByCategory');
-            if (!container) return;
-            
-            let html = '';
-            
-            if (currentCategory === 'all') {
-                categories.forEach(cat => {
-                    const catProducts = products.filter(p => p.category === cat);
-                    if (catProducts.length > 0) {
-                        html += renderCategoryProducts(cat, catProducts);
-                    }
-                });
-            } else {
-                const catProducts = products.filter(p => p.category === currentCategory);
-                if (catProducts.length > 0) {
-                    html += renderCategoryProducts(currentCategory, catProducts);
-                }
-            }
-            
-            container.innerHTML = html || '<p style="text-align: center; padding: 2rem;">Немає товарів у цій категорії</p>';
-        }
-
-        // Відображення товарів однієї категорії
-        function renderCategoryProducts(categoryName, categoryProducts) {
-            return `
-                <div class="category-section">
-                    <div class="category-title">
-                        <h3>${categoryName}</h3>
-                        <span>${categoryProducts.length} товарів</span>
-                    </div>
-                    <div class="table-container">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Фото</th>
-                                    <th>Назва</th>
-                                    <th>Ціна</th>
-                                    <th>Варіанти</th>
-                                    <th>Дії</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${categoryProducts.map(p => `
-                                    <tr>
-                                        <td><img src="${p.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23e2e8f0\'/%3E%3C/svg%3E'}" alt=""></td>
-                                        <td>${p.name}</td>
-                                        <td>${p.price.toLocaleString()} грн</td>
-                                        <td>${p.variants.length}</td>
-                                        <td>
-                                            <div class="action-btns">
-                                                <button class="edit-btn" onclick="editProduct(${p.id})">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                                <button class="delete-btn" onclick="deleteProduct(${p.id})">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
-        }
-
         // Оновлення списку замовлень
         function updateOrdersList() {
             const tbody = document.getElementById('ordersList');
+            if (!tbody) return;
+            
             tbody.innerHTML = orders.sort((a, b) => new Date(b.date) - new Date(a.date)).map(o => {
                 const product = products.find(p => p.id == o.productId);
                 return `
@@ -1558,9 +1354,7 @@
                         <td>${o.phone}</td>
                         <td>${o.variant || '—'}</td>
                         <td>${new Date(o.date).toLocaleString('uk-UA')}</td>
-                        <td>
-                            <span class="badge badge-active">нове</span>
-                        </td>
+                        <td><span class="badge badge-active">нове</span></td>
                     </tr>
                 `;
             }).join('');
@@ -1576,24 +1370,12 @@
                     <td><i class="${s.icon}" style="font-size: 1.5rem; color: var(--accent);"></i></td>
                     <td>${s.platform}</td>
                     <td>${s.name}</td>
-                    <td>
-                        <a href="${s.url}" target="_blank" style="color: var(--accent); text-decoration: none;">
-                            ${s.url.substring(0, 30)}...
-                        </a>
-                    </td>
-                    <td>
-                        <span class="badge ${s.active ? 'badge-active' : 'badge-inactive'}">
-                            ${s.active ? 'Активна' : 'Неактивна'}
-                        </span>
-                    </td>
+                    <td><a href="${s.url}" target="_blank">${s.url.substring(0, 30)}...</a></td>
+                    <td><span class="badge ${s.active ? 'badge-active' : 'badge-inactive'}">${s.active ? 'Активна' : 'Неактивна'}</span></td>
                     <td>
                         <div class="action-btns">
-                            <button class="edit-btn" onclick="openEditSocial('${s.platform}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="delete-btn" onclick="deleteSocial('${s.platform}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            <button class="edit-btn" onclick="openEditSocial('${s.platform}')"><i class="fas fa-edit"></i></button>
+                            <button class="delete-btn" onclick="deleteSocial('${s.platform}')"><i class="fas fa-trash"></i></button>
                         </div>
                     </td>
                 </tr>
@@ -1608,28 +1390,92 @@
             }
         }
 
-        // Додавання поля варіанту
+        // Додавання варіанту
         window.addVariantField = function() {
             const container = document.getElementById('variantsContainer');
             const div = document.createElement('div');
             div.className = 'variant-row';
-            div.style.display = 'flex';
-            div.style.gap = '0.5rem';
-            div.style.marginBottom = '0.5rem';
             div.innerHTML = `
-                <input type="text" placeholder="Варіант" style="flex: 1;">
-                <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
+                <input type="text" placeholder="Варіант">
+                <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
             `;
             container.appendChild(div);
+        }
+
+        // Перевірка надійності пароля
+        window.checkPasswordStrength = function() {
+            const password = document.getElementById('newPassword').value;
+            const bar = document.getElementById('passwordStrengthBar');
+            const hint = document.getElementById('passwordHint');
+            
+            if (!password) {
+                bar.className = 'password-strength-bar';
+                hint.textContent = '';
+                return;
+            }
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            if (strength <= 2) {
+                bar.className = 'password-strength-bar weak';
+                hint.textContent = 'Слабкий пароль';
+            } else if (strength <= 4) {
+                bar.className = 'password-strength-bar medium';
+                hint.textContent = 'Середній пароль';
+            } else {
+                bar.className = 'password-strength-bar strong';
+                hint.textContent = 'Надійний пароль';
+            }
+        }
+
+        // Зміна пароля
+        window.changePassword = async function() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword) {
+                showNotification('Введіть поточний пароль', 'warning');
+                return;
+            }
+            
+            if (newPassword && newPassword !== confirmPassword) {
+                showNotification('Паролі не співпадають', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ currentPassword, newUsername, newPassword })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('Дані оновлено! Увійдіть заново.', 'success');
+                    setTimeout(() => logout(), 2000);
+                } else {
+                    showNotification(data.error || 'Помилка', 'error');
+                }
+            } catch (error) {
+                showNotification('Помилка сервера', 'error');
+            }
         }
 
         // Завантаження логотипу
         window.uploadLogo = async function() {
             const file = document.getElementById('logoFile').files[0];
             if (!file) {
-                showNotification('Виберіть файл для завантаження', 'warning');
+                showNotification('Виберіть файл', 'warning');
                 return;
             }
             
@@ -1647,7 +1493,7 @@
                     loadLogo();
                 }
             } catch (error) {
-                showNotification('Помилка при збереженні логотипу', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1656,10 +1502,7 @@
             if (!confirm('Видалити логотип?')) return;
             
             try {
-                const response = await fetch('/api/logo', {
-                    method: 'DELETE'
-                });
-                
+                const response = await fetch('/api/logo', { method: 'DELETE' });
                 if (response.ok) {
                     showNotification('Логотип видалено!', 'success');
                     document.getElementById('headerLogo').style.display = 'none';
@@ -1667,7 +1510,7 @@
                     document.getElementById('noLogoText').style.display = 'block';
                 }
             } catch (error) {
-                showNotification('Помилка при видаленні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1675,7 +1518,7 @@
         window.addCategory = async function() {
             const category = document.getElementById('newCategory').value.trim();
             if (!category) {
-                showNotification('Введіть назву категорії', 'warning');
+                showNotification('Введіть назву', 'warning');
                 return;
             }
             
@@ -1690,12 +1533,9 @@
                     showNotification('Категорію додано!', 'success');
                     document.getElementById('newCategory').value = '';
                     loadData();
-                } else {
-                    const error = await response.json();
-                    showNotification(error.error || 'Помилка', 'error');
                 }
             } catch (error) {
-                showNotification('Помилка при додаванні категорії', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1711,12 +1551,9 @@
                 if (response.ok) {
                     showNotification('Категорію видалено!', 'success');
                     loadData();
-                } else {
-                    const error = await response.json();
-                    showNotification(error.error || 'Помилка', 'error');
                 }
             } catch (error) {
-                showNotification('Помилка при видаленні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1733,13 +1570,10 @@
                 if (input.value.trim()) variants.push(input.value.trim());
             });
             
-            if (variants.length === 0) variants.push('Стандарт');
-            formData.append('variants', JSON.stringify(variants));
+            formData.append('variants', JSON.stringify(variants.length ? variants : ['Стандарт']));
             
             const imageFile = document.getElementById('productImage').files[0];
-            if (imageFile) {
-                formData.append('image', imageFile);
-            }
+            if (imageFile) formData.append('image', imageFile);
             
             try {
                 const response = await fetch('/api/products', {
@@ -1752,23 +1586,12 @@
                     document.getElementById('productName').value = '';
                     document.getElementById('productPrice').value = '';
                     document.getElementById('productDescription').value = '';
-                    document.getElementById('variantsContainer').innerHTML = `
-                        <div class="variant-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <input type="text" placeholder="Варіант" style="flex: 1;">
-                            <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    `;
+                    document.getElementById('variantsContainer').innerHTML = '';
                     document.getElementById('productImage').value = '';
-                    document.getElementById('imagePreview').style.display = 'none';
                     loadData();
-                } else {
-                    const error = await response.json();
-                    showNotification(error.error || 'Помилка', 'error');
                 }
             } catch (error) {
-                showNotification('Помилка при додаванні товару', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1777,51 +1600,14 @@
             if (!confirm('Видалити товар?')) return;
             
             try {
-                const response = await fetch(`/api/products/${id}`, {
-                    method: 'DELETE'
-                });
-                
+                const response = await fetch(`/api/products/${id}`, { method: 'DELETE' });
                 if (response.ok) {
                     showNotification('Товар видалено!', 'success');
                     loadData();
                 }
             } catch (error) {
-                showNotification('Помилка при видаленні', 'error');
+                showNotification('Помилка', 'error');
             }
-        }
-
-        // Редагування товару
-        window.editProduct = function(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-            
-            document.getElementById('productCategory').value = product.category;
-            document.getElementById('productName').value = product.name;
-            document.getElementById('productPrice').value = product.price;
-            document.getElementById('productDescription').value = product.description || '';
-            
-            const container = document.getElementById('variantsContainer');
-            container.innerHTML = '';
-            product.variants.forEach(v => {
-                const div = document.createElement('div');
-                div.className = 'variant-row';
-                div.style.display = 'flex';
-                div.style.gap = '0.5rem';
-                div.style.marginBottom = '0.5rem';
-                div.innerHTML = `
-                    <input type="text" value="${v}" placeholder="Варіант" style="flex: 1;">
-                    <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                container.appendChild(div);
-            });
-            
-            showSection('products', null);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            showNotification('Редагуйте товар та додайте заново', 'info');
-            
-            deleteProduct(productId);
         }
 
         // Збереження "Про нас"
@@ -1839,7 +1625,7 @@
                     showNotification('Текст збережено!', 'success');
                 }
             } catch (error) {
-                showNotification('Помилка при збереженні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1856,20 +1642,18 @@
             if (schedule) parts.push(`Графік: ${schedule}`);
             if (address) parts.push(`Адреса: ${address}`);
             
-            const text = parts.join('\n');
-            
             try {
                 const response = await fetch('/api/contact', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
+                    body: JSON.stringify({ text: parts.join('\n') })
                 });
                 
                 if (response.ok) {
                     showNotification('Контакти збережено!', 'success');
                 }
             } catch (error) {
-                showNotification('Помилка при збереженні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1882,36 +1666,30 @@
             const active = document.getElementById('socialActive').checked;
             
             if (!name || !url) {
-                showNotification('Заповніть назву та посилання', 'warning');
+                showNotification('Заповніть всі поля', 'warning');
                 return;
             }
             
-            if (!icon) {
-                const icons = {
-                    telegram: 'fa-brands fa-telegram',
-                    instagram: 'fa-brands fa-instagram',
-                    facebook: 'fa-brands fa-facebook',
-                    viber: 'fa-brands fa-viber',
-                    whatsapp: 'fa-brands fa-whatsapp',
-                    tiktok: 'fa-brands fa-tiktok',
-                    youtube: 'fa-brands fa-youtube'
-                };
-                icon = icons[platform] || 'fa-solid fa-link';
-            }
+            const icons = {
+                telegram: 'fa-brands fa-telegram',
+                instagram: 'fa-brands fa-instagram',
+                facebook: 'fa-brands fa-facebook',
+                viber: 'fa-brands fa-viber',
+                whatsapp: 'fa-brands fa-whatsapp',
+                tiktok: 'fa-brands fa-tiktok',
+                youtube: 'fa-brands fa-youtube'
+            };
+            
+            if (!icon) icon = icons[platform] || 'fa-solid fa-link';
             
             try {
                 const getResponse = await fetch('/api/social');
                 let currentSocial = await getResponse.json();
                 
-                const newSocial = {
+                currentSocial.push({
                     platform: platform === 'custom' ? name.toLowerCase().replace(/\s+/g, '_') : platform,
-                    name,
-                    url,
-                    icon,
-                    active
-                };
-                
-                currentSocial.push(newSocial);
+                    name, url, icon, active
+                });
                 
                 const response = await fetch('/api/social', {
                     method: 'POST',
@@ -1920,19 +1698,18 @@
                 });
                 
                 if (response.ok) {
-                    showNotification('Соцмережу додано!', 'success');
+                    showNotification('Додано!', 'success');
                     document.getElementById('socialName').value = '';
                     document.getElementById('socialUrl').value = '';
                     document.getElementById('socialIcon').value = '';
-                    document.getElementById('socialActive').checked = true;
                     loadData();
                 }
             } catch (error) {
-                showNotification('Помилка при додаванні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
-        // Відкриття модалки редагування соцмережі
+        // Відкриття редагування соцмережі
         window.openEditSocial = function(platform) {
             const item = social.find(s => s.platform === platform);
             if (item) {
@@ -1960,13 +1737,7 @@
                 
                 const index = currentSocial.findIndex(s => s.platform === currentEditPlatform);
                 if (index !== -1) {
-                    currentSocial[index] = {
-                        ...currentSocial[index],
-                        name,
-                        url,
-                        icon,
-                        active
-                    };
+                    currentSocial[index] = { ...currentSocial[index], name, url, icon, active };
                     
                     const response = await fetch('/api/social', {
                         method: 'POST',
@@ -1981,18 +1752,17 @@
                     }
                 }
             } catch (error) {
-                showNotification('Помилка при оновленні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
         // Видалення соцмережі
         window.deleteSocial = async function(platform) {
-            if (!confirm('Видалити цю соцмережу?')) return;
+            if (!confirm('Видалити?')) return;
             
             try {
                 const getResponse = await fetch('/api/social');
                 let currentSocial = await getResponse.json();
-                
                 currentSocial = currentSocial.filter(s => s.platform !== platform);
                 
                 const response = await fetch('/api/social', {
@@ -2002,28 +1772,21 @@
                 });
                 
                 if (response.ok) {
-                    showNotification('Соцмережу видалено!', 'success');
+                    showNotification('Видалено!', 'success');
                     loadData();
                 }
             } catch (error) {
-                showNotification('Помилка при видаленні', 'error');
+                showNotification('Помилка', 'error');
             }
         }
 
         // Показ секції
-        window.showSection = function(sectionId, event) {
-            if (event) {
-                event.preventDefault();
-            }
-            
+        window.showSection = function(sectionId, element) {
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             
             document.querySelectorAll('.sidebar-menu a, .mobile-admin-menu a').forEach(a => a.classList.remove('active'));
-            if (event && event.target) {
-                const target = event.target.closest('a');
-                if (target) target.classList.add('active');
-            }
+            if (element) element.classList.add('active');
         }
 
         // Закриття модалки
@@ -2048,20 +1811,16 @@
                 background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
                 color: white;
                 border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
                 z-index: 3000;
                 animation: slideIn 0.3s ease;
             `;
             notification.textContent = message;
             document.body.appendChild(notification);
             
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
+            setTimeout(() => notification.remove(), 3000);
         }
 
-        // Preview зображення товару
+        // Preview зображення
         document.getElementById('productImage')?.addEventListener('change', function(e) {
             const reader = new FileReader();
             reader.onload = function() {
@@ -2069,12 +1828,9 @@
                 preview.src = reader.result;
                 preview.style.display = 'block';
             }
-            if (e.target.files[0]) {
-                reader.readAsDataURL(e.target.files[0]);
-            }
+            if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
         });
 
-        // Preview логотипу
         document.getElementById('logoFile')?.addEventListener('change', function(e) {
             const reader = new FileReader();
             reader.onload = function() {
@@ -2082,31 +1838,8 @@
                 preview.src = reader.result;
                 preview.style.display = 'block';
             }
-            if (e.target.files[0]) {
-                reader.readAsDataURL(e.target.files[0]);
-            }
+            if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
         });
-
-        // Preview іконки соцмережі
-        document.getElementById('socialIcon')?.addEventListener('input', function(e) {
-            const preview = document.getElementById('socialPreview');
-            const icon = e.target.value || 'fa-brands fa-telegram';
-            preview.innerHTML = `<i class="${icon}" style="font-size: 2rem; color: #d32f2f;"></i><span>Попередній перегляд</span>`;
-        });
-
-        // Додаємо стилі для анімацій
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
 
         // Завантаження даних при старті
         loadData();
