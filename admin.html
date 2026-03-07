@@ -1,4 +1,4 @@
-<!-- admin.html - повністю робоча версія з товарами -->
+<!-- admin.html - виправлений вихід -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -94,11 +94,18 @@
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logout-btn:hover {
             background: var(--accent);
             color: var(--white);
+        }
+
+        .logout-btn i {
+            font-size: 1rem;
         }
 
         /* Mobile menu */
@@ -606,6 +613,10 @@
             .logo-img {
                 height: 40px;
             }
+
+            .logout-btn span {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -629,8 +640,8 @@
                 <span class="ua">UA</span>
             </div>
         </div>
-        <button class="logout-btn" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i> Вийти
+        <button class="logout-btn" onclick="goToHomePage()">
+            <i class="fas fa-home"></i> <span>На головну</span>
         </button>
     </header>
 
@@ -1053,7 +1064,7 @@
                 // Оновлюємо всі секції
                 updateDashboard(stats);
                 updateCategoriesList();
-                updateProductsList(); // Це головна функція для товарів
+                updateProductsList();
                 updateOrdersList();
                 updateSocialList();
                 updateCategorySelect();
@@ -1163,7 +1174,7 @@
             }).join('');
         }
 
-        // Оновлення списку товарів - ГОЛОВНА ФУНКЦІЯ
+        // Оновлення списку товарів
         function updateProductsList() {
             const tbody = document.getElementById('productsList');
             if (!tbody) {
@@ -1325,8 +1336,10 @@
                 });
                 
                 if (response.ok) {
-                    showNotification('Дані оновлено! Увійдіть заново.', 'success');
-                    setTimeout(() => logout(), 2000);
+                    showNotification('Дані оновлено! Будь ласка, увійдіть заново.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
                 } else {
                     const data = await response.json();
                     showNotification(data.error || 'Помилка', 'error');
@@ -1690,7 +1703,12 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
-        // Вихід
+        // Нова функція - перехід на головну сторінку без виходу
+        window.goToHomePage = function() {
+            window.location.href = '/';
+        }
+
+        // Вихід (тільки для зміни пароля)
         window.logout = async function() {
             await fetch('/api/logout', { method: 'POST' });
             window.location.href = '/';
