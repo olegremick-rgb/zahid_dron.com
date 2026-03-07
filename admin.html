@@ -1,4 +1,4 @@
-<!-- admin.html - оновлений з сортуванням по категоріях, новими кольорами та завантаженням логотипу -->
+<!-- admin.html - з можливістю зміни логіна та пароля -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -16,15 +16,16 @@
         }
 
         :root {
-            --primary: #1e3c5c;      /* темно-синій */
-            --secondary: #2b4d6e;     /* середньо-синій */
-            --accent: #ff8c42;        /* помаранчевий */
-            --accent-light: #ffaa5e;   /* світло-помаранчевий */
-            --light: #f0f7ff;          /* світло-блакитний */
+            --primary: #0a1a2b;
+            --secondary: #1e3a5f;
+            --accent: #d32f2f;
+            --accent-light: #ef5350;
+            --light: #f5f5f5;
             --white: #ffffff;
+            --text: #333333;
             --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --gradient: linear-gradient(135deg, #1e3c5c, #2b4d6e);
-            --accent-gradient: linear-gradient(135deg, #ff8c42, #ffaa5e);
+            --gradient: linear-gradient(135deg, #0a1a2b, #1e3a5f);
+            --accent-gradient: linear-gradient(135deg, #d32f2f, #ef5350);
         }
 
         body {
@@ -54,23 +55,35 @@
         .logo-img {
             height: 50px;
             width: auto;
-            border-radius: 10px;
+            border-radius: 8px;
             background: var(--white);
-            padding: 5px;
+            padding: 3px;
         }
 
         .logo-text {
             display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--white);
+            flex-direction: column;
+            line-height: 1.2;
         }
 
-        .logo-text i {
+        .logo-text .top {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .logo-text .bottom {
+            font-size: 1.8rem;
+            font-weight: 700;
             color: var(--accent);
-            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .logo-text .ua {
+            font-size: 0.9rem;
+            color: var(--white);
+            opacity: 0.8;
         }
 
         .logout-btn {
@@ -338,7 +351,7 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255,140,66,0.3);
+            box-shadow: 0 5px 15px rgba(211,47,47,0.3);
         }
 
         .btn-danger {
@@ -355,71 +368,6 @@
 
         .btn-secondary:hover {
             background: var(--secondary);
-        }
-
-        /* Category tabs for products */
-        .category-tabs {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
-            background: var(--white);
-            padding: 1rem;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-        }
-
-        .category-tab {
-            padding: 0.8rem 1.5rem;
-            background: var(--light);
-            border: none;
-            border-radius: 30px;
-            color: var(--primary);
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.95rem;
-        }
-
-        .category-tab:hover {
-            background: var(--accent-light);
-            color: var(--white);
-        }
-
-        .category-tab.active {
-            background: var(--accent-gradient);
-            color: var(--white);
-        }
-
-        .category-tab i {
-            margin-right: 0.5rem;
-        }
-
-        /* Products by category */
-        .category-section {
-            margin-bottom: 2.5rem;
-        }
-
-        .category-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .category-title h3 {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .category-title span {
-            background: var(--accent);
-            color: var(--white);
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-size: 0.9rem;
         }
 
         /* Tables */
@@ -516,6 +464,102 @@
             border-radius: 10px;
             background: var(--light);
             padding: 0.5rem;
+        }
+
+        /* Password strength meter */
+        .password-strength {
+            height: 5px;
+            margin-top: 0.5rem;
+            border-radius: 10px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: 0.3s;
+        }
+
+        .password-strength-bar.weak {
+            background: #dc2626;
+            width: 33%;
+        }
+
+        .password-strength-bar.medium {
+            background: #f59e0b;
+            width: 66%;
+        }
+
+        .password-strength-bar.strong {
+            background: #10b981;
+            width: 100%;
+        }
+
+        .password-hint {
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            color: #64748b;
+        }
+
+        /* Category tabs */
+        .category-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--light);
+            border: none;
+            border-radius: 30px;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .category-tab:hover {
+            background: var(--accent-light);
+            color: var(--white);
+        }
+
+        .category-tab.active {
+            background: var(--accent-gradient);
+            color: var(--white);
+        }
+
+        .category-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .category-title h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .category-title span {
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
         }
 
         /* Badges */
@@ -656,11 +700,6 @@
             .logo-text {
                 display: none;
             }
-
-            .category-tab {
-                width: 100%;
-                text-align: center;
-            }
         }
     </style>
 </head>
@@ -669,8 +708,9 @@
         <div class="logo">
             <img src="" alt="Логотип" class="logo-img" id="headerLogo" style="display: none;">
             <div class="logo-text">
-                <i class="fas fa-drone"></i>
-                <span>ЗАХІД ДРОН</span>
+                <span class="top">ЗАХІД</span>
+                <span class="bottom">ДРОН</span>
+                <span class="ua">UA</span>
             </div>
         </div>
         <button class="logout-btn" onclick="logout()">
@@ -682,6 +722,9 @@
     <div class="mobile-admin-menu">
         <a href="#" onclick="showSection('dashboard', event)" class="active">
             <i class="fas fa-chart-line"></i> Дашборд
+        </a>
+        <a href="#" onclick="showSection('profile', event)">
+            <i class="fas fa-user-cog"></i> Профіль
         </a>
         <a href="#" onclick="showSection('logo', event)">
             <i class="fas fa-image"></i> Логотип
@@ -713,6 +756,9 @@
             <ul class="sidebar-menu">
                 <li><a href="#" onclick="showSection('dashboard', event)" class="active">
                     <i class="fas fa-chart-line"></i> Дашборд
+                </a></li>
+                <li><a href="#" onclick="showSection('profile', event)">
+                    <i class="fas fa-user-cog"></i> Профіль адміна
                 </a></li>
                 <li><a href="#" onclick="showSection('logo', event)">
                     <i class="fas fa-image"></i> Логотип
@@ -763,6 +809,60 @@
                             <tbody id="recentOrders"></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Profile Section - Нова секція для зміни логіна/пароля -->
+            <div id="profile" class="admin-section">
+                <h2>
+                    <i class="fas fa-user-cog"></i>
+                    Профіль адміністратора
+                </h2>
+                
+                <div class="admin-form">
+                    <h3><i class="fas fa-lock"></i> Зміна пароля</h3>
+                    
+                    <div class="form-group">
+                        <label>Поточний логін</label>
+                        <input type="text" id="currentUsername" readonly disabled>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Новий логін (необов'язково)</label>
+                        <input type="text" id="newUsername" placeholder="Введіть новий логін">
+                        <small>Залиште порожнім, якщо не хочете змінювати логін</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Поточний пароль</label>
+                        <input type="password" id="currentPassword" placeholder="Введіть поточний пароль">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Новий пароль</label>
+                        <input type="password" id="newPassword" placeholder="Введіть новий пароль" oninput="checkPasswordStrength()">
+                        <div class="password-strength">
+                            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                        </div>
+                        <div class="password-hint" id="passwordHint"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Підтвердіть новий пароль</label>
+                        <input type="password" id="confirmPassword" placeholder="Підтвердіть новий пароль">
+                    </div>
+                    
+                    <button class="btn" onclick="changePassword()">
+                        <i class="fas fa-save"></i> Зберегти зміни
+                    </button>
+                </div>
+                
+                <div class="admin-form">
+                    <h3><i class="fas fa-info-circle"></i> Інформація про безпеку</h3>
+                    <p style="color: #64748b; line-height: 1.6;">
+                        <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 0.5rem;"></i>
+                        Рекомендуємо використовувати надійний пароль, який містить щонайменше 8 символів, великі та малі літери, цифри та спеціальні символи.
+                    </p>
                 </div>
             </div>
 
@@ -864,9 +964,9 @@
                     <div class="form-group">
                         <label>Варіанти</label>
                         <div id="variantsContainer">
-                            <div class="variant-row">
-                                <input type="text" placeholder="Варіант (напр. Standard)">
-                                <button class="remove-btn" onclick="this.parentElement.remove()">
+                            <div class="variant-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <input type="text" placeholder="Варіант (напр. Standard)" style="flex: 1;">
+                                <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
                                     <i class="fas fa-times"></i>
                                 </button>
                             </div>
@@ -894,7 +994,7 @@
                 <div id="productsByCategory"></div>
             </div>
 
-            <!-- About Section - тепер основна -->
+            <!-- About Section -->
             <div id="about" class="admin-section">
                 <h2>
                     <i class="fas fa-info-circle"></i>
@@ -906,12 +1006,6 @@
                         <label>Текст сторінки "Про нас"</label>
                         <textarea id="aboutText" rows="10" style="width: 100%;"></textarea>
                         <small>Цей текст буде відображатися на головній сторінці "Про нас"</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Додаткове зображення</label>
-                        <input type="file" id="aboutImage" accept="image/*">
-                        <img id="aboutImagePreview" class="image-preview">
                     </div>
                     
                     <button class="btn" onclick="saveAbout()">
@@ -1001,7 +1095,7 @@
                     </div>
                     
                     <div class="social-icon-preview" id="socialPreview">
-                        <i class="fab fa-telegram" style="color: #ff8c42;"></i>
+                        <i class="fab fa-telegram" style="color: #d32f2f;"></i>
                         <span>Попередній перегляд</span>
                     </div>
                     
@@ -1087,6 +1181,7 @@
         let social = [];
         let currentEditPlatform = null;
         let currentCategory = 'all';
+        let currentAdmin = null;
 
         // Перевірка авторизації
         async function checkAuth() {
@@ -1101,6 +1196,7 @@
                     window.location.href = '/';
                     return false;
                 }
+                currentAdmin = user;
                 return true;
             } catch {
                 window.location.href = '/';
@@ -1118,7 +1214,7 @@
                     const currentLogo = document.getElementById('currentLogo');
                     const noLogoText = document.getElementById('noLogoText');
                     
-                    if (logoUrl && logoUrl !== 'null') {
+                    if (logoUrl && logoUrl !== '') {
                         headerLogo.src = logoUrl;
                         headerLogo.style.display = 'block';
                         currentLogo.src = logoUrl;
@@ -1168,11 +1264,103 @@
                 parseContactInfo(contactText);
                 
                 // Завантажуємо логотип
-                loadLogo();
+                await loadLogo();
+                
+                // Заповнюємо поточний логін в профілі
+                if (currentAdmin) {
+                    document.getElementById('currentUsername').value = currentAdmin.username;
+                }
                 
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
                 showNotification('Помилка завантаження даних', 'error');
+            }
+        }
+
+        // Перевірка надійності пароля
+        window.checkPasswordStrength = function() {
+            const password = document.getElementById('newPassword').value;
+            const bar = document.getElementById('passwordStrengthBar');
+            const hint = document.getElementById('passwordHint');
+            
+            if (!password) {
+                bar.className = 'password-strength-bar';
+                hint.textContent = '';
+                return;
+            }
+            
+            let strength = 0;
+            
+            // Перевірка довжини
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+            
+            // Перевірка наявності різних типів символів
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^a-zA-Z0-9]/.test(password)) strength++;
+            
+            if (strength <= 2) {
+                bar.className = 'password-strength-bar weak';
+                hint.textContent = 'Слабкий пароль';
+                hint.style.color = '#dc2626';
+            } else if (strength <= 4) {
+                bar.className = 'password-strength-bar medium';
+                hint.textContent = 'Середній пароль';
+                hint.style.color = '#f59e0b';
+            } else {
+                bar.className = 'password-strength-bar strong';
+                hint.textContent = 'Надійний пароль';
+                hint.style.color = '#10b981';
+            }
+        }
+
+        // Зміна пароля
+        window.changePassword = async function() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newUsername = document.getElementById('newUsername').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword) {
+                showNotification('Введіть поточний пароль', 'warning');
+                return;
+            }
+            
+            if (newPassword && newPassword !== confirmPassword) {
+                showNotification('Новий пароль та підтвердження не співпадають', 'error');
+                return;
+            }
+            
+            if (newPassword && newPassword.length < 6) {
+                showNotification('Пароль повинен містити щонайменше 6 символів', 'warning');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        currentPassword,
+                        newUsername: newUsername || undefined,
+                        newPassword: newPassword || undefined
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('Дані успішно оновлено! Будь ласка, увійдіть заново.', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    showNotification(data.error || 'Помилка при оновленні', 'error');
+                }
+            } catch (error) {
+                showNotification('Помилка при з'єднанні з сервером', 'error');
             }
         }
 
@@ -1296,7 +1484,6 @@
             let html = '';
             
             if (currentCategory === 'all') {
-                // Показуємо всі категорії
                 categories.forEach(cat => {
                     const catProducts = products.filter(p => p.category === cat);
                     if (catProducts.length > 0) {
@@ -1304,7 +1491,6 @@
                     }
                 });
             } else {
-                // Показуємо тільки вибрану категорію
                 const catProducts = products.filter(p => p.category === currentCategory);
                 if (catProducts.length > 0) {
                     html += renderCategoryProducts(currentCategory, catProducts);
@@ -1427,9 +1613,12 @@
             const container = document.getElementById('variantsContainer');
             const div = document.createElement('div');
             div.className = 'variant-row';
+            div.style.display = 'flex';
+            div.style.gap = '0.5rem';
+            div.style.marginBottom = '0.5rem';
             div.innerHTML = `
-                <input type="text" placeholder="Варіант">
-                <button class="remove-btn" onclick="this.parentElement.remove()">
+                <input type="text" placeholder="Варіант" style="flex: 1;">
+                <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
                     <i class="fas fa-times"></i>
                 </button>
             `;
@@ -1560,14 +1749,13 @@
                 
                 if (response.ok) {
                     showNotification('Товар додано!', 'success');
-                    // Очищаємо форму
                     document.getElementById('productName').value = '';
                     document.getElementById('productPrice').value = '';
                     document.getElementById('productDescription').value = '';
                     document.getElementById('variantsContainer').innerHTML = `
-                        <div class="variant-row">
-                            <input type="text" placeholder="Варіант">
-                            <button class="remove-btn" onclick="this.parentElement.remove()">
+                        <div class="variant-row" style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <input type="text" placeholder="Варіант" style="flex: 1;">
+                            <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -1617,9 +1805,12 @@
             product.variants.forEach(v => {
                 const div = document.createElement('div');
                 div.className = 'variant-row';
+                div.style.display = 'flex';
+                div.style.gap = '0.5rem';
+                div.style.marginBottom = '0.5rem';
                 div.innerHTML = `
-                    <input type="text" value="${v}" placeholder="Варіант">
-                    <button class="remove-btn" onclick="this.parentElement.remove()">
+                    <input type="text" value="${v}" placeholder="Варіант" style="flex: 1;">
+                    <button class="btn-danger" style="width: 44px; height: 44px;" onclick="this.parentElement.remove()">
                         <i class="fas fa-times"></i>
                     </button>
                 `;
@@ -1630,7 +1821,6 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
             showNotification('Редагуйте товар та додайте заново', 'info');
             
-            // Видаляємо старий товар
             deleteProduct(productId);
         }
 
@@ -1696,7 +1886,6 @@
                 return;
             }
             
-            // Визначаємо іконку за замовчуванням
             if (!icon) {
                 const icons = {
                     telegram: 'fa-brands fa-telegram',
@@ -1902,7 +2091,7 @@
         document.getElementById('socialIcon')?.addEventListener('input', function(e) {
             const preview = document.getElementById('socialPreview');
             const icon = e.target.value || 'fa-brands fa-telegram';
-            preview.innerHTML = `<i class="${icon}" style="font-size: 2rem; color: #ff8c42;"></i><span>Попередній перегляд</span>`;
+            preview.innerHTML = `<i class="${icon}" style="font-size: 2rem; color: #d32f2f;"></i><span>Попередній перегляд</span>`;
         });
 
         // Додаємо стилі для анімацій
