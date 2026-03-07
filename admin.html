@@ -1,4 +1,4 @@
-<!-- admin.html - повна версія з усіма функціями -->
+<!-- admin.html - оновлений з сортуванням по категоріях, новими кольорами та завантаженням логотипу -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -16,12 +16,15 @@
         }
 
         :root {
-            --primary: #0f172a;
-            --accent: #f97316;
-            --light: #f8fafc;
+            --primary: #1e3c5c;      /* темно-синій */
+            --secondary: #2b4d6e;     /* середньо-синій */
+            --accent: #ff8c42;        /* помаранчевий */
+            --accent-light: #ffaa5e;   /* світло-помаранчевий */
+            --light: #f0f7ff;          /* світло-блакитний */
             --white: #ffffff;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --gradient: linear-gradient(135deg, #f97316, #fb923c);
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --gradient: linear-gradient(135deg, #1e3c5c, #2b4d6e);
+            --accent-gradient: linear-gradient(135deg, #ff8c42, #ffaa5e);
         }
 
         body {
@@ -31,7 +34,7 @@
 
         /* Header */
         header {
-            background: var(--primary);
+            background: var(--gradient);
             padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
@@ -45,22 +48,29 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 15px;
+        }
+
+        .logo-img {
+            height: 50px;
+            width: auto;
+            border-radius: 10px;
+            background: var(--white);
+            padding: 5px;
+        }
+
+        .logo-text {
+            display: flex;
+            align-items: center;
+            gap: 5px;
             font-size: 1.5rem;
             font-weight: 700;
-            text-decoration: none;
             color: var(--white);
         }
 
-        .logo i {
+        .logo-text i {
             color: var(--accent);
             font-size: 2rem;
-        }
-
-        .logo span {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .logout-btn {
@@ -80,7 +90,7 @@
             color: var(--white);
         }
 
-        /* Mobile menu for admin */
+        /* Mobile menu */
         .mobile-admin-menu {
             display: none;
             background: var(--white);
@@ -108,7 +118,7 @@
         }
 
         .mobile-admin-menu a.active {
-            background: var(--gradient);
+            background: var(--accent-gradient);
             color: var(--white);
         }
 
@@ -138,6 +148,7 @@
             margin-bottom: 1.5rem;
             padding-left: 1rem;
             font-size: 1.2rem;
+            border-left: 4px solid var(--accent);
         }
 
         .sidebar-menu {
@@ -162,7 +173,7 @@
 
         .sidebar-menu a:hover,
         .sidebar-menu a.active {
-            background: var(--gradient);
+            background: var(--accent-gradient);
             color: var(--white);
         }
 
@@ -200,6 +211,8 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 0.5rem;
         }
 
         .admin-section h2 i {
@@ -222,6 +235,7 @@
             text-align: center;
             box-shadow: var(--shadow);
             transition: 0.3s;
+            border-bottom: 4px solid var(--accent);
         }
 
         .stat-card:hover {
@@ -306,7 +320,7 @@
         }
 
         .btn {
-            background: var(--gradient);
+            background: var(--accent-gradient);
             color: var(--white);
             border: none;
             padding: 0.8rem 1.8rem;
@@ -324,58 +338,88 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(249,115,22,0.3);
-        }
-
-        .btn:active {
-            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(255,140,66,0.3);
         }
 
         .btn-danger {
-            background: #ef4444;
+            background: #dc2626;
         }
 
         .btn-danger:hover {
-            background: #dc2626;
-            box-shadow: 0 5px 15px rgba(239,68,68,0.3);
+            background: #b91c1c;
         }
 
         .btn-secondary {
-            background: #64748b;
+            background: var(--primary);
         }
 
         .btn-secondary:hover {
-            background: #475569;
+            background: var(--secondary);
         }
 
-        .variant-row {
+        /* Category tabs for products */
+        .category-tabs {
             display: flex;
             gap: 0.5rem;
-            margin: 0.5rem 0;
-            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
         }
 
-        .variant-row input {
-            flex: 1;
-        }
-
-        .remove-btn {
-            background: #ef4444;
-            color: white;
+        .category-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--light);
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            font-size: 1.2rem;
+            border-radius: 30px;
+            color: var(--primary);
+            font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 0.95rem;
         }
 
-        .remove-btn:hover {
-            background: #dc2626;
+        .category-tab:hover {
+            background: var(--accent-light);
+            color: var(--white);
+        }
+
+        .category-tab.active {
+            background: var(--accent-gradient);
+            color: var(--white);
+        }
+
+        .category-tab i {
+            margin-right: 0.5rem;
+        }
+
+        /* Products by category */
+        .category-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .category-title h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .category-title span {
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
         }
 
         /* Tables */
@@ -448,19 +492,11 @@
         }
 
         .delete-btn {
-            background: #ef4444;
-        }
-
-        .delete-btn:hover {
             background: #dc2626;
         }
 
-        .view-btn {
-            background: #10b981;
-        }
-
-        .view-btn:hover {
-            background: #059669;
+        .delete-btn:hover {
+            background: #b91c1c;
         }
 
         /* Image preview */
@@ -473,7 +509,16 @@
             border: 2px solid #e2e8f0;
         }
 
-        /* Status badges */
+        .logo-preview {
+            max-width: 200px;
+            max-height: 100px;
+            margin: 1rem 0;
+            border-radius: 10px;
+            background: var(--light);
+            padding: 0.5rem;
+        }
+
+        /* Badges */
         .badge {
             padding: 0.3rem 0.8rem;
             border-radius: 30px;
@@ -483,7 +528,7 @@
         }
 
         .badge-active {
-            background: #22c55e;
+            background: #10b981;
             color: white;
         }
 
@@ -492,7 +537,7 @@
             color: white;
         }
 
-        /* Social icons preview */
+        /* Social icon preview */
         .social-icon-preview {
             display: flex;
             align-items: center;
@@ -539,6 +584,8 @@
         .modal-content h2 {
             margin-bottom: 1.5rem;
             color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.5rem;
         }
 
         .modal-close {
@@ -579,30 +626,21 @@
                 gap: 1rem;
             }
 
-            .admin-form {
-                padding: 1.5rem;
+            .logo-img {
+                height: 40px;
             }
 
-            .btn {
-                width: 100%;
-                margin-right: 0;
-                justify-content: center;
+            .logo-text {
+                font-size: 1.2rem;
             }
 
-            .variant-row {
-                flex-wrap: wrap;
-            }
-
-            .variant-row button {
-                width: 100%;
-            }
-
-            .action-btns {
-                flex-wrap: wrap;
-            }
-
-            .table th, .table td {
+            .category-tabs {
                 padding: 0.8rem;
+            }
+
+            .category-tab {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
             }
         }
 
@@ -615,36 +653,26 @@
                 font-size: 1.5rem;
             }
 
-            .logo {
-                font-size: 1.2rem;
+            .logo-text {
+                display: none;
             }
 
-            .logo i {
-                font-size: 1.5rem;
+            .category-tab {
+                width: 100%;
+                text-align: center;
             }
-
-            .logout-btn {
-                padding: 0.4rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* Touch optimization */
-        button,
-        .sidebar-menu a,
-        .mobile-admin-menu a,
-        .action-btns button {
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="/" class="logo">
-            <i class="fas fa-drone"></i>
-            <span>ЗАХІД ДРОН</span>
-        </a>
+        <div class="logo">
+            <img src="" alt="Логотип" class="logo-img" id="headerLogo" style="display: none;">
+            <div class="logo-text">
+                <i class="fas fa-drone"></i>
+                <span>ЗАХІД ДРОН</span>
+            </div>
+        </div>
         <button class="logout-btn" onclick="logout()">
             <i class="fas fa-sign-out-alt"></i> Вийти
         </button>
@@ -654,6 +682,9 @@
     <div class="mobile-admin-menu">
         <a href="#" onclick="showSection('dashboard', event)" class="active">
             <i class="fas fa-chart-line"></i> Дашборд
+        </a>
+        <a href="#" onclick="showSection('logo', event)">
+            <i class="fas fa-image"></i> Логотип
         </a>
         <a href="#" onclick="showSection('categories', event)">
             <i class="fas fa-tags"></i> Категорії
@@ -682,6 +713,9 @@
             <ul class="sidebar-menu">
                 <li><a href="#" onclick="showSection('dashboard', event)" class="active">
                     <i class="fas fa-chart-line"></i> Дашборд
+                </a></li>
+                <li><a href="#" onclick="showSection('logo', event)">
+                    <i class="fas fa-image"></i> Логотип
                 </a></li>
                 <li><a href="#" onclick="showSection('categories', event)">
                     <i class="fas fa-tags"></i> Категорії
@@ -714,7 +748,7 @@
                 <div class="stats-grid" id="stats"></div>
                 
                 <div style="margin-top: 2rem;">
-                    <h3 style="margin-bottom: 1rem;">Останні замовлення</h3>
+                    <h3 style="margin-bottom: 1rem; color: var(--primary);">Останні замовлення</h3>
                     <div class="table-container">
                         <table class="table">
                             <thead>
@@ -729,6 +763,40 @@
                             <tbody id="recentOrders"></tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+            <!-- Logo Section -->
+            <div id="logo" class="admin-section">
+                <h2>
+                    <i class="fas fa-image"></i>
+                    Логотип
+                </h2>
+                
+                <div class="admin-form">
+                    <h3><i class="fas fa-upload"></i> Завантажити логотип</h3>
+                    
+                    <div class="form-group">
+                        <label>Поточний логотип</label>
+                        <div id="currentLogoPreview">
+                            <img src="" alt="Логотип" class="logo-preview" id="currentLogo" style="display: none;">
+                            <p id="noLogoText" style="color: #64748b;">Логотип не завантажено</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Новий логотип</label>
+                        <input type="file" id="logoFile" accept="image/*">
+                        <small>Рекомендований розмір: 200x100px. Формати: PNG, JPG, SVG</small>
+                        <img id="logoPreview" class="logo-preview" style="display: none;">
+                    </div>
+                    
+                    <button class="btn" onclick="uploadLogo()">
+                        <i class="fas fa-save"></i> Зберегти логотип
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteLogo()">
+                        <i class="fas fa-trash"></i> Видалити логотип
+                    </button>
                 </div>
             </div>
 
@@ -819,24 +887,14 @@
                     </button>
                 </div>
 
-                <div class="table-container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Фото</th>
-                                <th>Назва</th>
-                                <th>Категорія</th>
-                                <th>Ціна</th>
-                                <th>Варіанти</th>
-                                <th>Дії</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productsList"></tbody>
-                    </table>
-                </div>
+                <!-- Category tabs for filtering -->
+                <div class="category-tabs" id="categoryTabs"></div>
+
+                <!-- Products by category -->
+                <div id="productsByCategory"></div>
             </div>
 
-            <!-- About Section -->
+            <!-- About Section - тепер основна -->
             <div id="about" class="admin-section">
                 <h2>
                     <i class="fas fa-info-circle"></i>
@@ -847,7 +905,15 @@
                     <div class="form-group">
                         <label>Текст сторінки "Про нас"</label>
                         <textarea id="aboutText" rows="10" style="width: 100%;"></textarea>
+                        <small>Цей текст буде відображатися на головній сторінці "Про нас"</small>
                     </div>
+                    
+                    <div class="form-group">
+                        <label>Додаткове зображення</label>
+                        <input type="file" id="aboutImage" accept="image/*">
+                        <img id="aboutImagePreview" class="image-preview">
+                    </div>
+                    
                     <button class="btn" onclick="saveAbout()">
                         <i class="fas fa-save"></i> Зберегти зміни
                     </button>
@@ -935,7 +1001,7 @@
                     </div>
                     
                     <div class="social-icon-preview" id="socialPreview">
-                        <i class="fab fa-telegram" style="color: #0088cc;"></i>
+                        <i class="fab fa-telegram" style="color: #ff8c42;"></i>
                         <span>Попередній перегляд</span>
                     </div>
                     
@@ -1020,6 +1086,7 @@
         let orders = [];
         let social = [];
         let currentEditPlatform = null;
+        let currentCategory = 'all';
 
         // Перевірка авторизації
         async function checkAuth() {
@@ -1038,6 +1105,29 @@
             } catch {
                 window.location.href = '/';
                 return false;
+            }
+        }
+
+        // Завантаження логотипу
+        async function loadLogo() {
+            try {
+                const response = await fetch('/api/logo');
+                if (response.ok) {
+                    const logoUrl = await response.text();
+                    const headerLogo = document.getElementById('headerLogo');
+                    const currentLogo = document.getElementById('currentLogo');
+                    const noLogoText = document.getElementById('noLogoText');
+                    
+                    if (logoUrl && logoUrl !== 'null') {
+                        headerLogo.src = logoUrl;
+                        headerLogo.style.display = 'block';
+                        currentLogo.src = logoUrl;
+                        currentLogo.style.display = 'block';
+                        if (noLogoText) noLogoText.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Помилка завантаження логотипу:', error);
             }
         }
 
@@ -1065,16 +1155,20 @@
                 // Оновлюємо всі секції
                 updateDashboard(stats);
                 updateCategoriesList();
-                updateProductsList();
+                renderProductsByCategory();
                 updateOrdersList();
                 updateSocialList();
                 updateCategorySelect();
+                updateCategoryTabs();
                 
                 // Заповнюємо текстові поля
                 document.getElementById('aboutText').value = await aboutRes.text();
                 
                 const contactText = await contactRes.text();
                 parseContactInfo(contactText);
+                
+                // Завантажуємо логотип
+                loadLogo();
                 
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
@@ -1162,28 +1256,107 @@
             }).join('');
         }
 
-        // Оновлення списку товарів
-        function updateProductsList() {
-            const tbody = document.getElementById('productsList');
-            tbody.innerHTML = products.map(p => `
-                <tr>
-                    <td><img src="${p.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23e2e8f0\'/%3E%3C/svg%3E'}" alt=""></td>
-                    <td>${p.name}</td>
-                    <td>${p.category}</td>
-                    <td>${p.price.toLocaleString()} грн</td>
-                    <td>${p.variants.length}</td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="edit-btn" onclick="editProduct(${p.id})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="delete-btn" onclick="deleteProduct(${p.id})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+        // Оновлення вкладок категорій
+        function updateCategoryTabs() {
+            const tabsContainer = document.getElementById('categoryTabs');
+            if (!tabsContainer) return;
+            
+            let tabsHtml = `
+                <button class="category-tab ${currentCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all')">
+                    <i class="fas fa-list"></i> Всі товари (${products.length})
+                </button>
+            `;
+            
+            categories.forEach(cat => {
+                const count = products.filter(p => p.category === cat).length;
+                if (count > 0) {
+                    tabsHtml += `
+                        <button class="category-tab ${currentCategory === cat ? 'active' : ''}" onclick="filterByCategory('${cat}')">
+                            <i class="fas fa-tag"></i> ${cat} (${count})
+                        </button>
+                    `;
+                }
+            });
+            
+            tabsContainer.innerHTML = tabsHtml;
+        }
+
+        // Фільтрація по категорії
+        window.filterByCategory = function(category) {
+            currentCategory = category;
+            updateCategoryTabs();
+            renderProductsByCategory();
+        }
+
+        // Відображення товарів по категоріях
+        function renderProductsByCategory() {
+            const container = document.getElementById('productsByCategory');
+            if (!container) return;
+            
+            let html = '';
+            
+            if (currentCategory === 'all') {
+                // Показуємо всі категорії
+                categories.forEach(cat => {
+                    const catProducts = products.filter(p => p.category === cat);
+                    if (catProducts.length > 0) {
+                        html += renderCategoryProducts(cat, catProducts);
+                    }
+                });
+            } else {
+                // Показуємо тільки вибрану категорію
+                const catProducts = products.filter(p => p.category === currentCategory);
+                if (catProducts.length > 0) {
+                    html += renderCategoryProducts(currentCategory, catProducts);
+                }
+            }
+            
+            container.innerHTML = html || '<p style="text-align: center; padding: 2rem;">Немає товарів у цій категорії</p>';
+        }
+
+        // Відображення товарів однієї категорії
+        function renderCategoryProducts(categoryName, categoryProducts) {
+            return `
+                <div class="category-section">
+                    <div class="category-title">
+                        <h3>${categoryName}</h3>
+                        <span>${categoryProducts.length} товарів</span>
+                    </div>
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Фото</th>
+                                    <th>Назва</th>
+                                    <th>Ціна</th>
+                                    <th>Варіанти</th>
+                                    <th>Дії</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${categoryProducts.map(p => `
+                                    <tr>
+                                        <td><img src="${p.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'50\' height=\'50\' viewBox=\'0 0 50 50\'%3E%3Crect width=\'50\' height=\'50\' fill=\'%23e2e8f0\'/%3E%3C/svg%3E'}" alt=""></td>
+                                        <td>${p.name}</td>
+                                        <td>${p.price.toLocaleString()} грн</td>
+                                        <td>${p.variants.length}</td>
+                                        <td>
+                                            <div class="action-btns">
+                                                <button class="edit-btn" onclick="editProduct(${p.id})">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="delete-btn" onclick="deleteProduct(${p.id})">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
         }
 
         // Оновлення списку замовлень
@@ -1261,6 +1434,52 @@
                 </button>
             `;
             container.appendChild(div);
+        }
+
+        // Завантаження логотипу
+        window.uploadLogo = async function() {
+            const file = document.getElementById('logoFile').files[0];
+            if (!file) {
+                showNotification('Виберіть файл для завантаження', 'warning');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('logo', file);
+            
+            try {
+                const response = await fetch('/api/logo', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    showNotification('Логотип збережено!', 'success');
+                    loadLogo();
+                }
+            } catch (error) {
+                showNotification('Помилка при збереженні логотипу', 'error');
+            }
+        }
+
+        // Видалення логотипу
+        window.deleteLogo = async function() {
+            if (!confirm('Видалити логотип?')) return;
+            
+            try {
+                const response = await fetch('/api/logo', {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    showNotification('Логотип видалено!', 'success');
+                    document.getElementById('headerLogo').style.display = 'none';
+                    document.getElementById('currentLogo').style.display = 'none';
+                    document.getElementById('noLogoText').style.display = 'block';
+                }
+            } catch (error) {
+                showNotification('Помилка при видаленні', 'error');
+            }
         }
 
         // Додавання категорії
@@ -1637,7 +1856,7 @@
                 top: 100px;
                 right: 20px;
                 padding: 1rem 2rem;
-                background: ${type === 'success' ? '#22c55e' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
                 color: white;
                 border-radius: 12px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -1653,7 +1872,7 @@
             }, 3000);
         }
 
-        // Preview зображення
+        // Preview зображення товару
         document.getElementById('productImage')?.addEventListener('change', function(e) {
             const reader = new FileReader();
             reader.onload = function() {
@@ -1666,11 +1885,24 @@
             }
         });
 
+        // Preview логотипу
+        document.getElementById('logoFile')?.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('logoPreview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            if (e.target.files[0]) {
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+
         // Preview іконки соцмережі
         document.getElementById('socialIcon')?.addEventListener('input', function(e) {
             const preview = document.getElementById('socialPreview');
             const icon = e.target.value || 'fa-brands fa-telegram';
-            preview.innerHTML = `<i class="${icon}" style="font-size: 2rem;"></i><span>Попередній перегляд</span>`;
+            preview.innerHTML = `<i class="${icon}" style="font-size: 2rem; color: #ff8c42;"></i><span>Попередній перегляд</span>`;
         });
 
         // Додаємо стилі для анімацій
