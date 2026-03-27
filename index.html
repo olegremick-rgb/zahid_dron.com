@@ -1,4 +1,4 @@
-<!-- index.html - чорно-сіра тема з фоном -->
+<!-- index.html - оновлений з фоном тільки на головній сторінці -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -16,14 +16,13 @@
         }
 
         :root {
-            --primary: #1a1a1a;        /* чорний */
-            --secondary: #2d2d2d;       /* темно-сірий */
-            --accent: #6c6c6c;          /* сірий */
-            --accent-light: #8a8a8a;     /* світло-сірий */
-            --light: #e5e5e5;            /* світло-сірий */
+            --primary: #1a1a1a;
+            --secondary: #2d2d2d;
+            --accent: #6c6c6c;
+            --accent-light: #8a8a8a;
+            --light: #e5e5e5;
             --white: #ffffff;
             --text: #f0f0f0;
-            --dark-text: #1a1a1a;
             --shadow: 0 4px 12px rgba(0,0,0,0.3);
             --gradient: linear-gradient(135deg, #1a1a1a, #2d2d2d);
             --accent-gradient: linear-gradient(135deg, #6c6c6c, #8a8a8a);
@@ -36,7 +35,7 @@
             flex-direction: column;
         }
 
-        /* Фоновий контейнер */
+        /* Фоновий контейнер - тільки для головної сторінки */
         .bg-container {
             position: fixed;
             top: 0;
@@ -45,13 +44,27 @@
             height: 100%;
             z-index: -1;
             background: var(--primary);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-container.active {
+            opacity: 1;
+            visibility: visible;
         }
 
         .bg-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.3;
+            opacity: 0.4;
+        }
+
+        /* Паралакс ефект при скролі */
+        .bg-image {
+            transform: translateY(0);
+            transition: transform 0.1s linear;
         }
 
         /* Мобільне меню */
@@ -862,8 +875,8 @@
     </style>
 </head>
 <body>
-    <!-- Фоновий контейнер -->
-    <div class="bg-container">
+    <!-- Фоновий контейнер - тільки для головної сторінки -->
+    <div class="bg-container" id="bgContainer">
         <img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;">
     </div>
 
@@ -884,7 +897,7 @@
         <nav class="desktop-nav">
             <a href="/">Головна</a>
             <a href="/catalog">Каталог</a>
-            <a href="/about" class="active">Про нас</a>
+            <a href="/about">Про нас</a>
             <a href="/contacts">Контакти</a>
         </nav>
 
@@ -903,7 +916,7 @@
         </div>
         <a href="/" class="mobile-nav-link">Головна</a>
         <a href="/catalog" class="mobile-nav-link">Каталог</a>
-        <a href="/about" class="mobile-nav-link active">Про нас</a>
+        <a href="/about" class="mobile-nav-link">Про нас</a>
         <a href="/contacts" class="mobile-nav-link">Контакти</a>
     </div>
 
@@ -945,6 +958,7 @@
         let contactInfo = '';
         let socialLinks = [];
         let backgroundImage = '';
+        let currentPage = '';
 
         // Функція для мобільного меню
         function initMobileMenu() {
@@ -984,6 +998,18 @@
             });
         }
 
+        // Ефект паралаксу для фону
+        function initParallax() {
+            window.addEventListener('scroll', () => {
+                const bgContainer = document.getElementById('bgContainer');
+                const bgImage = document.getElementById('bgImage');
+                if (bgContainer && bgContainer.classList.contains('active') && bgImage) {
+                    const scrollY = window.scrollY;
+                    bgImage.style.transform = `translateY(${scrollY * 0.3}px)`;
+                }
+            });
+        }
+
         // Завантаження логотипу
         async function loadLogo() {
             try {
@@ -1013,6 +1039,7 @@
                 if (response.ok) {
                     const bgUrl = await response.text();
                     if (bgUrl && bgUrl !== '') {
+                        backgroundImage = bgUrl;
                         const bgImage = document.getElementById('bgImage');
                         bgImage.src = bgUrl;
                         bgImage.style.display = 'block';
@@ -1023,23 +1050,37 @@
             }
         }
 
+        // Управління фоном в залежності від сторінки
+        function updateBackgroundForPage(page) {
+            const bgContainer = document.getElementById('bgContainer');
+            if (!bgContainer) return;
+            
+            if (page === '/' || page === '/about') {
+                if (backgroundImage) {
+                    bgContainer.classList.add('active');
+                } else {
+                    bgContainer.classList.remove('active');
+                }
+            } else {
+                bgContainer.classList.remove('active');
+            }
+        }
+
         async function loadData() {
             try {
-                const [categoriesRes, productsRes, aboutRes, contactRes, userRes, socialRes, bgRes] = await Promise.all([
+                const [categoriesRes, productsRes, aboutRes, contactRes, userRes, socialRes] = await Promise.all([
                     fetch('/api/categories'),
                     fetch('/api/products'),
                     fetch('/api/about'),
                     fetch('/api/contact'),
                     fetch('/api/user').catch(() => null),
-                    fetch('/api/social').catch(() => ({ json: () => [] })),
-                    fetch('/api/background').catch(() => ({ text: () => '' }))
+                    fetch('/api/social').catch(() => ({ json: () => [] }))
                 ]);
                 
                 categories = await categoriesRes.json();
                 products = await productsRes.json();
                 aboutText = await aboutRes.text();
                 contactInfo = await contactRes.text();
-                backgroundImage = await bgRes.text();
                 
                 try {
                     socialLinks = await socialRes.json();
@@ -1051,7 +1092,6 @@
                     currentUser = await userRes.json();
                 }
                 
-                // Завантажуємо логотип та фон
                 await loadLogo();
                 await loadBackground();
                 
@@ -1064,7 +1104,11 @@
             await loadData();
             
             const path = window.location.pathname;
+            currentPage = path;
             const main = document.getElementById('main-content');
+            
+            // Оновлюємо фон для поточної сторінки
+            updateBackgroundForPage(path);
             
             // Оновлюємо активні посилання
             document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => {
@@ -1374,9 +1418,9 @@
         document.getElementById('loginBtn').onclick = () => document.getElementById('loginModal').classList.add('active');
         document.getElementById('registerBtn').onclick = () => document.getElementById('registerModal').classList.add('active');
         
-        // Викликаємо ініціалізацію мобільного меню після завантаження DOM
         document.addEventListener('DOMContentLoaded', () => {
             initMobileMenu();
+            initParallax();
             renderPage();
         });
         
