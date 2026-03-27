@@ -1,4 +1,4 @@
-<!-- index.html - оновлений з прибраними непотрібними фічами -->
+<!-- index.html - чорно-сіра тема з фоном -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -16,23 +16,42 @@
         }
 
         :root {
-            --primary: #0a1a2b;        /* темно-синій як на фото */
-            --secondary: #1e3a5f;       /* середньо-синій */
-            --accent: #d32f2f;          /* червоний як на фото */
-            --accent-light: #ef5350;     /* світло-червоний */
-            --light: #f5f5f5;            /* світло-сірий */
+            --primary: #1a1a1a;        /* чорний */
+            --secondary: #2d2d2d;       /* темно-сірий */
+            --accent: #6c6c6c;          /* сірий */
+            --accent-light: #8a8a8a;     /* світло-сірий */
+            --light: #e5e5e5;            /* світло-сірий */
             --white: #ffffff;
-            --text: #333333;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --gradient: linear-gradient(135deg, #0a1a2b, #1e3a5f);
-            --accent-gradient: linear-gradient(135deg, #d32f2f, #ef5350);
+            --text: #f0f0f0;
+            --dark-text: #1a1a1a;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --gradient: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            --accent-gradient: linear-gradient(135deg, #6c6c6c, #8a8a8a);
         }
 
         body {
-            background: var(--light);
+            background: var(--primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Фоновий контейнер */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--primary);
+        }
+
+        .bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
         }
 
         /* Мобільне меню */
@@ -48,7 +67,8 @@
 
         /* Header */
         header {
-            background: var(--gradient);
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
             padding: 0.8rem 5%;
             display: flex;
             justify-content: space-between;
@@ -57,6 +77,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .logo {
@@ -90,7 +111,7 @@
         .logo-text .bottom {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--accent-light);
             letter-spacing: 2px;
         }
 
@@ -176,7 +197,7 @@
 
         .mobile-nav a:hover,
         .mobile-nav a:active {
-            color: var(--accent);
+            color: var(--accent-light);
             padding-left: 10px;
         }
 
@@ -223,12 +244,14 @@
         main {
             flex: 1;
             padding: 2rem 5%;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
             font-size: 2.2rem;
             margin-bottom: 1.5rem;
-            color: var(--primary);
+            color: var(--white);
             position: relative;
             padding-bottom: 0.5rem;
         }
@@ -246,7 +269,7 @@
         h2 {
             font-size: 1.6rem;
             margin: 1.5rem 0 1rem;
-            color: var(--primary);
+            color: var(--white);
         }
 
         /* Сітка товарів */
@@ -258,18 +281,20 @@
         }
 
         .product-card {
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 16px;
             overflow: hidden;
             box-shadow: var(--shadow);
             transition: 0.3s;
             cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(211,47,47,0.15);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-color: var(--accent);
         }
 
         .product-card:active {
@@ -280,7 +305,7 @@
             width: 100%;
             height: 200px;
             object-fit: cover;
-            background: #e2e8f0;
+            background: var(--secondary);
         }
 
         .product-info {
@@ -290,20 +315,20 @@
         .product-info h3 {
             font-size: 1.1rem;
             margin-bottom: 0.5rem;
-            color: var(--primary);
+            color: var(--white);
             line-height: 1.4;
         }
 
         .product-price {
-            color: var(--accent);
+            color: var(--accent-light);
             font-size: 1.5rem;
             font-weight: 700;
         }
 
         .product-category {
             font-size: 0.85rem;
-            color: #64748b;
-            background: #f1f5f9;
+            color: #aaa;
+            background: rgba(255,255,255,0.1);
             display: inline-block;
             padding: 0.3rem 1rem;
             border-radius: 30px;
@@ -312,13 +337,15 @@
 
         /* Сторінка Про нас - основна */
         .about-hero {
-            background: var(--gradient);
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
             color: var(--white);
             padding: 4rem 2rem;
             border-radius: 30px;
             margin-bottom: 3rem;
             text-align: center;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .about-hero h1 {
@@ -342,13 +369,15 @@
         }
 
         .about-content {
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             padding: 3rem;
             border-radius: 30px;
             box-shadow: var(--shadow);
             line-height: 1.8;
             color: var(--text);
             margin-bottom: 3rem;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .about-features {
@@ -361,38 +390,42 @@
         .feature-item {
             text-align: center;
             padding: 2rem;
-            background: #f8fafc;
+            background: rgba(26, 26, 26, 0.8);
             border-radius: 20px;
             transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .feature-item:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow);
+            border-color: var(--accent);
         }
 
         .feature-item i {
             font-size: 3rem;
-            color: var(--accent);
+            color: var(--accent-light);
             margin-bottom: 1rem;
         }
 
         .feature-item h3 {
             font-size: 1.3rem;
-            color: var(--primary);
+            color: var(--white);
             margin-bottom: 0.5rem;
         }
 
         .feature-item p {
-            color: #64748b;
+            color: #aaa;
         }
 
         /* Сторінка товару */
         .product-page {
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 30px;
             overflow: hidden;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .product-page-image {
@@ -412,7 +445,7 @@
 
         .product-page-price {
             font-size: 2.5rem;
-            color: var(--accent);
+            color: var(--accent-light);
             font-weight: 700;
             margin-bottom: 1.5rem;
         }
@@ -420,7 +453,7 @@
         .variants h3 {
             font-size: 1.2rem;
             margin-bottom: 1rem;
-            color: var(--primary);
+            color: var(--white);
         }
 
         .variant-options {
@@ -432,18 +465,19 @@
 
         .variant-btn {
             padding: 0.8rem 1.5rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 30px;
-            background: none;
+            background: transparent;
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: 0.3s;
+            color: var(--white);
         }
 
         .variant-btn:hover {
             border-color: var(--accent);
-            color: var(--accent);
+            color: var(--accent-light);
         }
 
         .variant-btn.selected {
@@ -453,7 +487,7 @@
         }
 
         .order-form {
-            background: #f8fafc;
+            background: rgba(26, 26, 26, 0.8);
             padding: 2rem;
             border-radius: 20px;
             margin-top: 2rem;
@@ -461,22 +495,28 @@
 
         .order-form h3 {
             margin-bottom: 1rem;
-            color: var(--primary);
+            color: var(--white);
         }
 
         .order-form input {
             width: 100%;
             padding: 1rem;
             margin: 0.5rem 0;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 16px;
             font-size: 1rem;
             -webkit-appearance: none;
+            background: rgba(0,0,0,0.5);
+            color: var(--white);
         }
 
         .order-form input:focus {
             outline: none;
             border-color: var(--accent);
+        }
+
+        .order-form input::placeholder {
+            color: #888;
         }
 
         .order-btn {
@@ -495,15 +535,17 @@
 
         .order-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(211,47,47,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
         /* Контакти */
         .contact-content {
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             padding: 3rem;
             border-radius: 30px;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .contact-info {
@@ -518,7 +560,7 @@
             align-items: center;
             gap: 1rem;
             padding: 1.5rem;
-            background: #f8fafc;
+            background: rgba(26, 26, 26, 0.8);
             border-radius: 16px;
             transition: 0.3s;
         }
@@ -546,27 +588,27 @@
 
         .contact-item h3 {
             font-size: 0.9rem;
-            color: #64748b;
+            color: #aaa;
             margin-bottom: 0.3rem;
         }
 
         .contact-item p {
             font-size: 1.1rem;
             font-weight: 600;
-            color: var(--primary);
+            color: var(--white);
         }
 
         /* Соціальні мережі */
         .social-section {
             margin-top: 3rem;
             padding-top: 2rem;
-            border-top: 2px solid #e2e8f0;
+            border-top: 2px solid rgba(255,255,255,0.1);
         }
 
         .social-section h3 {
             font-size: 1.3rem;
             margin-bottom: 1.5rem;
-            color: var(--primary);
+            color: var(--white);
         }
 
         .social-links {
@@ -580,10 +622,10 @@
             align-items: center;
             gap: 0.8rem;
             padding: 0.8rem 1.5rem;
-            background: #f8fafc;
+            background: rgba(26, 26, 26, 0.8);
             border-radius: 50px;
             text-decoration: none;
-            color: var(--primary);
+            color: var(--white);
             font-weight: 500;
             transition: 0.3s;
             flex: 0 1 auto;
@@ -617,7 +659,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.8);
             align-items: flex-end;
             justify-content: center;
             z-index: 2000;
@@ -628,7 +670,7 @@
         }
 
         .modal-content {
-            background: var(--white);
+            background: var(--secondary);
             padding: 2rem 1.5rem;
             border-radius: 30px 30px 0 0;
             width: 100%;
@@ -647,16 +689,18 @@
 
         .modal-content h2 {
             margin-bottom: 1.5rem;
-            color: var(--primary);
+            color: var(--white);
         }
 
         .modal-content input {
             width: 100%;
             padding: 1rem;
             margin: 0.5rem 0;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 16px;
             font-size: 1rem;
+            background: rgba(0,0,0,0.5);
+            color: var(--white);
         }
 
         .modal-content input:focus {
@@ -679,28 +723,30 @@
         }
 
         .modal-content button:hover {
-            background: #b71c1c;
+            background: var(--accent-light);
         }
 
         .close {
             float: right;
             font-size: 2rem;
             cursor: pointer;
-            color: #94a3b8;
+            color: #aaa;
             transition: 0.3s;
         }
 
         .close:hover {
-            color: var(--accent);
+            color: var(--white);
         }
 
         /* Footer */
         footer {
-            background: var(--primary);
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
             color: var(--white);
             text-align: center;
             padding: 2rem;
             margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         /* Адаптація */
@@ -816,6 +862,11 @@
     </style>
 </head>
 <body>
+    <!-- Фоновий контейнер -->
+    <div class="bg-container">
+        <img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;">
+    </div>
+
     <header>
         <div class="mobile-menu-toggle" id="mobileMenuToggle">
             <i class="fas fa-bars"></i>
@@ -861,7 +912,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Захід Дрон. Всі права захищені.</p>
+        <p>&copy; 2024 Захід Дрон. Всі права захищені.</p>
     </footer>
 
     <!-- Login Modal -->
@@ -893,6 +944,7 @@
         let aboutText = '';
         let contactInfo = '';
         let socialLinks = [];
+        let backgroundImage = '';
 
         // Функція для мобільного меню
         function initMobileMenu() {
@@ -954,21 +1006,40 @@
             }
         }
 
+        // Завантаження фону
+        async function loadBackground() {
+            try {
+                const response = await fetch('/api/background');
+                if (response.ok) {
+                    const bgUrl = await response.text();
+                    if (bgUrl && bgUrl !== '') {
+                        const bgImage = document.getElementById('bgImage');
+                        bgImage.src = bgUrl;
+                        bgImage.style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Помилка завантаження фону:', error);
+            }
+        }
+
         async function loadData() {
             try {
-                const [categoriesRes, productsRes, aboutRes, contactRes, userRes, socialRes] = await Promise.all([
+                const [categoriesRes, productsRes, aboutRes, contactRes, userRes, socialRes, bgRes] = await Promise.all([
                     fetch('/api/categories'),
                     fetch('/api/products'),
                     fetch('/api/about'),
                     fetch('/api/contact'),
                     fetch('/api/user').catch(() => null),
-                    fetch('/api/social').catch(() => ({ json: () => [] }))
+                    fetch('/api/social').catch(() => ({ json: () => [] })),
+                    fetch('/api/background').catch(() => ({ text: () => '' }))
                 ]);
                 
                 categories = await categoriesRes.json();
                 products = await productsRes.json();
                 aboutText = await aboutRes.text();
                 contactInfo = await contactRes.text();
+                backgroundImage = await bgRes.text();
                 
                 try {
                     socialLinks = await socialRes.json();
@@ -980,8 +1051,9 @@
                     currentUser = await userRes.json();
                 }
                 
-                // Завантажуємо логотип
+                // Завантажуємо логотип та фон
                 await loadLogo();
+                await loadBackground();
                 
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
@@ -1057,7 +1129,7 @@
             let html = '<h1>Каталог товарів</h1>';
             
             if (products.length === 0) {
-                html += '<p style="text-align: center; padding: 3rem;">Товари поки відсутні</p>';
+                html += '<p style="text-align: center; padding: 3rem; color: #aaa;">Товари поки відсутні</p>';
             }
             
             categories.forEach(cat => {
@@ -1069,7 +1141,7 @@
                     catProducts.forEach(p => {
                         html += `
                             <div class="product-card" onclick="window.location.href='/product/${p.id}'">
-                                <img src="${p.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\' viewBox=\'0 0 300 200\'%3E%3Crect width=\'300\' height=\'200\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%2394a3b8\' font-family=\'Arial\' font-size=\'14\'%3EНемає фото%3C/text%3E%3C/svg%3E'}" alt="${p.name}" class="product-image" loading="lazy">
+                                <img src="${p.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\' viewBox=\'0 0 300 200\'%3E%3Crect width=\'300\' height=\'200\' fill=\'%232d2d2d\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23666\' font-family=\'Arial\' font-size=\'14\'%3EНемає фото%3C/text%3E%3C/svg%3E'}" alt="${p.name}" class="product-image" loading="lazy">
                                 <div class="product-info">
                                     <h3>${p.name}</h3>
                                     <div class="product-price">${p.price.toLocaleString()} грн</div>
@@ -1163,11 +1235,11 @@
 
             main.innerHTML = `
                 <div class="product-page">
-                    <img src="${product.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'600\' height=\'400\' fill=\'%23e2e8f0\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%2394a3b8\' font-family=\'Arial\' font-size=\'24\'%3EНемає фото%3C/text%3E%3C/svg%3E'}" alt="${product.name}" class="product-page-image">
+                    <img src="${product.image || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\' viewBox=\'0 0 600 400\'%3E%3Crect width=\'600\' height=\'400\' fill=\'%232d2d2d\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' text-anchor=\'middle\' dy=\'.3em\' fill=\'%23666\' font-family=\'Arial\' font-size=\'24\'%3EНемає фото%3C/text%3E%3C/svg%3E'}" alt="${product.name}" class="product-page-image">
                     <div class="product-page-info">
                         <h1>${product.name}</h1>
                         <div class="product-page-price">${product.price.toLocaleString()} грн</div>
-                        <p style="color: #475569; line-height: 1.8; margin-bottom: 2rem;">${product.description || 'Опис товару відсутній'}</p>
+                        <p style="color: #aaa; line-height: 1.8; margin-bottom: 2rem;">${product.description || 'Опис товару відсутній'}</p>
                         
                         <div class="variants">
                             <h3>Варіанти:</h3>
@@ -1312,4 +1384,3 @@
     </script>
 </body>
 </html>
-
