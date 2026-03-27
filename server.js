@@ -1,4 +1,4 @@
-// server.js - повна версія з усіма функціями
+// server.js - повна версія з фоном, логотипом та всіма функціями
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs').promises;
@@ -15,13 +15,13 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(session({
-    secret: 'zahid-dron-secret-key-2024-change-this-in-production',
+    secret: 'zahid-dron-secret-key-2024-black-gray-theme',
     resave: false,
     saveUninitialized: false,
     cookie: { 
-        maxAge: 24 * 60 * 60 * 1000, // 24 години
+        maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true,
-        secure: false // встановіть true якщо використовуєте HTTPS
+        secure: false
     }
 }));
 
@@ -31,14 +31,12 @@ const storage = multer.diskStorage({
         cb(null, './uploads/');
     },
     filename: (req, file, cb) => {
-        // Створюємо унікальне ім'я файлу
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         const ext = path.extname(file.originalname);
         cb(null, uniqueSuffix + ext);
     }
 });
 
-// Фільтр для перевірки типу файлів
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp|svg/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -47,14 +45,14 @@ const fileFilter = (req, file, cb) => {
     if (mimetype && extname) {
         return cb(null, true);
     } else {
-        cb(new Error('Дозволені тільки зображення (jpg, jpeg, png, gif, webp, svg)'));
+        cb(new Error('Дозволені тільки зображення'));
     }
 };
 
 const upload = multer({ 
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 10 * 1024 * 1024 } // ліміт 10MB
+    limits: { fileSize: 10 * 1024 * 1024 }
 });
 
 // Файли даних
@@ -67,11 +65,11 @@ const CONTACT_FILE = path.join(DATA_DIR, 'contact.txt');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const SOCIAL_FILE = path.join(DATA_DIR, 'social.json');
 const LOGO_FILE = path.join(DATA_DIR, 'logo.txt');
+const BACKGROUND_FILE = path.join(DATA_DIR, 'background.txt');
 
 // Ініціалізація даних
 async function initData() {
     try {
-        // Створюємо директорії якщо їх немає
         await fs.mkdir(DATA_DIR, { recursive: true });
         await fs.mkdir('./uploads', { recursive: true });
         await fs.mkdir('./public', { recursive: true });
@@ -137,7 +135,7 @@ async function initData() {
         try {
             await fs.access(ABOUT_FILE);
         } catch {
-            await fs.writeFile(ABOUT_FILE, 'Ми — команда професіоналів, яка займається продажем дронів та реб. Пропонуємо тільки якісну техніку та комплектуючі. Доставка по всій Україні. Працюємо з 2020 року, маємо власний сервісний центр.');
+            await fs.writeFile(ABOUT_FILE, 'Ми — команда професіоналів, яка займається продажем дронів та реб. Пропонуємо тільки якісну техніку та комплектуючі. Доставка по всій Україні. Працюємо з 2020 року.');
             console.log('✅ Створено файл "Про нас"');
         }
 
@@ -209,13 +207,20 @@ async function initData() {
             console.log('✅ Створено файл логотипу');
         }
 
+        // Фон
+        try {
+            await fs.access(BACKGROUND_FILE);
+        } catch {
+            await fs.writeFile(BACKGROUND_FILE, '');
+            console.log('✅ Створено файл фону');
+        }
+
         console.log('✅ Всі дані успішно ініціалізовано');
     } catch (error) {
         console.error('❌ Помилка ініціалізації даних:', error);
     }
 }
 
-// Запускаємо ініціалізацію
 initData();
 
 // ============ API Routes ============
@@ -289,28 +294,23 @@ app.post('/api/admin/change-password', async (req, res) => {
         const { currentPassword, newUsername, newPassword } = req.body;
         const users = JSON.parse(await fs.readFile(USERS_FILE, 'utf8'));
         
-        // Знаходимо адміна
         const adminIndex = users.findIndex(u => u.username === req.session.user.username);
         
         if (adminIndex === -1) {
             return res.status(404).json({ error: 'Користувача не знайдено' });
         }
         
-        // Перевіряємо поточний пароль
         if (users[adminIndex].password !== currentPassword) {
             return res.status(401).json({ error: 'Невірний поточний пароль' });
         }
         
-        // Оновлюємо логін якщо вказано
         if (newUsername && newUsername.trim() !== '') {
-            // Перевіряємо чи новий логін не зайнятий
             if (users.some(u => u.username === newUsername && u.username !== req.session.user.username)) {
                 return res.status(400).json({ error: 'Цей логін вже використовується' });
             }
             users[adminIndex].username = newUsername;
         }
         
-        // Оновлюємо пароль якщо вказано
         if (newPassword && newPassword.trim() !== '') {
             if (newPassword.length < 6) {
                 return res.status(400).json({ error: 'Пароль повинен містити щонайменше 6 символів' });
@@ -318,10 +318,7 @@ app.post('/api/admin/change-password', async (req, res) => {
             users[adminIndex].password = newPassword;
         }
         
-        // Зберігаємо зміни
         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
-        
-        // Видаляємо сесію щоб користувач перелогінився
         req.session.destroy();
         
         res.json({ success: true, message: 'Дані оновлено. Будь ласка, увійдіть заново.' });
@@ -333,18 +330,15 @@ app.post('/api/admin/change-password', async (req, res) => {
 
 // ============ Логотип ============
 
-// Отримати логотип
 app.get('/api/logo', async (req, res) => {
     try {
         const logoPath = await fs.readFile(LOGO_FILE, 'utf8');
         res.send(logoPath || '');
     } catch (error) {
-        console.error('Помилка отримання логотипу:', error);
         res.status(500).send('');
     }
 });
 
-// Завантажити логотип
 app.post('/api/logo', upload.single('logo'), async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -364,7 +358,6 @@ app.post('/api/logo', upload.single('logo'), async (req, res) => {
     }
 });
 
-// Видалити логотип
 app.delete('/api/logo', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -379,9 +372,52 @@ app.delete('/api/logo', async (req, res) => {
     }
 });
 
+// ============ Фон ============
+
+app.get('/api/background', async (req, res) => {
+    try {
+        const bgPath = await fs.readFile(BACKGROUND_FILE, 'utf8');
+        res.send(bgPath || '');
+    } catch (error) {
+        res.status(500).send('');
+    }
+});
+
+app.post('/api/background', upload.single('background'), async (req, res) => {
+    if (!req.session.user?.isAdmin) {
+        return res.status(403).json({ error: 'Доступ заборонено' });
+    }
+    
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'Файл не завантажено' });
+        }
+        
+        const bgPath = `/uploads/${req.file.filename}`;
+        await fs.writeFile(BACKGROUND_FILE, bgPath);
+        res.json({ path: bgPath });
+    } catch (error) {
+        console.error('Помилка завантаження фону:', error);
+        res.status(500).json({ error: 'Помилка сервера' });
+    }
+});
+
+app.delete('/api/background', async (req, res) => {
+    if (!req.session.user?.isAdmin) {
+        return res.status(403).json({ error: 'Доступ заборонено' });
+    }
+    
+    try {
+        await fs.writeFile(BACKGROUND_FILE, '');
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Помилка видалення фону:', error);
+        res.status(500).json({ error: 'Помилка сервера' });
+    }
+});
+
 // ============ Категорії ============
 
-// Отримати всі категорії
 app.get('/api/categories', async (req, res) => {
     try {
         const categories = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8'));
@@ -392,7 +428,6 @@ app.get('/api/categories', async (req, res) => {
     }
 });
 
-// Додати категорію
 app.post('/api/categories', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -420,7 +455,6 @@ app.post('/api/categories', async (req, res) => {
     }
 });
 
-// Видалити категорію
 app.delete('/api/categories/:category', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -431,7 +465,6 @@ app.delete('/api/categories/:category', async (req, res) => {
         const categories = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8'));
         const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
         
-        // Перевіряємо чи є товари в цій категорії
         if (products.some(p => p.category === categoryToDelete)) {
             return res.status(400).json({ error: 'Неможливо видалити категорію з товарами' });
         }
@@ -452,7 +485,6 @@ app.delete('/api/categories/:category', async (req, res) => {
 
 // ============ Товари ============
 
-// Отримати всі товари
 app.get('/api/products', async (req, res) => {
     try {
         const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
@@ -463,7 +495,6 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-// Додати товар
 app.post('/api/products', upload.single('image'), async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -473,7 +504,6 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
         const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
         const variants = JSON.parse(req.body.variants || '[]');
         
-        // Валідація
         if (!req.body.name || req.body.name.trim() === '') {
             return res.status(400).json({ error: 'Назва товару обов\'язкова' });
         }
@@ -506,7 +536,6 @@ app.post('/api/products', upload.single('image'), async (req, res) => {
     }
 });
 
-// Видалити товар
 app.delete('/api/products/:id', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -520,7 +549,6 @@ app.delete('/api/products/:id', async (req, res) => {
             return res.status(404).json({ error: 'Товар не знайдено' });
         }
         
-        // Видаляємо зображення якщо воно є
         if (product.image) {
             const imagePath = path.join(__dirname, product.image);
             try {
@@ -539,7 +567,6 @@ app.delete('/api/products/:id', async (req, res) => {
     }
 });
 
-// Видалити варіант товару
 app.delete('/api/products/:id/variant/:index', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -621,11 +648,9 @@ app.post('/api/contact', async (req, res) => {
 
 // ============ Соціальні мережі ============
 
-// Отримати всі соціальні мережі
 app.get('/api/social', async (req, res) => {
     try {
         const social = JSON.parse(await fs.readFile(SOCIAL_FILE, 'utf8'));
-        // Для публічного перегляду повертаємо тільки активні
         if (!req.session.user?.isAdmin) {
             res.json(social.filter(s => s.active));
         } else {
@@ -637,7 +662,6 @@ app.get('/api/social', async (req, res) => {
     }
 });
 
-// Оновити всі соціальні мережі
 app.post('/api/social', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -654,7 +678,6 @@ app.post('/api/social', async (req, res) => {
 
 // ============ Замовлення ============
 
-// Отримати всі замовлення (тільки для адміна)
 app.get('/api/orders', async (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.status(403).json({ error: 'Доступ заборонено' });
@@ -669,7 +692,6 @@ app.get('/api/orders', async (req, res) => {
     }
 });
 
-// Створити замовлення
 app.post('/api/orders', async (req, res) => {
     try {
         const orders = JSON.parse(await fs.readFile(ORDERS_FILE, 'utf8'));
@@ -701,13 +723,11 @@ app.get('/api/stats', async (req, res) => {
         const categories = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8'));
         const orders = JSON.parse(await fs.readFile(ORDERS_FILE, 'utf8'));
         
-        // Обраховуємо загальну суму замовлень
         const totalOrdersSum = orders.reduce((sum, order) => {
             const product = products.find(p => p.id == order.productId);
             return sum + (product?.price || 0);
         }, 0);
         
-        // Обраховуємо загальну кількість варіантів
         const variantsCount = products.reduce((acc, p) => acc + p.variants.length, 0);
         
         res.json({
@@ -725,7 +745,6 @@ app.get('/api/stats', async (req, res) => {
 
 // ============ Сторінки ============
 
-// Віддаємо HTML файли
 app.get('/admin', (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.redirect('/');
