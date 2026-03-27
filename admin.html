@@ -1,4 +1,4 @@
-<!-- admin.html - виправлений вихід -->
+<!-- admin.html - чорно-сіра тема з фоном -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -16,26 +16,27 @@
         }
 
         :root {
-            --primary: #0a1a2b;
-            --secondary: #1e3a5f;
-            --accent: #d32f2f;
-            --accent-light: #ef5350;
-            --light: #f5f5f5;
+            --primary: #1a1a1a;
+            --secondary: #2d2d2d;
+            --accent: #6c6c6c;
+            --accent-light: #8a8a8a;
+            --light: #e5e5e5;
             --white: #ffffff;
-            --text: #333333;
-            --shadow: 0 4px 12px rgba(0,0,0,0.1);
-            --gradient: linear-gradient(135deg, #0a1a2b, #1e3a5f);
-            --accent-gradient: linear-gradient(135deg, #d32f2f, #ef5350);
+            --text: #f0f0f0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
+            --gradient: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            --accent-gradient: linear-gradient(135deg, #6c6c6c, #8a8a8a);
         }
 
         body {
-            background: var(--light);
+            background: var(--primary);
             min-height: 100vh;
         }
 
         /* Header */
         header {
-            background: var(--gradient);
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
             padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
@@ -44,6 +45,7 @@
             top: 0;
             z-index: 100;
             box-shadow: var(--shadow);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .logo {
@@ -76,7 +78,7 @@
         .logo-text .bottom {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--accent);
+            color: var(--accent-light);
         }
 
         .logo-text .ua {
@@ -85,7 +87,7 @@
             opacity: 0.8;
         }
 
-        .logout-btn {
+        .home-btn {
             background: transparent;
             border: 2px solid var(--accent);
             color: var(--accent);
@@ -99,19 +101,16 @@
             gap: 8px;
         }
 
-        .logout-btn:hover {
+        .home-btn:hover {
             background: var(--accent);
             color: var(--white);
-        }
-
-        .logout-btn i {
-            font-size: 1rem;
         }
 
         /* Mobile menu */
         .mobile-admin-menu {
             display: none;
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             padding: 0.8rem;
             position: sticky;
             top: 80px;
@@ -121,18 +120,20 @@
             -webkit-overflow-scrolling: touch;
             box-shadow: var(--shadow);
             gap: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .mobile-admin-menu a {
             display: inline-block;
             padding: 0.8rem 1.2rem;
-            background: var(--light);
+            background: rgba(26, 26, 26, 0.8);
             border-radius: 30px;
-            color: var(--primary);
+            color: var(--white);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
             cursor: pointer;
+            transition: 0.3s;
         }
 
         .mobile-admin-menu a.active {
@@ -152,17 +153,19 @@
 
         .sidebar {
             width: 280px;
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             padding: 2rem 1rem;
             box-shadow: var(--shadow);
             position: sticky;
             top: 80px;
             height: calc(100vh - 80px);
             overflow-y: auto;
+            border-right: 1px solid rgba(255,255,255,0.1);
         }
 
         .sidebar h3 {
-            color: var(--primary);
+            color: var(--white);
             margin-bottom: 1.5rem;
             padding-left: 1rem;
             font-size: 1.2rem;
@@ -182,7 +185,7 @@
             align-items: center;
             gap: 1rem;
             padding: 1rem;
-            color: var(--primary);
+            color: var(--white);
             text-decoration: none;
             border-radius: 12px;
             transition: 0.3s;
@@ -226,7 +229,7 @@
         .admin-section h2 {
             font-size: 2rem;
             margin-bottom: 2rem;
-            color: var(--primary);
+            color: var(--white);
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -235,7 +238,7 @@
         }
 
         .admin-section h2 i {
-            color: var(--accent);
+            color: var(--accent-light);
             font-size: 2rem;
         }
 
@@ -248,7 +251,8 @@
         }
 
         .stat-card {
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             padding: 1.5rem;
             border-radius: 20px;
             text-align: center;
@@ -258,34 +262,36 @@
 
         .stat-card i {
             font-size: 2.5rem;
-            color: var(--accent);
+            color: var(--accent-light);
             margin-bottom: 1rem;
         }
 
         .stat-card h3 {
             font-size: 1rem;
-            color: #64748b;
+            color: #aaa;
             margin-bottom: 0.5rem;
         }
 
         .stat-card p {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--white);
         }
 
         /* Forms */
         .admin-form {
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             padding: 2rem;
             border-radius: 20px;
             margin-bottom: 2rem;
             box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .admin-form h3 {
             margin-bottom: 1.5rem;
-            color: var(--primary);
+            color: var(--white);
             font-size: 1.3rem;
             display: flex;
             align-items: center;
@@ -293,7 +299,7 @@
         }
 
         .admin-form h3 i {
-            color: var(--accent);
+            color: var(--accent-light);
         }
 
         .form-group {
@@ -304,7 +310,7 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--primary);
+            color: var(--white);
         }
 
         .form-group input,
@@ -312,10 +318,12 @@
         .form-group select {
             width: 100%;
             padding: 0.8rem 1rem;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(255,255,255,0.2);
             border-radius: 12px;
             font-size: 1rem;
             transition: 0.3s;
+            background: rgba(0,0,0,0.5);
+            color: var(--white);
         }
 
         .form-group input:focus,
@@ -325,10 +333,15 @@
             border-color: var(--accent);
         }
 
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
         .form-group small {
             display: block;
             margin-top: 0.3rem;
-            color: #64748b;
+            color: #aaa;
             font-size: 0.85rem;
         }
 
@@ -350,11 +363,15 @@
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(211,47,47,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
 
         .btn-danger {
-            background: #dc2626;
+            background: #7a2e2e;
+        }
+
+        .btn-danger:hover {
+            background: #8b3c3c;
         }
 
         .btn-secondary {
@@ -373,7 +390,7 @@
         }
 
         .remove-btn {
-            background: #dc2626;
+            background: #7a2e2e;
             color: white;
             border: none;
             width: 44px;
@@ -386,6 +403,10 @@
             font-size: 1.2rem;
         }
 
+        .remove-btn:hover {
+            background: #8b3c3c;
+        }
+
         /* Image preview */
         .image-preview {
             max-width: 200px;
@@ -393,7 +414,7 @@
             margin: 1rem 0;
             border-radius: 12px;
             display: none;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(255,255,255,0.2);
         }
 
         .logo-preview {
@@ -401,7 +422,7 @@
             max-height: 100px;
             margin: 1rem 0;
             border-radius: 10px;
-            background: var(--light);
+            background: rgba(0,0,0,0.5);
             padding: 0.5rem;
         }
 
@@ -410,7 +431,7 @@
             height: 5px;
             margin-top: 0.5rem;
             border-radius: 10px;
-            background: #e2e8f0;
+            background: rgba(255,255,255,0.2);
             overflow: hidden;
         }
 
@@ -421,17 +442,17 @@
         }
 
         .password-strength-bar.weak {
-            background: #dc2626;
+            background: #7a2e2e;
             width: 33%;
         }
 
         .password-strength-bar.medium {
-            background: #f59e0b;
+            background: #b45f1b;
             width: 66%;
         }
 
         .password-strength-bar.strong {
-            background: #10b981;
+            background: #2e7a5e;
             width: 100%;
         }
 
@@ -445,10 +466,10 @@
 
         .category-tab {
             padding: 0.8rem 1.5rem;
-            background: var(--white);
+            background: rgba(26, 26, 26, 0.8);
             border: 2px solid var(--accent);
             border-radius: 30px;
-            color: var(--accent);
+            color: var(--accent-light);
             font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
@@ -458,6 +479,7 @@
         .category-tab.active {
             background: var(--accent);
             color: var(--white);
+            border-color: var(--accent);
         }
 
         /* Tables */
@@ -465,8 +487,10 @@
             overflow-x: auto;
             margin: 1rem 0;
             border-radius: 20px;
-            background: var(--white);
+            background: rgba(45, 45, 45, 0.95);
+            backdrop-filter: blur(10px);
             box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .table {
@@ -484,8 +508,9 @@
 
         .table td {
             padding: 1rem;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             vertical-align: middle;
+            color: var(--text);
         }
 
         .table img {
@@ -515,7 +540,7 @@
         }
 
         .delete-btn {
-            background: #dc2626;
+            background: #7a2e2e;
         }
 
         /* Badges */
@@ -527,12 +552,12 @@
         }
 
         .badge-active {
-            background: #10b981;
+            background: #2e7a5e;
             color: white;
         }
 
         .badge-inactive {
-            background: #ef4444;
+            background: #7a2e2e;
             color: white;
         }
 
@@ -543,7 +568,7 @@
             gap: 1rem;
             margin-top: 1rem;
             padding: 1rem;
-            background: #f8fafc;
+            background: rgba(26, 26, 26, 0.8);
             border-radius: 12px;
         }
 
@@ -555,7 +580,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.8);
             align-items: center;
             justify-content: center;
             z-index: 2000;
@@ -566,16 +591,17 @@
         }
 
         .modal-content {
-            background: var(--white);
+            background: var(--secondary);
             padding: 2rem;
             border-radius: 30px;
             width: 90%;
             max-width: 500px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .modal-content h2 {
             margin-bottom: 1.5rem;
-            color: var(--primary);
+            color: var(--white);
             border-bottom: 2px solid var(--accent);
             padding-bottom: 0.5rem;
         }
@@ -584,11 +610,12 @@
             float: right;
             font-size: 2rem;
             cursor: pointer;
-            color: #94a3b8;
+            color: #aaa;
+            transition: 0.3s;
         }
 
         .modal-close:hover {
-            color: var(--accent);
+            color: var(--white);
         }
 
         /* Responsive */
@@ -614,7 +641,7 @@
                 height: 40px;
             }
 
-            .logout-btn span {
+            .home-btn span {
                 display: none;
             }
         }
@@ -640,7 +667,7 @@
                 <span class="ua">UA</span>
             </div>
         </div>
-        <button class="logout-btn" onclick="goToHomePage()">
+        <button class="home-btn" onclick="goToHomePage()">
             <i class="fas fa-home"></i> <span>На головну</span>
         </button>
     </header>
@@ -653,8 +680,11 @@
         <a onclick="showSection('profile', this)">
             <i class="fas fa-user-cog"></i> Профіль
         </a>
+        <a onclick="showSection('background', this)">
+            <i class="fas fa-image"></i> Фон
+        </a>
         <a onclick="showSection('logo', this)">
-            <i class="fas fa-image"></i> Логотип
+            <i class="fas fa-camera"></i> Логотип
         </a>
         <a onclick="showSection('categories', this)">
             <i class="fas fa-tags"></i> Категорії
@@ -687,8 +717,11 @@
                 <li><a onclick="showSection('profile', this)">
                     <i class="fas fa-user-cog"></i> Профіль
                 </a></li>
+                <li><a onclick="showSection('background', this)">
+                    <i class="fas fa-image"></i> Фон сайту
+                </a></li>
                 <li><a onclick="showSection('logo', this)">
-                    <i class="fas fa-image"></i> Логотип
+                    <i class="fas fa-camera"></i> Логотип
                 </a></li>
                 <li><a onclick="showSection('categories', this)">
                     <i class="fas fa-tags"></i> Категорії
@@ -717,7 +750,7 @@
                 <h2><i class="fas fa-chart-line"></i> Дашборд</h2>
                 <div class="stats-grid" id="stats"></div>
                 <div style="margin-top: 2rem;">
-                    <h3 style="margin-bottom: 1rem;">Останні замовлення</h3>
+                    <h3 style="margin-bottom: 1rem; color: var(--white);">Останні замовлення</h3>
                     <div class="table-container">
                         <table class="table">
                             <thead>
@@ -767,25 +800,63 @@
                 </div>
             </div>
 
-            <!-- Logo -->
+            <!-- Background Section -->
+            <div id="background" class="admin-section">
+                <h2><i class="fas fa-image"></i> Фон сайту</h2>
+                <div class="admin-form">
+                    <h3><i class="fas fa-upload"></i> Завантажити фон</h3>
+                    
+                    <div class="form-group">
+                        <label>Поточний фон</label>
+                        <div id="currentBgPreview">
+                            <img src="" alt="Фон" class="logo-preview" id="currentBg" style="display: none; max-height: 200px; object-fit: cover;">
+                            <p id="noBgText" style="color: #aaa;">Фон не завантажено</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Новий фон</label>
+                        <input type="file" id="bgFile" accept="image/*">
+                        <small>Рекомендований розмір: 1920x1080px. Формати: JPG, PNG, WEBP</small>
+                        <img id="bgPreview" class="logo-preview" style="display: none; max-height: 200px; object-fit: cover;">
+                    </div>
+                    
+                    <button class="btn" onclick="uploadBackground()">
+                        <i class="fas fa-save"></i> Зберегти фон
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteBackground()">
+                        <i class="fas fa-trash"></i> Видалити фон
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logo Section -->
             <div id="logo" class="admin-section">
-                <h2><i class="fas fa-image"></i> Логотип</h2>
+                <h2><i class="fas fa-camera"></i> Логотип</h2>
                 <div class="admin-form">
                     <h3><i class="fas fa-upload"></i> Завантажити логотип</h3>
+                    
                     <div class="form-group">
                         <label>Поточний логотип</label>
                         <div id="currentLogoPreview">
                             <img src="" alt="Логотип" class="logo-preview" id="currentLogo" style="display: none;">
-                            <p id="noLogoText">Логотип не завантажено</p>
+                            <p id="noLogoText" style="color: #aaa;">Логотип не завантажено</p>
                         </div>
                     </div>
+                    
                     <div class="form-group">
                         <label>Новий логотип</label>
                         <input type="file" id="logoFile" accept="image/*">
+                        <small>Рекомендований розмір: 200x100px. Формати: PNG, JPG, SVG</small>
                         <img id="logoPreview" class="logo-preview" style="display: none;">
                     </div>
-                    <button class="btn" onclick="uploadLogo()">Зберегти логотип</button>
-                    <button class="btn btn-danger" onclick="deleteLogo()">Видалити логотип</button>
+                    
+                    <button class="btn" onclick="uploadLogo()">
+                        <i class="fas fa-save"></i> Зберегти логотип
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteLogo()">
+                        <i class="fas fa-trash"></i> Видалити логотип
+                    </button>
                 </div>
             </div>
 
@@ -817,7 +888,6 @@
             <div id="products" class="admin-section">
                 <h2><i class="fas fa-box"></i> Товари</h2>
                 
-                <!-- Форма додавання товару -->
                 <div class="admin-form">
                     <h3><i class="fas fa-plus-circle"></i> Додати товар</h3>
                     
@@ -863,10 +933,8 @@
                     <button class="btn" onclick="addProduct()">Додати товар</button>
                 </div>
 
-                <!-- Фільтр по категоріях -->
                 <div class="category-tabs" id="categoryTabs"></div>
 
-                <!-- Таблиця товарів -->
                 <div class="table-container">
                     <table class="table">
                         <thead>
@@ -925,6 +993,8 @@
                             <option value="facebook">Facebook</option>
                             <option value="viber">Viber</option>
                             <option value="whatsapp">WhatsApp</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="youtube">YouTube</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -938,6 +1008,10 @@
                     </div>
                     <div class="form-group">
                         <label><input type="checkbox" id="socialActive" checked> Активна</label>
+                    </div>
+                    <div class="social-icon-preview" id="socialPreview">
+                        <i class="fab fa-telegram" style="color: var(--accent-light);"></i>
+                        <span style="color: #aaa;">Попередній перегляд</span>
                     </div>
                     <button class="btn" onclick="addSocial()">Додати</button>
                 </div>
@@ -1035,6 +1109,48 @@
             }
         }
 
+        // Завантаження фону
+        async function loadBackground() {
+            try {
+                const response = await fetch('/api/background');
+                if (response.ok) {
+                    const bgUrl = await response.text();
+                    if (bgUrl && bgUrl !== '') {
+                        const currentBg = document.getElementById('currentBg');
+                        const noBgText = document.getElementById('noBgText');
+                        currentBg.src = bgUrl;
+                        currentBg.style.display = 'block';
+                        if (noBgText) noBgText.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Помилка завантаження фону:', error);
+            }
+        }
+
+        // Завантаження логотипу
+        async function loadLogo() {
+            try {
+                const response = await fetch('/api/logo');
+                if (response.ok) {
+                    const logoUrl = await response.text();
+                    if (logoUrl && logoUrl !== '') {
+                        const headerLogo = document.getElementById('headerLogo');
+                        const currentLogo = document.getElementById('currentLogo');
+                        const noLogoText = document.getElementById('noLogoText');
+                        
+                        headerLogo.src = logoUrl;
+                        headerLogo.style.display = 'block';
+                        currentLogo.src = logoUrl;
+                        currentLogo.style.display = 'block';
+                        if (noLogoText) noLogoText.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Помилка завантаження логотипу:', error);
+            }
+        }
+
         // Завантаження всіх даних
         async function loadData() {
             if (!await checkAuth()) return;
@@ -1061,7 +1177,6 @@
                 console.log('Категорії:', categories);
                 console.log('Товари:', products);
                 
-                // Оновлюємо всі секції
                 updateDashboard(stats);
                 updateCategoriesList();
                 updateProductsList();
@@ -1070,37 +1185,17 @@
                 updateCategorySelect();
                 updateCategoryTabs();
                 
-                // Заповнюємо текстові поля
                 document.getElementById('aboutText').value = await aboutRes.text();
                 
                 const contactText = await contactRes.text();
                 parseContactInfo(contactText);
                 
-                // Завантажуємо логотип
-                loadLogo();
+                await loadLogo();
+                await loadBackground();
                 
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
                 showNotification('Помилка завантаження даних', 'error');
-            }
-        }
-
-        // Завантаження логотипу
-        async function loadLogo() {
-            try {
-                const response = await fetch('/api/logo');
-                if (response.ok) {
-                    const logoUrl = await response.text();
-                    if (logoUrl && logoUrl !== '') {
-                        document.getElementById('headerLogo').src = logoUrl;
-                        document.getElementById('headerLogo').style.display = 'block';
-                        document.getElementById('currentLogo').src = logoUrl;
-                        document.getElementById('currentLogo').style.display = 'block';
-                        document.getElementById('noLogoText').style.display = 'none';
-                    }
-                }
-            } catch (error) {
-                console.error('Помилка завантаження логотипу:', error);
             }
         }
 
@@ -1138,7 +1233,6 @@
                 </div>
             `;
             
-            // Останні замовлення
             const recentOrders = orders.slice(-5).reverse();
             document.getElementById('recentOrders').innerHTML = recentOrders.map(o => {
                 const product = products.find(p => p.id == o.productId);
@@ -1177,17 +1271,13 @@
         // Оновлення списку товарів
         function updateProductsList() {
             const tbody = document.getElementById('productsList');
-            if (!tbody) {
-                console.error('Елемент productsList не знайдено');
-                return;
-            }
+            if (!tbody) return;
             
             if (!products || products.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Немає товарів</td></tr>';
                 return;
             }
             
-            // Фільтруємо товари якщо вибрана категорія
             let filteredProducts = products;
             if (currentCategory !== 'all') {
                 filteredProducts = products.filter(p => p.category === currentCategory);
@@ -1241,7 +1331,7 @@
                     <td><i class="${s.icon}" style="font-size: 1.5rem;"></i></td>
                     <td>${s.platform}</td>
                     <td>${s.name}</td>
-                    <td><a href="${s.url}" target="_blank">${s.url.substring(0, 30)}...</a></td>
+                    <td><a href="${s.url}" target="_blank" style="color: var(--accent-light);">${s.url.substring(0, 30)}...</a></td>
                     <td><span class="badge ${s.active ? 'badge-active' : 'badge-inactive'}">${s.active ? 'Активна' : 'Неактивна'}</span></td>
                     <td>
                         <div class="action-btns">
@@ -1336,7 +1426,7 @@
                 });
                 
                 if (response.ok) {
-                    showNotification('Дані оновлено! Будь ласка, увійдіть заново.', 'success');
+                    showNotification('Дані оновлено! Увійдіть заново.', 'success');
                     setTimeout(() => {
                         window.location.href = '/';
                     }, 2000);
@@ -1346,6 +1436,48 @@
                 }
             } catch (error) {
                 showNotification('Помилка сервера', 'error');
+            }
+        }
+
+        // Завантаження фону
+        window.uploadBackground = async function() {
+            const file = document.getElementById('bgFile').files[0];
+            if (!file) {
+                showNotification('Виберіть файл', 'warning');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('background', file);
+            
+            try {
+                const response = await fetch('/api/background', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    showNotification('Фон збережено!', 'success');
+                    loadBackground();
+                }
+            } catch (error) {
+                showNotification('Помилка', 'error');
+            }
+        }
+
+        // Видалення фону
+        window.deleteBackground = async function() {
+            if (!confirm('Видалити фон?')) return;
+            
+            try {
+                const response = await fetch('/api/background', { method: 'DELETE' });
+                if (response.ok) {
+                    showNotification('Фон видалено!', 'success');
+                    document.getElementById('currentBg').style.display = 'none';
+                    document.getElementById('noBgText').style.display = 'block';
+                }
+            } catch (error) {
+                showNotification('Помилка', 'error');
             }
         }
 
@@ -1586,7 +1718,9 @@
                 instagram: 'fa-brands fa-instagram',
                 facebook: 'fa-brands fa-facebook',
                 viber: 'fa-brands fa-viber',
-                whatsapp: 'fa-brands fa-whatsapp'
+                whatsapp: 'fa-brands fa-whatsapp',
+                tiktok: 'fa-brands fa-tiktok',
+                youtube: 'fa-brands fa-youtube'
             };
             
             if (!icon) icon = icons[platform] || 'fa-solid fa-link';
@@ -1703,14 +1837,8 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
-        // Нова функція - перехід на головну сторінку без виходу
+        // Перехід на головну
         window.goToHomePage = function() {
-            window.location.href = '/';
-        }
-
-        // Вихід (тільки для зміни пароля)
-        window.logout = async function() {
-            await fetch('/api/logout', { method: 'POST' });
             window.location.href = '/';
         }
 
@@ -1722,7 +1850,7 @@
                 top: 100px;
                 right: 20px;
                 padding: 1rem 2rem;
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+                background: ${type === 'success' ? '#2e7a5e' : type === 'error' ? '#7a2e2e' : '#2e5e7a'};
                 color: white;
                 border-radius: 12px;
                 z-index: 3000;
@@ -1753,6 +1881,32 @@
             }
             if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
         });
+
+        document.getElementById('bgFile')?.addEventListener('change', function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const preview = document.getElementById('bgPreview');
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+            if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+        });
+
+        document.getElementById('socialIcon')?.addEventListener('input', function(e) {
+            const preview = document.getElementById('socialPreview');
+            const icon = e.target.value || 'fa-brands fa-telegram';
+            preview.innerHTML = `<i class="${icon}" style="font-size: 2rem; color: var(--accent-light);"></i><span style="color: #aaa;">Попередній перегляд</span>`;
+        });
+
+        // Додаємо стилі для анімацій
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
 
         // Завантаження даних при старті
         document.addEventListener('DOMContentLoaded', loadData);
