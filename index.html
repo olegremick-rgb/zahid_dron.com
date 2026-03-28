@@ -1,4 +1,4 @@
-<!-- index.html - оновлений з фоном тільки на головній сторінці -->
+<!-- index.html - з затемненням фону при скролі -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -42,7 +42,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -2;
             background: var(--primary);
             opacity: 0;
             visibility: hidden;
@@ -59,12 +59,21 @@
             height: 100%;
             object-fit: cover;
             opacity: 0.4;
-        }
-
-        /* Паралакс ефект при скролі */
-        .bg-image {
             transform: translateY(0);
             transition: transform 0.1s linear;
+        }
+
+        /* Темний оверлей, який затемнюється при скролі */
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0);
+            pointer-events: none;
+            transition: background-color 0.05s linear;
+            z-index: 1;
         }
 
         /* Мобільне меню */
@@ -878,6 +887,7 @@
     <!-- Фоновий контейнер - тільки для головної сторінки -->
     <div class="bg-container" id="bgContainer">
         <img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;">
+        <div class="bg-overlay" id="bgOverlay"></div>
     </div>
 
     <header>
@@ -925,7 +935,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Захід Дрон. Всі права захищені.</p>
+        <p>&copy; 2024 Захід Дрон. Всі права захищені.</p>
     </footer>
 
     <!-- Login Modal -->
@@ -998,14 +1008,23 @@
             });
         }
 
-        // Ефект паралаксу для фону
+        // Ефект паралаксу та затемнення при скролі
         function initParallax() {
+            const bgImage = document.getElementById('bgImage');
+            const bgOverlay = document.getElementById('bgOverlay');
+            
             window.addEventListener('scroll', () => {
                 const bgContainer = document.getElementById('bgContainer');
-                const bgImage = document.getElementById('bgImage');
                 if (bgContainer && bgContainer.classList.contains('active') && bgImage) {
                     const scrollY = window.scrollY;
+                    // Паралакс
                     bgImage.style.transform = `translateY(${scrollY * 0.3}px)`;
+                    
+                    // Затемнення фону при скролі: від 0 до 0.6
+                    if (bgOverlay) {
+                        let opacity = Math.min(scrollY / 400, 0.6);
+                        bgOverlay.style.backgroundColor = `rgba(0,0,0,${opacity})`;
+                    }
                 }
             });
         }
@@ -1053,16 +1072,20 @@
         // Управління фоном в залежності від сторінки
         function updateBackgroundForPage(page) {
             const bgContainer = document.getElementById('bgContainer');
+            const bgOverlay = document.getElementById('bgOverlay');
             if (!bgContainer) return;
             
             if (page === '/' || page === '/about') {
                 if (backgroundImage) {
                     bgContainer.classList.add('active');
+                    // Скидаємо затемнення при зміні сторінки
+                    if (bgOverlay) bgOverlay.style.backgroundColor = 'rgba(0,0,0,0)';
                 } else {
                     bgContainer.classList.remove('active');
                 }
             } else {
                 bgContainer.classList.remove('active');
+                if (bgOverlay) bgOverlay.style.backgroundColor = 'rgba(0,0,0,0)';
             }
         }
 
@@ -1427,4 +1450,4 @@
         renderPage();
     </script>
 </body>
-</html>
+    </html>
