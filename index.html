@@ -1,4 +1,4 @@
-<!-- index.html - з банером зверху та текстом нижче -->
+<!-- index.html - з затемненням фону при скролі -->
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -33,6 +33,47 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* Фоновий контейнер - тільки для головної сторінки */
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: var(--primary);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            transform: translateY(0);
+            transition: transform 0.1s linear;
+        }
+
+        /* Темний оверлей, який затемнюється при скролі */
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0);
+            pointer-events: none;
+            transition: background-color 0.05s linear;
+            z-index: 1;
         }
 
         /* Мобільне меню */
@@ -229,24 +270,6 @@
             z-index: 1;
         }
 
-        /* Банер на головній сторінці */
-        .hero-banner {
-            width: 100%;
-            margin-bottom: 3rem;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            background: var(--secondary);
-        }
-
-        .hero-banner img {
-            width: 100%;
-            height: auto;
-            max-height: 500px;
-            object-fit: cover;
-            display: block;
-        }
-
         h1 {
             font-size: 2.2rem;
             margin-bottom: 1.5rem;
@@ -334,22 +357,37 @@
             margin-top: 0.5rem;
         }
 
-        /* Сторінка Про нас - основна з банером зверху */
+        /* Сторінка Про нас - основна */
         .about-hero {
-            width: 100%;
-            margin-bottom: 3rem;
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            padding: 4rem 2rem;
             border-radius: 30px;
-            overflow: hidden;
+            margin-bottom: 3rem;
+            text-align: center;
             box-shadow: var(--shadow);
-            background: var(--secondary);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .about-hero img {
-            width: 100%;
-            height: auto;
-            max-height: 500px;
-            object-fit: cover;
-            display: block;
+        .about-hero h1 {
+            color: var(--white);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .about-hero h1::after {
+            background: var(--accent);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+        }
+
+        .about-hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
         }
 
         .about-content {
@@ -773,9 +811,12 @@
                 height: 250px;
             }
 
-            .hero-banner img,
-            .about-hero img {
-                max-height: 300px;
+            .about-hero {
+                padding: 2rem 1rem;
+            }
+
+            .about-hero h1 {
+                font-size: 2rem;
             }
 
             .about-content {
@@ -820,11 +861,6 @@
             .auth-buttons button span {
                 display: none;
             }
-
-            .hero-banner img,
-            .about-hero img {
-                max-height: 200px;
-            }
         }
 
         /* Touch оптимізація */
@@ -848,6 +884,12 @@
     </style>
 </head>
 <body>
+    <!-- Фоновий контейнер - тільки для головної сторінки -->
+    <div class="bg-container" id="bgContainer">
+        <img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;">
+        <div class="bg-overlay" id="bgOverlay"></div>
+    </div>
+
     <header>
         <div class="mobile-menu-toggle" id="mobileMenuToggle">
             <i class="fas fa-bars"></i>
@@ -925,7 +967,8 @@
         let aboutText = '';
         let contactInfo = '';
         let socialLinks = [];
-        let bannerImage = '';
+        let backgroundImage = '';
+        let currentPage = '';
 
         // Функція для мобільного меню
         function initMobileMenu() {
@@ -965,6 +1008,27 @@
             });
         }
 
+        // Ефект паралаксу та затемнення при скролі
+        function initParallax() {
+            const bgImage = document.getElementById('bgImage');
+            const bgOverlay = document.getElementById('bgOverlay');
+            
+            window.addEventListener('scroll', () => {
+                const bgContainer = document.getElementById('bgContainer');
+                if (bgContainer && bgContainer.classList.contains('active') && bgImage) {
+                    const scrollY = window.scrollY;
+                    // Паралакс
+                    bgImage.style.transform = `translateY(${scrollY * 0.3}px)`;
+                    
+                    // Затемнення фону при скролі: від 0 до 0.6
+                    if (bgOverlay) {
+                        let opacity = Math.min(scrollY / 400, 0.6);
+                        bgOverlay.style.backgroundColor = `rgba(0,0,0,${opacity})`;
+                    }
+                }
+            });
+        }
+
         // Завантаження логотипу
         async function loadLogo() {
             try {
@@ -987,18 +1051,41 @@
             }
         }
 
-        // Завантаження банера
-        async function loadBanner() {
+        // Завантаження фону
+        async function loadBackground() {
             try {
-                const response = await fetch('/api/banner');
+                const response = await fetch('/api/background');
                 if (response.ok) {
-                    const bannerUrl = await response.text();
-                    if (bannerUrl && bannerUrl !== '') {
-                        bannerImage = bannerUrl;
+                    const bgUrl = await response.text();
+                    if (bgUrl && bgUrl !== '') {
+                        backgroundImage = bgUrl;
+                        const bgImage = document.getElementById('bgImage');
+                        bgImage.src = bgUrl;
+                        bgImage.style.display = 'block';
                     }
                 }
             } catch (error) {
-                console.error('Помилка завантаження банера:', error);
+                console.error('Помилка завантаження фону:', error);
+            }
+        }
+
+        // Управління фоном в залежності від сторінки
+        function updateBackgroundForPage(page) {
+            const bgContainer = document.getElementById('bgContainer');
+            const bgOverlay = document.getElementById('bgOverlay');
+            if (!bgContainer) return;
+            
+            if (page === '/' || page === '/about') {
+                if (backgroundImage) {
+                    bgContainer.classList.add('active');
+                    // Скидаємо затемнення при зміні сторінки
+                    if (bgOverlay) bgOverlay.style.backgroundColor = 'rgba(0,0,0,0)';
+                } else {
+                    bgContainer.classList.remove('active');
+                }
+            } else {
+                bgContainer.classList.remove('active');
+                if (bgOverlay) bgOverlay.style.backgroundColor = 'rgba(0,0,0,0)';
             }
         }
 
@@ -1029,7 +1116,7 @@
                 }
                 
                 await loadLogo();
-                await loadBanner();
+                await loadBackground();
                 
             } catch (error) {
                 console.error('Помилка завантаження даних:', error);
@@ -1040,7 +1127,11 @@
             await loadData();
             
             const path = window.location.pathname;
+            currentPage = path;
             const main = document.getElementById('main-content');
+            
+            // Оновлюємо фон для поточної сторінки
+            updateBackgroundForPage(path);
             
             // Оновлюємо активні посилання
             document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => {
@@ -1064,14 +1155,11 @@
         }
 
         function renderAbout(main) {
-            const bannerHtml = bannerImage ? `
-                <div class="hero-banner">
-                    <img src="${bannerImage}" alt="Захід Дрон - Банер">
-                </div>
-            ` : '';
-            
             main.innerHTML = `
-                ${bannerHtml}
+                <div class="about-hero">
+                    <h1>Про нас</h1>
+                    <p>Ваш надійний партнер у світі дронів та комплектуючих</p>
+                </div>
                 
                 <div class="about-content">
                     ${aboutText.replace(/\n/g, '<br>')}
@@ -1355,10 +1443,11 @@
         
         document.addEventListener('DOMContentLoaded', () => {
             initMobileMenu();
+            initParallax();
             renderPage();
         });
         
         renderPage();
     </script>
 </body>
-                </html>
+</html>
