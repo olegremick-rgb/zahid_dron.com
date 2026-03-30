@@ -34,7 +34,7 @@
             flex-direction: column;
         }
 
-        /* Мобільне меню */
+        /* Mobile menu */
         .mobile-menu-toggle {
             display: none;
             font-size: 1.8rem;
@@ -102,7 +102,6 @@
             margin-top: 2px;
         }
 
-        /* Десктоп навігація */
         .desktop-nav {
             display: flex;
             gap: 1rem;
@@ -124,7 +123,7 @@
             color: var(--white);
         }
 
-        /* Мобільне меню */
+        /* Mobile nav */
         .mobile-nav {
             display: none;
             position: fixed;
@@ -220,7 +219,7 @@
             color: var(--white);
         }
 
-        /* Основний контент */
+        /* Main content */
         main {
             flex: 1;
             padding: 2rem 5%;
@@ -252,7 +251,7 @@
             color: var(--white);
         }
 
-        /* Сітка товарів */
+        /* Products grid */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -315,7 +314,7 @@
             margin-top: 0.5rem;
         }
 
-        /* Банер */
+        /* Banner */
         .hero-banner {
             width: 100%;
             margin-bottom: 2rem;
@@ -333,7 +332,7 @@
             display: block;
         }
 
-        /* Бренд-лого */
+        /* Brand logo */
         .brand-logo-container {
             text-align: center;
             margin-bottom: 1.5rem;
@@ -343,7 +342,7 @@
             height: auto;
         }
 
-        /* Hero блок */
+        /* Hero block */
         .about-hero {
             background: rgba(26, 26, 26, 0.8);
             backdrop-filter: blur(10px);
@@ -426,7 +425,7 @@
             color: #aaa;
         }
 
-        /* Сторінка товару */
+        /* Product page */
         .product-page {
             background: rgba(45, 45, 45, 0.95);
             backdrop-filter: blur(10px);
@@ -546,7 +545,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* Контакти */
+        /* Contacts */
         .contact-content {
             background: rgba(45, 45, 45, 0.95);
             backdrop-filter: blur(10px);
@@ -606,7 +605,7 @@
             color: var(--white);
         }
 
-        /* Соціальні мережі */
+        /* Social */
         .social-section {
             margin-top: 3rem;
             padding-top: 2rem;
@@ -659,7 +658,7 @@
             color: var(--white);
         }
 
-        /* Modal */
+        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -687,12 +686,8 @@
         }
 
         @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
-            to {
-                transform: translateY(0);
-            }
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
 
         .modal-content h2 {
@@ -757,144 +752,57 @@
             border-top: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Адаптація */
         @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-
-            .mobile-menu-toggle {
-                display: block;
-            }
-
-            .mobile-nav {
-                display: block;
-            }
-
-            .logo-img {
-                height: 40px;
-            }
-
-            .logo-text .top {
-                font-size: 1rem;
-            }
-
-            .logo-text .bottom {
-                font-size: 1.4rem;
-            }
-
-            .auth-buttons button {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 1rem;
-            }
-
-            .product-page-image {
-                height: 250px;
-            }
-
-            .hero-banner img,
-            .about-hero {
-                padding: 2rem 1rem;
-            }
-
-            .about-hero h1 {
-                font-size: 2rem;
-            }
-
-            .about-content {
-                padding: 1.5rem;
-            }
-
-            .social-link {
-                min-width: 100%;
-            }
-
-            .contact-content {
-                padding: 1.5rem;
-            }
+            .desktop-nav { display: none; }
+            .mobile-menu-toggle { display: block; }
+            .mobile-nav { display: block; }
+            .logo-img { height: 40px; }
+            .logo-text .top { font-size: 1rem; }
+            .logo-text .bottom { font-size: 1.4rem; }
+            .auth-buttons button { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .product-page-image { height: 250px; }
+            .about-hero { padding: 2rem 1rem; }
+            .about-hero h1 { font-size: 2rem; }
+            .about-content { padding: 1.5rem; }
+            .social-link { min-width: 100%; }
+            .contact-content { padding: 1.5rem; }
         }
 
         @media (max-width: 480px) {
-            .logo-img {
-                height: 35px;
-            }
-
-            .logo-text .top {
-                font-size: 0.9rem;
-            }
-
-            .logo-text .bottom {
-                font-size: 1.2rem;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .auth-buttons button {
-                padding: 0.3rem 0.6rem;
-                font-size: 0.8rem;
-            }
-
-            .auth-buttons button i {
-                margin-right: 0;
-            }
-
-            .auth-buttons button span {
-                display: none;
-            }
-
+            .logo-img { height: 35px; }
+            .logo-text .top { font-size: 0.9rem; }
+            .logo-text .bottom { font-size: 1.2rem; }
+            .products-grid { grid-template-columns: 1fr; }
+            .auth-buttons button { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+            .auth-buttons button i { margin-right: 0; }
+            .auth-buttons button span { display: none; }
             .hero-banner img,
-            .about-hero {
-                max-height: 200px;
-            }
+            .about-hero { max-height: 200px; }
         }
 
-        button, 
-        .product-card,
-        .variant-btn,
-        .order-btn,
-        .auth-buttons button,
-        .mobile-menu-toggle,
-        .mobile-nav-close,
-        .social-link {
+        button, .product-card, .variant-btn, .order-btn, .auth-buttons button,
+        .mobile-menu-toggle, .mobile-nav-close, .social-link {
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             cursor: pointer;
         }
-
-        body {
-            overscroll-behavior-y: contain;
-        }
+        body { overscroll-behavior-y: contain; }
     </style>
 </head>
 <body>
     <header>
-        <div class="mobile-menu-toggle" id="mobileMenuToggle">
-            <i class="fas fa-bars"></i>
-        </div>
-
+        <div class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></div>
         <a href="/" class="logo">
             <img src="" alt="Логотип" class="logo-img" id="headerLogo" style="display: none;">
-            <div class="logo-text">
-                <span class="top">ЗАХІД</span>
-                <span class="bottom">ДРОН</span>
-                <span class="ua">UA</span>
-            </div>
+            <div class="logo-text"><span class="top">ЗАХІД</span><span class="bottom">ДРОН</span><span class="ua">UA</span></div>
         </a>
-
         <nav class="desktop-nav">
             <a href="/">Головна</a>
             <a href="/catalog">Каталог</a>
             <a href="/about">Про нас</a>
             <a href="/contacts">Контакти</a>
         </nav>
-
         <div class="auth-buttons">
             <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span>Вхід</span></button>
             <button id="registerBtn"><i class="fas fa-user-plus"></i> <span>Реєстрація</span></button>
@@ -915,23 +823,13 @@
 
     <main id="main-content"></main>
 
-    <footer>
-        <p>&copy; 2024 Захід Дрон. Всі права захищені.</p>
-    </footer>
+    <footer><p>&copy; 2024 Захід Дрон. Всі права захищені.</p></footer>
 
-    <!-- Modals -->
     <div id="loginModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('loginModal')">&times;</span><h2>Вхід</h2><input type="text" id="loginUsername" placeholder="Логін"><input type="password" id="loginPassword" placeholder="Пароль"><button onclick="login()">Увійти</button></div></div>
     <div id="registerModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('registerModal')">&times;</span><h2>Реєстрація</h2><input type="text" id="regUsername" placeholder="Логін"><input type="password" id="regPassword" placeholder="Пароль"><button onclick="register()">Зареєструватися</button></div></div>
 
     <script>
-        let currentUser = null;
-        let categories = [];
-        let products = [];
-        let aboutText = '';
-        let contactInfo = '';
-        let socialLinks = [];
-        let bannerImage = '';
-        let brandLogoImage = '';
+        let currentUser = null, categories = [], products = [], aboutText = '', contactInfo = '', socialLinks = [], bannerImage = '', brandLogoImage = '';
 
         function initMobileMenu() {
             const toggle = document.getElementById('mobileMenuToggle');
@@ -939,40 +837,33 @@
             const nav = document.getElementById('mobileNav');
             const overlay = document.getElementById('mobileNavOverlay');
             if (!toggle || !close || !nav || !overlay) return;
-            function openMenu() { nav.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+            function open() { nav.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
             function closeMenu() { nav.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
-            toggle.addEventListener('click', (e) => { e.stopPropagation(); openMenu(); });
+            toggle.addEventListener('click', e => { e.stopPropagation(); open(); });
             close.addEventListener('click', closeMenu);
             overlay.addEventListener('click', closeMenu);
-            document.querySelectorAll('.mobile-nav-link').forEach(link => link.addEventListener('click', closeMenu));
-            nav.addEventListener('click', (e) => e.stopPropagation());
+            document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeMenu));
+            nav.addEventListener('click', e => e.stopPropagation());
         }
 
         async function loadLogo() {
-            try { const res = await fetch('/api/logo'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('mobileLogo').src = url; document.getElementById('mobileLogo').style.display = 'block'; } } } catch(e){}
-        }
-        async function loadBanner() {
-            try { const res = await fetch('/api/banner'); if(res.ok){ const url = await res.text(); if(url) bannerImage = url; } } catch(e){}
-        }
-        async function loadBrandLogo() {
-            try { const res = await fetch('/api/brand-logo'); if(res.ok){ const url = await res.text(); if(url) brandLogoImage = url; } } catch(e){}
-        }
+            try { const r = await fetch('/api/logo'); if(r.ok){ const url = await r.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('mobileLogo').src = url; document.getElementById('mobileLogo').style.display = 'block'; } } } catch(e){} }
+        async function loadBanner() { try { const r = await fetch('/api/banner'); if(r.ok){ const url = await r.text(); if(url) bannerImage = url; } } catch(e){} }
+        async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ const url = await r.text(); if(url) brandLogoImage = url; } } catch(e){} }
         async function loadData() {
             try {
-                const [catRes, prodRes, aboutRes, contactRes, userRes, socialRes] = await Promise.all([
+                const [cRes, pRes, aRes, coRes, uRes, sRes] = await Promise.all([
                     fetch('/api/categories'), fetch('/api/products'), fetch('/api/about'), fetch('/api/contact'),
                     fetch('/api/user').catch(()=>null), fetch('/api/social').catch(()=>({json:()=>[]}))
                 ]);
-                categories = await catRes.json();
-                products = await prodRes.json();
-                aboutText = await aboutRes.text();
-                contactInfo = await contactRes.text();
-                socialLinks = await socialRes.json();
-                if(userRes && userRes.ok) currentUser = await userRes.json();
-                await loadLogo();
-                await loadBanner();
-                await loadBrandLogo();
-            } catch(e) { console.error(e); }
+                categories = await cRes.json();
+                products = await pRes.json();
+                aboutText = await aRes.text();
+                contactInfo = await coRes.text();
+                socialLinks = await sRes.json();
+                if(uRes && uRes.ok) currentUser = await uRes.json();
+                await loadLogo(); await loadBanner(); await loadBrandLogo();
+            } catch(e){ console.error(e); }
         }
 
         async function renderPage() {
@@ -981,13 +872,12 @@
             const main = document.getElementById('main-content');
             document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => {
                 link.classList.remove('active');
-                const href = link.getAttribute('href');
-                if (href === path || (path === '/' && href === '/about')) link.classList.add('active');
+                if(link.getAttribute('href') === path || (path === '/' && link.getAttribute('href') === '/about')) link.classList.add('active');
             });
-            if (path === '/' || path === '/about') renderAbout(main);
-            else if (path === '/catalog') renderCatalog(main);
-            else if (path === '/contacts') renderContacts(main);
-            else if (path.startsWith('/product/')) renderProductPage(main, path.split('/')[2]);
+            if(path === '/' || path === '/about') renderAbout(main);
+            else if(path === '/catalog') renderCatalog(main);
+            else if(path === '/contacts') renderContacts(main);
+            else if(path.startsWith('/product/')) renderProductPage(main, path.split('/')[2]);
         }
 
         function renderAbout(main) {
@@ -1046,7 +936,7 @@
 
         function renderProductPage(main, id) {
             const p = products.find(p => p.id == id);
-            if(!p) { main.innerHTML = '<h1>Товар не знайдено</h1>'; return; }
+            if(!p){ main.innerHTML = '<h1>Товар не знайдено</h1>'; return; }
             main.innerHTML = `<div class="product-page"><img src="${p.image||'data:image/svg+xml,%3Csvg...%3E'}" class="product-page-image"><div class="product-page-info"><h1>${p.name}</h1><div class="product-page-price">${p.price.toLocaleString()} грн</div><p style="color:#aaa;line-height:1.8;">${p.description||'Опис відсутній'}</p><div class="variants"><h3>Варіанти:</h3><div class="variant-options">${p.variants.map(v=>`<button class="variant-btn" onclick="selectVariant(this,'${v}')">${v}</button>`).join('')}</div></div><div class="order-form"><h3>Замовити:</h3><input type="text" id="orderName" placeholder="Ваше ім'я"><input type="tel" id="orderPhone" placeholder="Номер телефону"><input type="text" id="orderVariant" placeholder="Оберіть варіант" readonly><button class="order-btn" onclick="placeOrder(${p.id})"><i class="fas fa-shopping-cart"></i> Замовити</button></div></div></div>`;
         }
 
