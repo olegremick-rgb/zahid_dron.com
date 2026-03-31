@@ -9,7 +9,10 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         :root { --primary:#1a1a1a; --secondary:#2d2d2d; --accent:#6c6c6c; --accent-light:#8a8a8a; --light:#e5e5e5; --white:#ffffff; --text:#f0f0f0; --shadow:0 4px 12px rgba(0,0,0,0.3); --gradient:linear-gradient(135deg,#1a1a1a,#2d2d2d); --accent-gradient:linear-gradient(135deg,#6c6c6c,#8a8a8a); }
-        body { background: var(--primary); min-height: 100vh; display: flex; flex-direction: column; }
+        body { background: var(--primary); min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+        .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: var(--primary); }
+        .bg-image { width: 100%; height: 100%; object-fit: cover; opacity: 0.3; transform: translateY(0); transition: transform 0.1s linear; }
+        .bg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0); pointer-events: none; transition: background-color 0.05s linear; }
         .mobile-menu-toggle { display: none; font-size: 1.8rem; color: var(--white); cursor: pointer; padding: 10px; margin: -10px; z-index: 1002; }
         header { background: rgba(26,26,26,0.95); backdrop-filter: blur(10px); padding: 0.8rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .logo { display: flex; align-items: center; gap: 15px; text-decoration: none; }
@@ -40,7 +43,6 @@
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem; }
         .product-card { background: rgba(45,45,45,0.95); backdrop-filter: blur(10px); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.5); border-color: var(--accent); }
-        .product-card:active { transform: scale(0.98); }
         .product-image { width: 100%; height: 200px; object-fit: cover; background: var(--secondary); }
         .product-info { padding: 1.5rem; }
         .product-info h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--white); line-height: 1.4; }
@@ -48,8 +50,8 @@
         .product-category { font-size: 0.85rem; color: #aaa; background: rgba(255,255,255,0.1); display: inline-block; padding: 0.3rem 1rem; border-radius: 30px; margin-top: 0.5rem; }
         .hero-banner { width: 100%; margin-bottom: 2rem; border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); background: var(--secondary); }
         .hero-banner img { width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; }
-        .brand-logo-container { text-align: center; margin-bottom: 1.5rem; }
-        .brand-logo-container img { max-width: 200px; height: auto; }
+        .brand-logo-container { text-align: center; margin-bottom: 2rem; }
+        .brand-logo-container img { max-width: 400px; width: 100%; height: auto; border-radius: 20px; }
         .about-hero { background: rgba(26,26,26,0.8); backdrop-filter: blur(10px); color: var(--white); padding: 4rem 2rem; border-radius: 30px; margin-bottom: 3rem; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); }
         .about-hero h1 { color: var(--white); font-size: 3rem; margin-bottom: 1rem; }
         .about-hero h1::after { background: var(--accent); left: 50%; transform: translateX(-50%); width: 100px; }
@@ -75,13 +77,11 @@
         .order-form h3 { margin-bottom: 1rem; color: var(--white); }
         .order-form input { width: 100%; padding: 1rem; margin: 0.5rem 0; border: 2px solid rgba(255,255,255,0.2); border-radius: 16px; font-size: 1rem; background: rgba(0,0,0,0.5); color: var(--white); }
         .order-form input:focus { outline: none; border-color: var(--accent); }
-        .order-form input::placeholder { color: #888; }
         .order-btn { background: var(--accent-gradient); color: var(--white); border: none; padding: 1rem; width: 100%; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; transition: 0.3s; }
         .order-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         .contact-content { background: rgba(45,45,45,0.95); backdrop-filter: blur(10px); padding: 3rem; border-radius: 30px; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); }
         .contact-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 2rem; margin: 2rem 0; }
         .contact-item { display: flex; align-items: center; gap: 1rem; padding: 1.5rem; background: rgba(26,26,26,0.8); border-radius: 16px; transition: 0.3s; }
-        .contact-item:hover { transform: translateX(5px); box-shadow: var(--shadow); }
         .contact-item i { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: var(--accent); color: var(--white); border-radius: 50%; font-size: 1.3rem; }
         .contact-item div { flex: 1; }
         .contact-item h3 { font-size: 0.9rem; color: #aaa; margin-bottom: 0.3rem; }
@@ -89,7 +89,7 @@
         .social-section { margin-top: 3rem; padding-top: 2rem; border-top: 2px solid rgba(255,255,255,0.1); }
         .social-section h3 { font-size: 1.3rem; margin-bottom: 1.5rem; color: var(--white); }
         .social-links { display: flex; gap: 1rem; flex-wrap: wrap; }
-        .social-link { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1.5rem; background: rgba(26,26,26,0.8); border-radius: 50px; text-decoration: none; color: var(--white); font-weight: 500; transition: 0.3s; flex: 0 1 auto; min-width: 140px; }
+        .social-link { display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem 1.5rem; background: rgba(26,26,26,0.8); border-radius: 50px; text-decoration: none; color: var(--white); font-weight: 500; transition: 0.3s; min-width: 140px; }
         .social-link i { font-size: 1.4rem; }
         .social-link.telegram i { color: #0088cc; }
         .social-link.instagram i { color: #e4405f; }
@@ -103,19 +103,22 @@
         .modal-content { background: var(--secondary); padding: 2rem 1.5rem; border-radius: 30px 30px 0 0; width: 100%; max-width: 500px; animation: slideUp 0.3s ease; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-content h2 { margin-bottom: 1.5rem; color: var(--white); }
-        .modal-content input { width: 100%; padding: 1rem; margin: 0.5rem 0; border: 2px solid rgba(255,255,255,0.2); border-radius: 16px; font-size: 1rem; background: rgba(0,0,0,0.5); color: var(--white); }
-        .modal-content button { background: var(--accent); color: var(--white); border: none; padding: 1rem; width: 100%; border-radius: 30px; font-weight: 600; font-size: 1.1rem; margin-top: 1rem; cursor: pointer; transition: 0.3s; }
-        .modal-content button:hover { background: var(--accent-light); }
-        .close { float: right; font-size: 2rem; cursor: pointer; color: #aaa; transition: 0.3s; }
+        .modal-content input { width: 100%; padding: 1rem; margin: 0.5rem 0; border: 2px solid rgba(255,255,255,0.2); border-radius: 16px; background: rgba(0,0,0,0.5); color: var(--white); }
+        .modal-content button { background: var(--accent); color: var(--white); border: none; padding: 1rem; width: 100%; border-radius: 30px; font-weight: 600; font-size: 1.1rem; margin-top: 1rem; cursor: pointer; }
+        .close { float: right; font-size: 2rem; cursor: pointer; color: #aaa; }
         .close:hover { color: var(--white); }
         footer { background: rgba(26,26,26,0.95); backdrop-filter: blur(10px); color: var(--white); text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); }
-        @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-menu-toggle { display: block; } .mobile-nav { display: block; } .logo-img { height: 40px; } .logo-text .top { font-size: 1rem; } .logo-text .bottom { font-size: 1.4rem; } .auth-buttons button { padding: 0.4rem 0.8rem; font-size: 0.85rem; } .products-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; } .product-page-image { height: 250px; } .about-hero { padding: 2rem 1rem; } .about-hero h1 { font-size: 2rem; } .about-content { padding: 1.5rem; } .social-link { min-width: 100%; } .contact-content { padding: 1.5rem; } }
-        @media (max-width: 480px) { .logo-img { height: 35px; } .logo-text .top { font-size: 0.9rem; } .logo-text .bottom { font-size: 1.2rem; } .products-grid { grid-template-columns: 1fr; } .auth-buttons button { padding: 0.3rem 0.6rem; font-size: 0.8rem; } .auth-buttons button i { margin-right: 0; } .auth-buttons button span { display: none; } .hero-banner img, .about-hero { max-height: 200px; } }
+        @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-menu-toggle { display: block; } .mobile-nav { display: block; } .logo-img { height: 40px; } .logo-text .top { font-size: 1rem; } .logo-text .bottom { font-size: 1.4rem; } .auth-buttons button { padding: 0.4rem 0.8rem; font-size: 0.85rem; } .products-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; } .product-page-image { height: 250px; } .about-hero { padding: 2rem 1rem; } .about-hero h1 { font-size: 2rem; } .about-content { padding: 1.5rem; } .brand-logo-container img { max-width: 250px; } }
+        @media (max-width: 480px) { .logo-img { height: 35px; } .logo-text .top { font-size: 0.9rem; } .logo-text .bottom { font-size: 1.2rem; } .products-grid { grid-template-columns: 1fr; } .auth-buttons button { padding: 0.3rem 0.6rem; font-size: 0.8rem; } .auth-buttons button i { margin-right: 0; } .auth-buttons button span { display: none; } .brand-logo-container img { max-width: 200px; } }
         button, .product-card, .variant-btn, .order-btn, .auth-buttons button, .mobile-menu-toggle, .mobile-nav-close, .social-link { touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor: pointer; }
         body { overscroll-behavior-y: contain; }
     </style>
 </head>
 <body>
+    <div class="bg-container" id="bgContainer">
+        <img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;">
+        <div class="bg-overlay" id="bgOverlay"></div>
+    </div>
     <header>
         <div class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></div>
         <a href="/" class="logo">
@@ -133,7 +136,6 @@
             <button id="registerBtn"><i class="fas fa-user-plus"></i> <span>Реєстрація</span></button>
         </div>
     </header>
-
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
         <div class="mobile-nav-header">
@@ -145,17 +147,12 @@
         <a href="/about" class="mobile-nav-link">Про нас</a>
         <a href="/contacts" class="mobile-nav-link">Контакти</a>
     </div>
-
     <main id="main-content"></main>
-
     <footer><p>&copy; 2024 Захід Дрон. Всі права захищені.</p></footer>
-
     <div id="loginModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('loginModal')">&times;</span><h2>Вхід</h2><input type="text" id="loginUsername" placeholder="Логін"><input type="password" id="loginPassword" placeholder="Пароль"><button onclick="login()">Увійти</button></div></div>
     <div id="registerModal" class="modal"><div class="modal-content"><span class="close" onclick="closeModal('registerModal')">&times;</span><h2>Реєстрація</h2><input type="text" id="regUsername" placeholder="Логін"><input type="password" id="regPassword" placeholder="Пароль"><button onclick="register()">Зареєструватися</button></div></div>
-
     <script>
-        let currentUser = null, categories = [], products = [], aboutText = '', contactInfo = '', socialLinks = [], bannerImage = '', brandLogoImage = '';
-
+        let currentUser = null, categories = [], products = [], aboutText = '', contactInfo = '', socialLinks = [], bannerImage = '', brandLogoImage = '', backgroundImage = '';
         function initMobileMenu() {
             const toggle = document.getElementById('mobileMenuToggle');
             const close = document.getElementById('mobileNavClose');
@@ -170,12 +167,25 @@
             document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeMenu));
             nav.addEventListener('click', e => e.stopPropagation());
         }
-
-        async function loadLogo() {
-            try { const r = await fetch('/api/logo'); if(r.ok){ const url = await r.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('mobileLogo').src = url; document.getElementById('mobileLogo').style.display = 'block'; } } } catch(e){} }
+        function initParallax() {
+            const bgImage = document.getElementById('bgImage');
+            const bgOverlay = document.getElementById('bgOverlay');
+            window.addEventListener('scroll', () => {
+                const bgContainer = document.getElementById('bgContainer');
+                if (bgContainer && bgImage && bgImage.style.display !== 'none') {
+                    const scrollY = window.scrollY;
+                    bgImage.style.transform = `translateY(${scrollY * 0.3}px)`;
+                    if (bgOverlay) {
+                        let opacity = Math.min(scrollY / 400, 0.6);
+                        bgOverlay.style.backgroundColor = `rgba(0,0,0,${opacity})`;
+                    }
+                }
+            });
+        }
+        async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const url = await r.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('mobileLogo').src = url; document.getElementById('mobileLogo').style.display = 'block'; } } } catch(e){} }
         async function loadBanner() { try { const r = await fetch('/api/banner'); if(r.ok){ const url = await r.text(); if(url) bannerImage = url; } } catch(e){} }
         async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ const url = await r.text(); if(url) brandLogoImage = url; } } catch(e){} }
-
+        async function loadBackground() { try { const r = await fetch('/api/background'); if(r.ok){ const url = await r.text(); if(url){ backgroundImage = url; document.getElementById('bgImage').src = url; document.getElementById('bgImage').style.display = 'block'; } } } catch(e){} }
         async function loadData() {
             try {
                 const [cRes, pRes, aRes, coRes, uRes, sRes] = await Promise.all([
@@ -188,10 +198,9 @@
                 contactInfo = await coRes.text();
                 socialLinks = await sRes.json();
                 if(uRes && uRes.ok) currentUser = await uRes.json();
-                await loadLogo(); await loadBanner(); await loadBrandLogo();
+                await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground();
             } catch(e){ console.error(e); }
         }
-
         async function renderPage() {
             await loadData();
             const path = window.location.pathname;
@@ -205,13 +214,12 @@
             else if(path === '/contacts') renderContacts(main);
             else if(path.startsWith('/product/')) renderProductPage(main, path.split('/')[2]);
         }
-
         function renderAbout(main) {
             const bannerHtml = bannerImage ? `<div class="hero-banner"><img src="${bannerImage}" alt="Банер"></div>` : '';
             const brandHtml = brandLogoImage ? `<div class="brand-logo-container"><img src="${brandLogoImage}" alt="Бренд-лого"></div>` : '';
             main.innerHTML = `
                 ${bannerHtml}
-                <div style="margin-top: 3rem;">
+                <div style="margin-top: 2rem;">
                     ${brandHtml}
                     <div class="about-hero">
                         <h1>Про нас</h1>
@@ -229,7 +237,6 @@
                 </div>
             `;
         }
-
         function renderCatalog(main) {
             let html = '<h1>Каталог товарів</h1>';
             if (!products.length) html += '<p style="text-align:center;padding:3rem;color:#aaa;">Товари поки відсутні</p>';
@@ -239,7 +246,7 @@
                     html += `<h2>${cat}</h2><div class="products-grid">`;
                     catProds.forEach(p => {
                         html += `<div class="product-card" onclick="location.href='/product/${p.id}'">
-                            <img src="${p.image || 'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22200%22%20viewBox%3D%220%200%20300%20200%22%3E%3Crect%20width%3D%22300%22%20height%3D%22200%22%20fill%3D%22%232d2d2d%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.3em%22%20fill%3D%22%23666%22%20font-family%3D%22Arial%22%20font-size%3D%2214%22%3E%D0%9D%D0%B5%D0%BC%D0%B0%D1%94%20%D1%84%D0%BE%D1%82%D0%BE%3C%2Ftext%3E%3C%2Fsvg%3E'}" class="product-image" loading="lazy">
+                            <img src="${p.image || 'data:image/svg+xml,%3Csvg...%3E'}" class="product-image" loading="lazy">
                             <div class="product-info"><h3>${p.name}</h3><div class="product-price">${p.price.toLocaleString()} грн</div><span class="product-category">${p.category}</span></div>
                         </div>`;
                     });
@@ -248,7 +255,6 @@
             });
             main.innerHTML = html;
         }
-
         function renderContacts(main) {
             const lines = contactInfo.split('\n');
             main.innerHTML = `<h1>Контакти</h1><div class="contact-content"><div class="contact-info">${lines.map(l => {
@@ -259,13 +265,11 @@
                 return '';
             }).join('')}</div><div class="social-section"><h3>Напишіть нам</h3><div class="social-links">${socialLinks.map(s => `<a href="${s.url}" target="_blank" class="social-link ${s.platform}"><i class="${s.icon}"></i><span>${s.name}</span></a>`).join('')}</div></div></div>`;
         }
-
         function renderProductPage(main, id) {
             const p = products.find(p => p.id == id);
             if(!p){ main.innerHTML = '<h1>Товар не знайдено</h1>'; return; }
-            main.innerHTML = `<div class="product-page"><img src="${p.image||'data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22600%22%20height%3D%22400%22%20viewBox%3D%220%200%20600%20400%22%3E%3Crect%20width%3D%22600%22%20height%3D%22400%22%20fill%3D%22%232d2d2d%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.3em%22%20fill%3D%22%23666%22%20font-family%3D%22Arial%22%20font-size%3D%2224%22%3E%D0%9D%D0%B5%D0%BC%D0%B0%D1%94%20%D1%84%D0%BE%D1%82%D0%BE%3C%2Ftext%3E%3C%2Fsvg%3E'}" class="product-page-image"><div class="product-page-info"><h1>${p.name}</h1><div class="product-page-price">${p.price.toLocaleString()} грн</div><p style="color:#aaa;line-height:1.8;">${p.description||'Опис відсутній'}</p><div class="variants"><h3>Варіанти:</h3><div class="variant-options">${p.variants.map(v=>`<button class="variant-btn" onclick="selectVariant(this,'${v}')">${v}</button>`).join('')}</div></div><div class="order-form"><h3>Замовити:</h3><input type="text" id="orderName" placeholder="Ваше ім'я"><input type="tel" id="orderPhone" placeholder="Номер телефону"><input type="text" id="orderVariant" placeholder="Оберіть варіант" readonly><button class="order-btn" onclick="placeOrder(${p.id})"><i class="fas fa-shopping-cart"></i> Замовити</button></div></div></div>`;
+            main.innerHTML = `<div class="product-page"><img src="${p.image||'data:image/svg+xml,%3Csvg...%3E'}" class="product-page-image"><div class="product-page-info"><h1>${p.name}</h1><div class="product-page-price">${p.price.toLocaleString()} грн</div><p style="color:#aaa;line-height:1.8;">${p.description||'Опис відсутній'}</p><div class="variants"><h3>Варіанти:</h3><div class="variant-options">${p.variants.map(v=>`<button class="variant-btn" onclick="selectVariant(this,'${v}')">${v}</button>`).join('')}</div></div><div class="order-form"><h3>Замовити:</h3><input type="text" id="orderName" placeholder="Ваше ім'я"><input type="tel" id="orderPhone" placeholder="Номер телефону"><input type="text" id="orderVariant" placeholder="Оберіть варіант" readonly><button class="order-btn" onclick="placeOrder(${p.id})"><i class="fas fa-shopping-cart"></i> Замовити</button></div></div></div>`;
         }
-
         window.selectVariant = (btn, v) => { document.querySelectorAll('.variant-btn').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); document.getElementById('orderVariant').value = v; };
         window.placeOrder = async (id) => {
             const name = document.getElementById('orderName').value, phone = document.getElementById('orderPhone').value, variant = document.getElementById('orderVariant').value;
@@ -292,7 +296,7 @@
         document.querySelectorAll('.desktop-nav a, .mobile-nav-link').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); const href = link.getAttribute('href'); history.pushState({},'',href); renderPage(); }));
         document.getElementById('loginBtn').onclick = () => document.getElementById('loginModal').classList.add('active');
         document.getElementById('registerBtn').onclick = () => document.getElementById('registerModal').classList.add('active');
-        document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); renderPage(); });
+        document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); initParallax(); renderPage(); });
         renderPage();
     </script>
 </body>
