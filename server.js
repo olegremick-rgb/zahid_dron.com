@@ -282,4 +282,4 @@ app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`\n=================================\n🚀 Сервер запущено: http://localhost:${PORT}\n📌 Адмін-панель: http://localhost:${PORT}/admin\n👤 Логін: admin, Пароль: admin\n=================================\n`);
-});s
+});
