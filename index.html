@@ -50,8 +50,9 @@
         .product-category { font-size: 0.85rem; color: #aaa; background: rgba(255,255,255,0.1); display: inline-block; padding: 0.3rem 1rem; border-radius: 30px; margin-top: 0.5rem; }
         .hero-banner { width: 100%; margin-bottom: 2rem; border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); background: var(--secondary); }
         .hero-banner img { width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; }
+        /* Збільшене бренд-лого – розтягується на всю ширину, але зберігає пропорції */
         .brand-logo-container { text-align: center; margin-bottom: 2rem; }
-        .brand-logo-container img { max-width: 400px; width: 100%; height: auto; border-radius: 20px; }
+        .brand-logo-container img { width: 100%; height: auto; max-width: 800px; display: inline-block; border-radius: 20px; }
         .about-hero { background: rgba(26,26,26,0.8); backdrop-filter: blur(10px); color: var(--white); padding: 4rem 2rem; border-radius: 30px; margin-bottom: 3rem; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); }
         .about-hero h1 { color: var(--white); font-size: 3rem; margin-bottom: 1rem; }
         .about-hero h1::after { background: var(--accent); left: 50%; transform: translateX(-50%); width: 100px; }
@@ -108,8 +109,8 @@
         .close { float: right; font-size: 2rem; cursor: pointer; color: #aaa; }
         .close:hover { color: var(--white); }
         footer { background: rgba(26,26,26,0.95); backdrop-filter: blur(10px); color: var(--white); text-align: center; padding: 2rem; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); }
-        @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-menu-toggle { display: block; } .mobile-nav { display: block; } .logo-img { height: 40px; } .logo-text .top { font-size: 1rem; } .logo-text .bottom { font-size: 1.4rem; } .auth-buttons button { padding: 0.4rem 0.8rem; font-size: 0.85rem; } .products-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; } .product-page-image { height: 250px; } .about-hero { padding: 2rem 1rem; } .about-hero h1 { font-size: 2rem; } .about-content { padding: 1.5rem; } .brand-logo-container img { max-width: 250px; } }
-        @media (max-width: 480px) { .logo-img { height: 35px; } .logo-text .top { font-size: 0.9rem; } .logo-text .bottom { font-size: 1.2rem; } .products-grid { grid-template-columns: 1fr; } .auth-buttons button { padding: 0.3rem 0.6rem; font-size: 0.8rem; } .auth-buttons button i { margin-right: 0; } .auth-buttons button span { display: none; } .brand-logo-container img { max-width: 200px; } }
+        @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-menu-toggle { display: block; } .mobile-nav { display: block; } .logo-img { height: 40px; } .logo-text .top { font-size: 1rem; } .logo-text .bottom { font-size: 1.4rem; } .auth-buttons button { padding: 0.4rem 0.8rem; font-size: 0.85rem; } .products-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; } .product-page-image { height: 250px; } .about-hero { padding: 2rem 1rem; } .about-hero h1 { font-size: 2rem; } .about-content { padding: 1.5rem; } .brand-logo-container img { max-width: 100%; } }
+        @media (max-width: 480px) { .logo-img { height: 35px; } .logo-text .top { font-size: 0.9rem; } .logo-text .bottom { font-size: 1.2rem; } .products-grid { grid-template-columns: 1fr; } .auth-buttons button { padding: 0.3rem 0.6rem; font-size: 0.8rem; } .auth-buttons button i { margin-right: 0; } .auth-buttons button span { display: none; } .brand-logo-container img { max-width: 100%; } }
         button, .product-card, .variant-btn, .order-btn, .auth-buttons button, .mobile-menu-toggle, .mobile-nav-close, .social-link { touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor: pointer; }
         body { overscroll-behavior-y: contain; }
     </style>
