@@ -40,19 +40,30 @@
         h1 { font-size: 2.2rem; margin-bottom: 1.5rem; color: var(--white); position: relative; padding-bottom: 0.5rem; }
         h1::after { content: ''; position: absolute; bottom: 0; left: 0; width: 60px; height: 3px; background: var(--accent); }
         h2 { font-size: 1.6rem; margin: 1.5rem 0 1rem; color: var(--white); }
+        
+        /* Цікавіше меню товарів – картки з ефектами */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; margin-top: 2rem; }
-        .product-card { background: rgba(45,45,45,0.95); backdrop-filter: blur(10px); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.5); border-color: var(--accent); }
-        .product-image { width: 100%; height: 200px; object-fit: cover; background: var(--secondary); }
-        .product-info { padding: 1.5rem; }
-        .product-info h3 { font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--white); line-height: 1.4; }
-        .product-price { color: var(--accent-light); font-size: 1.5rem; font-weight: 700; }
+        .product-card { background: rgba(45,45,45,0.95); backdrop-filter: blur(10px); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); cursor: pointer; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+        .product-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent); transition: left 0.5s; z-index: 1; pointer-events: none; }
+        .product-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 30px rgba(0,0,0,0.4); border-color: var(--accent-light); }
+        .product-card:hover::before { left: 100%; }
+        .product-image { width: 100%; height: 200px; object-fit: cover; background: var(--secondary); transition: transform 0.5s; }
+        .product-card:hover .product-image { transform: scale(1.05); }
+        .product-info { padding: 1.5rem; position: relative; z-index: 2; }
+        .product-info h3 { font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--white); line-height: 1.4; transition: color 0.2s; }
+        .product-card:hover .product-info h3 { color: var(--accent-light); }
+        .product-price { color: var(--accent-light); font-size: 1.6rem; font-weight: 700; margin: 0.5rem 0; }
         .product-category { font-size: 0.85rem; color: #aaa; background: rgba(255,255,255,0.1); display: inline-block; padding: 0.3rem 1rem; border-radius: 30px; margin-top: 0.5rem; }
+        .order-btn-small { background: var(--accent-gradient); border: none; color: white; padding: 0.5rem 1rem; border-radius: 40px; font-size: 0.9rem; font-weight: 600; margin-top: 1rem; width: 100%; cursor: pointer; transition: all 0.2s; text-align: center; display: inline-block; text-decoration: none; }
+        .order-btn-small:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.3); background: var(--accent-light); }
+
+        /* Бренд-лого – трохи розтягнуте (max-width: 1000px) */
         .hero-banner { width: 100%; margin-bottom: 2rem; border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); background: var(--secondary); }
         .hero-banner img { width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block; }
-        /* Збільшене бренд-лого – розтягується на всю ширину, але зберігає пропорції */
         .brand-logo-container { text-align: center; margin-bottom: 2rem; }
-        .brand-logo-container img { width: 100%; height: auto; max-width: 800px; display: inline-block; border-radius: 20px; }
+        .brand-logo-container img { width: 100%; height: auto; max-width: 1000px; display: inline-block; border-radius: 20px; transition: transform 0.3s; }
+        .brand-logo-container img:hover { transform: scale(1.02); }
+
         .about-hero { background: rgba(26,26,26,0.8); backdrop-filter: blur(10px); color: var(--white); padding: 4rem 2rem; border-radius: 30px; margin-bottom: 3rem; text-align: center; box-shadow: var(--shadow); border: 1px solid rgba(255,255,255,0.1); }
         .about-hero h1 { color: var(--white); font-size: 3rem; margin-bottom: 1rem; }
         .about-hero h1::after { background: var(--accent); left: 50%; transform: translateX(-50%); width: 100px; }
@@ -246,15 +257,27 @@
                 if (catProds.length) {
                     html += `<h2>${cat}</h2><div class="products-grid">`;
                     catProds.forEach(p => {
-                        html += `<div class="product-card" onclick="location.href='/product/${p.id}'">
+                        html += `<div class="product-card" data-id="${p.id}">
                             <img src="${p.image || 'data:image/svg+xml,%3Csvg...%3E'}" class="product-image" loading="lazy">
-                            <div class="product-info"><h3>${p.name}</h3><div class="product-price">${p.price.toLocaleString()} грн</div><span class="product-category">${p.category}</span></div>
+                            <div class="product-info">
+                                <h3>${p.name}</h3>
+                                <div class="product-price">${p.price.toLocaleString()} грн</div>
+                                <span class="product-category">${p.category}</span>
+                                <button class="order-btn-small" onclick="event.stopPropagation(); location.href='/product/${p.id}'">Детальніше</button>
+                            </div>
                         </div>`;
                     });
                     html += '</div>';
                 }
             });
             main.innerHTML = html;
+            // Додаємо обробник кліку на картку (перехід на сторінку товару)
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const id = card.getAttribute('data-id');
+                    if(id) location.href = `/product/${id}`;
+                });
+            });
         }
         function renderContacts(main) {
             const lines = contactInfo.split('\n');
