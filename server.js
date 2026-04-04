@@ -48,6 +48,7 @@ const LOGO_FILE = path.join(DATA_DIR, 'logo.txt');
 const BANNER_FILE = path.join(DATA_DIR, 'banner.txt');
 const BRAND_LOGO_FILE = path.join(DATA_DIR, 'brand-logo.txt');
 const BACKGROUND_FILE = path.join(DATA_DIR, 'background.txt');
+const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 
 async function initData() {
     try {
@@ -89,6 +90,7 @@ async function initData() {
         if (!await fs.access(BANNER_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BANNER_FILE, '');
         if (!await fs.access(BRAND_LOGO_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BRAND_LOGO_FILE, '');
         if (!await fs.access(BACKGROUND_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BACKGROUND_FILE, '');
+        if (!await fs.access(SETTINGS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(SETTINGS_FILE, JSON.stringify({ product_display_style: 'classic' }, null, 2));
         console.log('✅ Ініціалізацію даних завершено');
     } catch (err) { console.error('❌ Помилка ініціалізації:', err); }
 }
@@ -169,6 +171,20 @@ app.delete('/api/brand-logo', isAdmin, async (req, res) => { await fs.writeFile(
 app.get('/api/background', async (req, res) => { try { const p = await fs.readFile(BACKGROUND_FILE, 'utf8'); res.send(p || ''); } catch(e){res.send('');} });
 app.post('/api/background', isAdmin, upload.single('background'), async (req, res) => { if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); const p = `/uploads/${req.file.filename}`; await fs.writeFile(BACKGROUND_FILE, p); res.json({ path: p }); });
 app.delete('/api/background', isAdmin, async (req, res) => { await fs.writeFile(BACKGROUND_FILE, ''); res.json({ success: true }); });
+
+// Налаштування
+app.get('/api/settings', async (req, res) => {
+    try {
+        const settings = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8'));
+        res.json(settings);
+    } catch(e) { res.json({ product_display_style: 'classic' }); }
+});
+app.post('/api/settings', isAdmin, async (req, res) => {
+    try {
+        await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2));
+        res.json({ success: true });
+    } catch(e) { res.status(500).json({ error: 'Помилка збереження' }); }
+});
 
 // Категорії
 app.get('/api/categories', async (req, res) => { try { const c = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8')); res.json(c); } catch(e){res.status(500).json({error:'Помилка'});} });
