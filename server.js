@@ -62,7 +62,7 @@ async function initData() {
         }
         if (!await fs.access(PRODUCTS_FILE).then(()=>true).catch(()=>false)) {
             await fs.writeFile(PRODUCTS_FILE, JSON.stringify([
-                { id: 1, name: 'Квадрокоптер DJI Mavic 3', category: 'Дрони', price: 85000, description: 'Професійний дрон з камерою Hasselblad', specs: 'Потужність: 30 Вт, 50 Вт\nБатарея: 5000 mAh', variants: ['Standard', 'Pro', 'Cine'], image: null, createdAt: new Date().toISOString() },
+                { id: 1, name: 'Квадрокоптер DJI Mavic 3', category: 'Дрони', price: 85000, description: 'Професійний дрон', specs: 'Потужність: 30 Вт, 50 Вт\nБатарея: 5000 mAh', variants: ['Standard', 'Pro', 'Cine'], image: null, createdAt: new Date().toISOString() },
                 { id: 2, name: 'Карбонові реб 3K', category: 'Реб', price: 1200, description: 'Високоякісні карбонові ребра', specs: 'Матеріал: карбон\nТовщина: 3 мм', variants: ['200mm', '250mm', '300mm'], image: null, createdAt: new Date().toISOString() }
             ], null, 2));
         }
@@ -97,7 +97,6 @@ function isAdmin(req, res, next) {
     res.status(403).json({ error: 'Доступ заборонено' });
 }
 
-// ============ API Routes ============
 app.get('/api/user', (req, res) => {
     if (req.session.user) res.json(req.session.user);
     else res.status(401).json({ error: 'Не авторизований' });
@@ -146,7 +145,6 @@ app.post('/api/admin/change-password', isAdmin, async (req, res) => {
             users[idx].password = newPassword;
         }
         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
-        // Не знищуємо сесію, щоб не викидало з акаунту
         res.json({ success: true });
     } catch (err) { res.status(500).json({ error: 'Помилка сервера' }); }
 });
