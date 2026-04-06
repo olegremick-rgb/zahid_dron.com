@@ -13,18 +13,16 @@ app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(session({
-    secret: 'zahid-dron-secret-black-gray',
+    secret: 'zahid-dron-secret-key-2025',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+    cookie: { maxAge: 24 * 60 * 60 * 1000, httpOnly: true, secure: false }
 }));
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
-        try {
-            await fs.mkdir('./uploads', { recursive: true });
-            cb(null, './uploads/');
-        } catch (err) { cb(err); }
+        await fs.mkdir('./uploads', { recursive: true });
+        cb(null, './uploads/');
     },
     filename: (req, file, cb) => cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
 });
@@ -49,12 +47,12 @@ const BANNER_FILE = path.join(DATA_DIR, 'banner.txt');
 const BRAND_LOGO_FILE = path.join(DATA_DIR, 'brand-logo.txt');
 const BACKGROUND_FILE = path.join(DATA_DIR, 'background.txt');
 const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
+const REVIEWS_FILE = path.join(DATA_DIR, 'reviews.json');
 
 async function initData() {
     try {
         await fs.mkdir(DATA_DIR, { recursive: true });
         await fs.mkdir('./uploads', { recursive: true });
-        await fs.mkdir('./public', { recursive: true });
 
         if (!await fs.access(USERS_FILE).then(()=>true).catch(()=>false)) {
             await fs.writeFile(USERS_FILE, JSON.stringify([{ username: 'admin', password: 'admin', isAdmin: true }], null, 2));
@@ -64,8 +62,8 @@ async function initData() {
         }
         if (!await fs.access(PRODUCTS_FILE).then(()=>true).catch(()=>false)) {
             await fs.writeFile(PRODUCTS_FILE, JSON.stringify([
-                { id: 1, name: 'Квадрокоптер DJI Mavic 3', category: 'Дрони', price: 85000, description: 'Професійний дрон з камерою Hasselblad', variants: ['Standard', 'Pro', 'Cine'], image: null, createdAt: new Date().toISOString() },
-                { id: 2, name: 'Карбонові реб 3K', category: 'Реб', price: 1200, description: 'Високоякісні карбонові ребра', variants: ['200mm', '250mm', '300mm'], image: null, createdAt: new Date().toISOString() }
+                { id: 1, name: 'Квадрокоптер DJI Mavic 3', category: 'Дрони', price: 85000, description: 'Професійний дрон з камерою Hasselblad', specs: 'Потужність: 30 Вт, 50 Вт\nБатарея: 5000 mAh', variants: ['Standard', 'Pro', 'Cine'], image: null, createdAt: new Date().toISOString() },
+                { id: 2, name: 'Карбонові реб 3K', category: 'Реб', price: 1200, description: 'Високоякісні карбонові ребра', specs: 'Матеріал: карбон\nТовщина: 3 мм', variants: ['200mm', '250mm', '300mm'], image: null, createdAt: new Date().toISOString() }
             ], null, 2));
         }
         if (!await fs.access(ABOUT_FILE).then(()=>true).catch(()=>false)) {
@@ -80,10 +78,7 @@ async function initData() {
         if (!await fs.access(SOCIAL_FILE).then(()=>true).catch(()=>false)) {
             await fs.writeFile(SOCIAL_FILE, JSON.stringify([
                 { platform: 'telegram', url: 'https://t.me/zahid_dron', icon: 'fa-brands fa-telegram', name: 'Telegram', active: true },
-                { platform: 'instagram', url: 'https://instagram.com/zahid_dron', icon: 'fa-brands fa-instagram', name: 'Instagram', active: true },
-                { platform: 'facebook', url: 'https://facebook.com/zahid.dron', icon: 'fa-brands fa-facebook', name: 'Facebook', active: true },
-                { platform: 'viber', url: 'viber://chat?number=380991234567', icon: 'fa-brands fa-viber', name: 'Viber', active: true },
-                { platform: 'whatsapp', url: 'https://wa.me/380991234567', icon: 'fa-brands fa-whatsapp', name: 'WhatsApp', active: true }
+                { platform: 'instagram', url: 'https://instagram.com/zahid_dron', icon: 'fa-brands fa-instagram', name: 'Instagram', active: true }
             ], null, 2));
         }
         if (!await fs.access(LOGO_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(LOGO_FILE, '');
@@ -91,6 +86,7 @@ async function initData() {
         if (!await fs.access(BRAND_LOGO_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BRAND_LOGO_FILE, '');
         if (!await fs.access(BACKGROUND_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BACKGROUND_FILE, '');
         if (!await fs.access(SETTINGS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(SETTINGS_FILE, JSON.stringify({ product_display_style: 'classic' }, null, 2));
+        if (!await fs.access(REVIEWS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(REVIEWS_FILE, JSON.stringify([], null, 2));
         console.log('✅ Ініціалізацію даних завершено');
     } catch (err) { console.error('❌ Помилка ініціалізації:', err); }
 }
@@ -150,7 +146,7 @@ app.post('/api/admin/change-password', isAdmin, async (req, res) => {
             users[idx].password = newPassword;
         }
         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
-        req.session.destroy();
+        // Не знищуємо сесію, щоб не викидало з акаунту
         res.json({ success: true });
     } catch (err) { res.status(500).json({ error: 'Помилка сервера' }); }
 });
@@ -174,16 +170,32 @@ app.delete('/api/background', isAdmin, async (req, res) => { await fs.writeFile(
 
 // Налаштування
 app.get('/api/settings', async (req, res) => {
-    try {
-        const settings = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8'));
-        res.json(settings);
-    } catch(e) { res.json({ product_display_style: 'classic' }); }
+    try { const s = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8')); res.json(s); } catch(e) { res.json({ product_display_style: 'classic' }); }
 });
-app.post('/api/settings', isAdmin, async (req, res) => {
+app.post('/api/settings', isAdmin, async (req, res) => { await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2)); res.json({ success: true }); });
+
+// Відгуки
+app.get('/api/reviews', async (req, res) => {
+    try { const r = JSON.parse(await fs.readFile(REVIEWS_FILE, 'utf8')); res.json(r); } catch(e) { res.json([]); }
+});
+app.post('/api/reviews', async (req, res) => {
     try {
-        await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2));
+        const { author, rating, text } = req.body;
+        if (!author || !text) return res.status(400).json({ error: 'Заповніть всі поля' });
+        const reviews = JSON.parse(await fs.readFile(REVIEWS_FILE, 'utf8'));
+        const newReview = { id: Date.now(), author, rating: rating || 5, text, date: new Date().toISOString(), approved: true };
+        reviews.push(newReview);
+        await fs.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2));
+        res.status(201).json(newReview);
+    } catch(e) { res.status(500).json({ error: 'Помилка' }); }
+});
+app.delete('/api/reviews/:id', isAdmin, async (req, res) => {
+    try {
+        const reviews = JSON.parse(await fs.readFile(REVIEWS_FILE, 'utf8'));
+        const filtered = reviews.filter(r => r.id != req.params.id);
+        await fs.writeFile(REVIEWS_FILE, JSON.stringify(filtered, null, 2));
         res.json({ success: true });
-    } catch(e) { res.status(500).json({ error: 'Помилка збереження' }); }
+    } catch(e) { res.status(500).json({ error: 'Помилка' }); }
 });
 
 // Категорії
@@ -222,6 +234,7 @@ app.post('/api/products', isAdmin, upload.single('image'), async (req, res) => {
             category: req.body.category,
             price: parseFloat(req.body.price),
             description: req.body.description || '',
+            specs: req.body.specs || '',
             variants: variants.length ? variants : ['Стандарт'],
             image: req.file ? `/uploads/${req.file.filename}` : null,
             createdAt: new Date().toISOString()
