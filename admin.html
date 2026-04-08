@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',sans-serif; }
-        :root { --primary:#0a0a0a; --secondary:#111; --accent:#3a3a3a; --accent-light:#5a5a5a; --white:#fff; --shadow:0 4px 12px rgba(0,0,0,0.3); --gradient:linear-gradient(135deg,#1a1a1a,#2d2d2d); }
+        :root { --primary:#0a0a0a; --secondary:#111; --accent:#3a3a3a; --accent-light:#5a5a5a; --white:#fff; --shadow:0 4px 12px rgba(0,0,0,0.3); }
         body { background:var(--primary); min-height:100vh; }
         header { background:rgba(10,10,10,0.95); backdrop-filter:blur(12px); padding:1rem 5%; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; border-bottom:1px solid rgba(255,255,255,0.08); }
         .logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
@@ -49,6 +49,8 @@
         .variant-row { display:flex; gap:0.5rem; margin-bottom:0.5rem; }
         .remove-btn { background:#7a2e2e; color:white; border:none; width:40px; height:40px; border-radius:10px; cursor:pointer; }
         .image-preview, .logo-preview { max-width:200px; max-height:150px; margin:1rem 0; border-radius:12px; display:none; border:1px solid #333; background:#1a1a1a; padding:0.3rem; }
+        .additional-images-preview { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+        .additional-images-preview img { width:80px; height:80px; object-fit:cover; border-radius:8px; border:1px solid #333; }
         .password-strength { height:4px; margin-top:0.5rem; border-radius:5px; background:#333; overflow:hidden; }
         .password-strength-bar { height:100%; width:0%; transition:0.3s; }
         .password-strength-bar.weak { background:#7a2e2e; width:33%; }
@@ -174,7 +176,7 @@
             <div id="categories" class="admin-section">
                 <h2><i class="fas fa-tags"></i> Категорії</h2>
                 <div class="admin-form"><h3><i class="fas fa-plus-circle"></i> Додати категорію</h3><div class="form-group"><input type="text" id="newCategory" placeholder="Назва категорії"></div><button class="btn" onclick="addCategory()">Додати</button></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></tr></thead><tbody id="categoriesList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th><tr></thead><tbody id="categoriesList"></tbody></table></div>
             </div>
 
             <!-- Products -->
@@ -183,12 +185,13 @@
                 <div class="admin-form">
                     <h3><i class="fas fa-plus-circle"></i> Додати товар</h3>
                     <div class="form-group"><label>Категорія</label><select id="productCategory"></select></div>
-                    <div class="form-group"><input type="text" id="productName" placeholder="Назва"></div>
-                    <div class="form-group"><input type="number" id="productPrice" placeholder="Ціна"></div>
-                    <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис"></textarea></div>
+                    <div class="form-group"><input type="text" id="productName" placeholder="Назва товару"></div>
+                    <div class="form-group"><input type="number" id="productPrice" placeholder="Ціна (грн)"></div>
+                    <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
                     <div class="form-group"><textarea id="productSpecs" rows="3" placeholder="Характеристики (кожен рядок - нова характеристика)"></textarea></div>
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button class="btn btn-secondary" onclick="addVariantField()">+ Додати варіант</button></div>
-                    <div class="form-group"><label>Зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
+                    <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
+                    <div class="form-group"><label>Додаткові зображення (галерея)</label><input type="file" id="productAdditionalImages" accept="image/*" multiple><div id="additionalImagesPreview" class="additional-images-preview"></div></div>
                     <button class="btn" onclick="addProduct()">Додати товар</button>
                 </div>
                 <div class="category-tabs" id="categoryTabs"></div>
@@ -291,30 +294,30 @@
                 <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${st.ordersCount||orders.length}</p></div>
                 <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${st.variantsCount||products.reduce((a,p)=>a+p.variants.length,0)}</p></div>`;
             const recent = orders.slice(-5).reverse();
-            document.getElementById('recentOrders').innerHTML = recent.map(o => { const p = products.find(p => p.id == o.productId); return `<tr><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString()||0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`; }).join('');
+            document.getElementById('recentOrders').innerHTML = recent.map(o => { const p = products.find(p => p.id == o.productId); return `<td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString()||0} грн</td><td>${new Date(o.date).toLocaleString()}</td>`; }).join('');
         }
 
         function updateCategoriesList() {
             const tbody = document.getElementById('categoriesList');
-            tbody.innerHTML = categories.map(cat => { const cnt = products.filter(p => p.category === cat).length; return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" onclick="deleteCategory('${cat}')" ${cnt>0?'disabled':''}><i class="fas fa-trash"></i></button></td></tr>`; }).join('');
+            tbody.innerHTML = categories.map(cat => { const cnt = products.filter(p => p.category === cat).length; return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" onclick="deleteCategory('${cat}')" ${cnt>0?'disabled':''}><i class="fas fa-trash"></i></button></td>`; }).join('');
         }
 
         function updateProductsList() {
             const tbody = document.getElementById('productsList');
-            if(!products.length) { tbody.innerHTML = '<tr><td colspan="6">Немає товарів</td></tr>'; return; }
+            if(!products.length) { tbody.innerHTML = '<td><td colspan="6">Немає товарів</td></tr>'; return; }
             let filtered = products;
             if(currentCategory !== 'all') filtered = products.filter(p => p.category === currentCategory);
-            tbody.innerHTML = filtered.map(p => `<tr><td><img src="${p.image||'https://via.placeholder.com/50'}" alt=""></td><td>${p.name}</td><td>${p.category}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants.length}</td><td><div class="action-btns"><button class="edit-btn" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button><button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+            tbody.innerHTML = filtered.map(p => `<tr><td><img src="${p.image||'https://via.placeholder.com/50'}" alt=""></td><td>${p.name}</td><td>${p.category}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants.length}</td><td><div class="action-btns"><button class="edit-btn" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button><button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></td>`; }).join('');
         }
 
         function updateOrdersList() {
             const tbody = document.getElementById('ordersList');
-            tbody.innerHTML = orders.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(o => { const p = products.find(p => p.id == o.productId); return `<tr><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant||'—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge badge-active">нове</span></td></tr>`; }).join('');
+            tbody.innerHTML = orders.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(o => { const p = products.find(p => p.id == o.productId); return `<td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant||'—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge badge-active">нове</span></td>`; }).join('');
         }
 
         function updateSocialList() {
             const tbody = document.getElementById('socialList');
-            tbody.innerHTML = social.map(s => `<tr><td><i class="${s.icon}" style="font-size:1.2rem;"></i></td><td>${s.platform}</td><td>${s.name}</td><td><a href="${s.url}" target="_blank">${s.url.substring(0,30)}...</a></td><td><span class="badge ${s.active?'badge-active':'badge-inactive'}">${s.active?'Активна':'Неактивна'}</span></td><td><div class="action-btns"><button class="edit-btn" onclick="openEditSocial('${s.platform}')"><i class="fas fa-edit"></i></button><button class="delete-btn" onclick="deleteSocial('${s.platform}')"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+            tbody.innerHTML = social.map(s => `<tr><td><i class="${s.icon}" style="font-size:1.2rem;"></i></td><td>${s.platform}</td><td>${s.name}</td><td><a href="${s.url}" target="_blank">${s.url.substring(0,30)}...</a></td><td><span class="badge ${s.active?'badge-active':'badge-inactive'}">${s.active?'Активна':'Неактивна'}</span></td><td><div class="action-btns"><button class="edit-btn" onclick="openEditSocial('${s.platform}')"><i class="fas fa-edit"></i></button><button class="delete-btn" onclick="deleteSocial('${s.platform}')"><i class="fas fa-trash"></i></button></div></td>`; }).join('');
         }
 
         function updateCategorySelect() { document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join(''); }
@@ -328,7 +331,7 @@
             if(newP && newP !== conf) return showNotification('Паролі не співпадають','error');
             try {
                 const r = await fetch('/api/admin/change-password', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({currentPassword:cur, newUsername:newU, newPassword:newP}) });
-                if(r.ok) { showNotification('Дані оновлено! Увійдіть заново.','success'); setTimeout(()=>location.href='/',2000); }
+                if(r.ok) { showNotification('Дані оновлено!','success'); }
                 else { const e = await r.json(); showNotification(e.error||'Помилка','error'); }
             } catch(e){ showNotification('Помилка сервера','error'); }
         }
@@ -352,8 +355,13 @@
             fd.append('specs', document.getElementById('productSpecs').value);
             const variants = []; document.querySelectorAll('#variantsContainer input').forEach(i => { if(i.value.trim()) variants.push(i.value.trim()); });
             fd.append('variants', JSON.stringify(variants.length ? variants : ['Стандарт']));
-            const img = document.getElementById('productImage').files[0]; if(img) fd.append('image', img);
-            try { const r = await fetch('/api/products',{method:'POST',body:fd}); if(r.ok){ showNotification('Товар додано!','success'); document.getElementById('productName').value=''; document.getElementById('productPrice').value=''; document.getElementById('productDescription').value=''; document.getElementById('productSpecs').value=''; document.getElementById('variantsContainer').innerHTML='<div class="variant-row"><input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>'; document.getElementById('productImage').value=''; document.getElementById('imagePreview').style.display='none'; loadData(); } } catch(e){ showNotification('Помилка','error'); } }
+            const mainImg = document.getElementById('productImage').files[0];
+            if(mainImg) fd.append('image', mainImg);
+            const additionalImgs = document.getElementById('productAdditionalImages').files;
+            for(let i = 0; i < additionalImgs.length; i++) {
+                fd.append('additionalImages', additionalImgs[i]);
+            }
+            try { const r = await fetch('/api/products',{method:'POST',body:fd}); if(r.ok){ showNotification('Товар додано!','success'); document.getElementById('productName').value=''; document.getElementById('productPrice').value=''; document.getElementById('productDescription').value=''; document.getElementById('productSpecs').value=''; document.getElementById('variantsContainer').innerHTML='<div class="variant-row"><input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>'; document.getElementById('productImage').value=''; document.getElementById('productAdditionalImages').value=''; document.getElementById('imagePreview').style.display='none'; document.getElementById('additionalImagesPreview').innerHTML=''; loadData(); } } catch(e){ showNotification('Помилка','error'); } }
         window.deleteProduct = async function(id) { if(!confirm('Видалити товар?')) return; try { const r = await fetch(`/api/products/${id}`,{method:'DELETE'}); if(r.ok){ showNotification('Товар видалено!','success'); loadData(); } } catch(e){ showNotification('Помилка','error'); } }
         window.editProduct = function(id) { const p = products.find(p => p.id === id); if(!p) return; document.getElementById('productCategory').value = p.category; document.getElementById('productName').value = p.name; document.getElementById('productPrice').value = p.price; document.getElementById('productDescription').value = p.description || ''; document.getElementById('productSpecs').value = p.specs || ''; const cont = document.getElementById('variantsContainer'); cont.innerHTML = ''; p.variants.forEach(v => { const d = document.createElement('div'); d.className='variant-row'; d.innerHTML=`<input type="text" value="${v}" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`; cont.appendChild(d); }); showSection('products', document.querySelector('[onclick="showSection(\'products\', this)"]')); window.scrollTo({top:0,behavior:'smooth'}); showNotification('Редагуйте товар та додайте заново','info'); deleteProduct(id); }
         window.saveAbout = async function() { const t = document.getElementById('aboutText').value; try { const r = await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:t})}); if(r.ok) showNotification('Текст збережено!','success'); } catch(e){ showNotification('Помилка','error'); } }
@@ -367,7 +375,22 @@
         window.closeModal = function(id) { document.getElementById(id).classList.remove('active'); }
         window.goToHomePage = function() { window.location.href = '/'; }
         function showNotification(msg, type='info') { const n = document.createElement('div'); n.style.cssText = `position:fixed;top:100px;right:20px;padding:0.8rem 1.5rem;background:${type==='success'?'#2e7a5e':type==='error'?'#7a2e2e':'#2e5e7a'};color:white;border-radius:40px;z-index:3000;animation:slideIn 0.3s ease;`; n.textContent = msg; document.body.appendChild(n); setTimeout(()=>n.remove(),3000); }
+        
+        // Preview зображень
         document.getElementById('productImage')?.addEventListener('change', function(e) { const r = new FileReader(); r.onload = function() { document.getElementById('imagePreview').src = r.result; document.getElementById('imagePreview').style.display = 'block'; }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); });
+        document.getElementById('productAdditionalImages')?.addEventListener('change', function(e) {
+            const container = document.getElementById('additionalImagesPreview');
+            container.innerHTML = '';
+            Array.from(e.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const img = document.createElement('img');
+                    img.src = ev.target.result;
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
         document.getElementById('logoFile')?.addEventListener('change', function(e) { const r = new FileReader(); r.onload = function() { document.getElementById('logoPreview').src = r.result; document.getElementById('logoPreview').style.display = 'block'; }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); });
         document.getElementById('bannerFile')?.addEventListener('change', function(e) { const r = new FileReader(); r.onload = function() { document.getElementById('bannerPreview').src = r.result; document.getElementById('bannerPreview').style.display = 'block'; }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); });
         document.getElementById('brandLogoFile')?.addEventListener('change', function(e) { const r = new FileReader(); r.onload = function() { document.getElementById('brandLogoPreview').src = r.result; document.getElementById('brandLogoPreview').style.display = 'block'; }; if(e.target.files[0]) r.readAsDataURL(e.target.files[0]); });
