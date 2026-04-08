@@ -405,6 +405,7 @@
             border-radius: 16px;
             padding: 0.8rem;
         }
+        .battery-item p, .stack-item p { margin: 0.2rem 0; }
         .variant-buttons {
             display: flex;
             gap: 0.8rem;
@@ -848,14 +849,6 @@
             const defaultImage = p.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22600%22 viewBox=%220 0 600 600%22%3E%3Crect width=%22600%22 height=%22600%22 fill=%22#1a1a1a%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22#666%22 font-size=%2224%22%3EНемає фото%3C/text%3E%3C/svg%3E';
             const variantsHtml = p.variants.map(v => `<button class="variant-btn-new" data-variant="${v}">${v}</button>`).join('');
             
-            // Генеруємо мініатюри: головне фото + додаткові
-            let thumbnailsHtml = `<div class="thumbnail active"><img src="${defaultImage}" alt="Головне"></div>`;
-            if (p.images && p.images.length) {
-                p.images.forEach(img => {
-                    thumbnailsHtml += `<div class="thumbnail"><img src="${img}" alt="Додаткове"></div>`;
-                });
-            }
-            
             let specsHtml = '';
             let batteryHtml = '';
             let stackHtml = '';
@@ -878,13 +871,22 @@
                 }
                 specsHtml = specItems.join('');
                 if (batteryValue || stackValue) {
-                    batteryHtml = `<div class="battery-item"><h4>БАТАРЕЯ</h4><p>${batteryValue || '—'}</p></div>`;
-                    stackHtml = `<div class="stack-item"><h4>ПОЛІТНИЙ СТЕК</h4><p>${stackValue || '—'}</p></div>`;
+                    let batteryParts = batteryValue.split('/');
+                    let stackParts = stackValue.split('/');
+                    batteryHtml = `<div class="battery-item"><h4>БАТАРЕЯ</h4>${batteryParts.map(part => `<p>${part.trim()}</p>`).join('')}</div>`;
+                    stackHtml = `<div class="stack-item"><h4>ПОЛІТНИЙ СТЕК</h4>${stackParts.map(part => `<p>${part.trim()}</p>`).join('')}</div>`;
                 }
             } else {
                 specsHtml = '<div class="spec-item"><span>Характеристики не додані</span></div>';
             }
             const batteryStackHtml = (batteryHtml || stackHtml) ? `<div class="battery-stack">${batteryHtml}${stackHtml}</div>` : '';
+            
+            let thumbnailsHtml = `<div class="thumbnail active"><img src="${defaultImage}" alt="Головне"></div>`;
+            if (p.images && p.images.length) {
+                p.images.forEach(img => {
+                    thumbnailsHtml += `<div class="thumbnail"><img src="${img}" alt="Додаткове"></div>`;
+                });
+            }
             
             main.innerHTML = `
                 <div class="product-page">
@@ -921,7 +923,6 @@
                 </div>
             `;
             
-            // Обробник для мініатюр
             const thumbnails = document.querySelectorAll('.thumbnail');
             thumbnails.forEach((thumb, idx) => {
                 thumb.addEventListener('click', () => {
@@ -932,7 +933,6 @@
                 });
             });
             
-            // Обробники для варіантів
             document.querySelectorAll('.variant-btn-new').forEach(btn => {
                 btn.addEventListener('click', () => {
                     document.querySelectorAll('.variant-btn-new').forEach(b => b.classList.remove('active'));
@@ -941,7 +941,6 @@
                 });
             });
             
-            // Обробники для табів
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const tabId = btn.getAttribute('data-tab');
