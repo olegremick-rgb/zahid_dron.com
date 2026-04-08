@@ -157,7 +157,7 @@
                     <button class="btn btn-danger" id="cancelEditBtn" style="display:none;">Скасувати</button>
                 </div>
                 <div class="category-tabs" id="categoryTabs"></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody><tr></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
             </div>
 
             <!-- About -->
@@ -176,7 +176,7 @@
             <div id="social" class="admin-section">
                 <h2>Соціальні мережі</h2>
                 <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><button class="btn" id="addSocialBtn">Додати</button></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></tr></div>
             </div>
 
             <!-- Orders -->
@@ -235,7 +235,7 @@
         async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ const url = await r.text(); if(url){ document.getElementById('currentBrandLogo').src = url; document.getElementById('currentBrandLogo').style.display = 'block'; document.getElementById('noBrandLogoText').style.display = 'none'; } } } catch(e){} }
         async function loadBackground() { try { const r = await fetch('/api/background'); if(r.ok){ const url = await r.text(); if(url){ document.getElementById('currentBg').src = url; document.getElementById('currentBg').style.display = 'block'; document.getElementById('noBgText').style.display = 'none'; } } } catch(e){} }
         async function loadCatalogStyle() { try { const r = await fetch('/api/settings'); const s = await r.json(); document.getElementById('productDisplayStyle').value = s.product_display_style || 'classic'; } catch(e){} }
-        async function loadReviewsAdmin() { try { const r = await fetch('/api/reviews'); const rev = await r.json(); document.getElementById('reviewsListAdmin').innerHTML = rev.map(r => `<td><td>${r.author}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${r.text.substring(0,80)}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-review-id="${r.id}"><i class="fas fa-trash"></i></button></td>`; }).join(''); 
+        async function loadReviewsAdmin() { try { const r = await fetch('/api/reviews'); const rev = await r.json(); document.getElementById('reviewsListAdmin').innerHTML = rev.map(r => `<tr><td>${r.author}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${r.text.substring(0,80)}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-review-id="${r.id}"><i class="fas fa-trash"></i></button></td>`; }).join(''); 
             document.querySelectorAll('[data-review-id]').forEach(btn => btn.addEventListener('click', () => deleteReview(btn.getAttribute('data-review-id'))));
         }
         async function loadData() {
@@ -254,12 +254,12 @@
         function updateCategoriesList() { document.getElementById('categoriesList').innerHTML = categories.map(cat => { const cnt = products.filter(p=>p.category===cat).length; return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-category="${cat}" ${cnt>0?'disabled':''}><i class="fas fa-trash"></i></button></td>`; }).join(''); 
             document.querySelectorAll('[data-category]').forEach(btn => btn.addEventListener('click', () => deleteCategory(btn.getAttribute('data-category'))));
         }
-        function updateProductsList() { let filtered = products; if(currentCategory !== 'all') filtered = products.filter(p=>p.category===currentCategory); document.getElementById('productsList').innerHTML = filtered.map(p => `<td><td><img src="${p.image||'https://via.placeholder.com/50'}" alt=""></td><td>${p.name}</td><td>${p.category}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants.length}</td><td><div class="action-btns"><button class="edit-btn" data-product-id="${p.id}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-product-id="${p.id}"><i class="fas fa-trash"></i></button></div></td>`; }).join('');
+        function updateProductsList() { let filtered = products; if(currentCategory !== 'all') filtered = products.filter(p=>p.category===currentCategory); document.getElementById('productsList').innerHTML = filtered.map(p => `<tr><td><img src="${p.image||'https://via.placeholder.com/50'}" alt=""></td><td>${p.name}</td><td>${p.category}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants.length}</td><td><div class="action-btns"><button class="edit-btn" data-product-id="${p.id}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-product-id="${p.id}"><i class="fas fa-trash"></i></button></div></td>`; }).join('');
             document.querySelectorAll('.edit-btn[data-product-id]').forEach(btn => btn.addEventListener('click', () => editProduct(btn.getAttribute('data-product-id'))));
             document.querySelectorAll('.delete-btn[data-product-id]').forEach(btn => btn.addEventListener('click', () => deleteProduct(btn.getAttribute('data-product-id'))));
         }
         function updateOrdersList() { document.getElementById('ordersList').innerHTML = orders.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(o => { const p = products.find(p=>p.id==o.productId); return `<td><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant||'—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td>`; }).join(''); }
-        function updateSocialList() { document.getElementById('socialList').innerHTML = social.map(s => `<td><td><i class="${s.icon}"></i></td><td>${s.platform}</td><td>${s.name}</td><td><a href="${s.url}" target="_blank">${s.url.substring(0,30)}...</a></td><td>${s.active?'Активна':'Неактивна'}</td><td><div class="action-btns"><button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button></div></td>`; }).join('');
+        function updateSocialList() { document.getElementById('socialList').innerHTML = social.map(s => `<tr><td><i class="${s.icon}"></i></td><td>${s.platform}</td><td>${s.name}</td><td><a href="${s.url}" target="_blank">${s.url.substring(0,30)}...</a></td><td>${s.active?'Активна':'Неактивна'}</td><td><div class="action-btns"><button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button></div></td>`; }).join('');
             document.querySelectorAll('.edit-btn[data-platform]').forEach(btn => btn.addEventListener('click', () => openEditSocial(btn.getAttribute('data-platform'))));
             document.querySelectorAll('.delete-btn[data-platform]').forEach(btn => btn.addEventListener('click', () => deleteSocial(btn.getAttribute('data-platform'))));
         }
