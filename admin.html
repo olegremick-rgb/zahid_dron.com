@@ -61,7 +61,28 @@
         .modal-content { background:#111; padding:1.5rem; border-radius:24px; width:90%; max-width:500px; border:1px solid #333; }
         .modal-content h2 { margin-bottom:1rem; color:#fff; border-bottom:1px solid #333; padding-bottom:0.5rem; }
         .modal-close { float:right; font-size:1.5rem; cursor:pointer; color:#aaa; }
-        @media (max-width:768px) { .sidebar { display:none; } .admin-content { margin-left:0; padding:1rem; } .stats-grid { grid-template-columns:repeat(2,1fr); } }
+        
+        /* Стилі для галереї зображень */
+        .gallery-container { margin-top:1rem; }
+        .gallery-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
+        .gallery-images { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:0.5rem; margin-bottom:1rem; }
+        .gallery-item { position:relative; border-radius:8px; overflow:hidden; border:1px solid #333; background:#1a1a1a; }
+        .gallery-item img { width:100%; height:100px; object-fit:cover; display:block; }
+        .gallery-item-actions { position:absolute; top:5px; right:5px; display:flex; gap:5px; opacity:0; transition:0.2s; }
+        .gallery-item:hover .gallery-item-actions { opacity:1; }
+        .gallery-item-actions button { width:28px; height:28px; border-radius:6px; border:none; cursor:pointer; color:white; }
+        .set-main-btn { background:#3b82f6; }
+        .delete-gallery-btn { background:#7a2e2e; }
+        .upload-gallery-area { border:2px dashed #333; border-radius:12px; padding:1rem; text-align:center; cursor:pointer; transition:0.2s; }
+        .upload-gallery-area:hover { border-color:#5a5a5a; background:#1a1a1a; }
+        .upload-gallery-area i { font-size:2rem; color:#5a5a5a; margin-bottom:0.5rem; }
+        
+        @media (max-width:768px) { 
+            .sidebar { display:none; } 
+            .admin-content { margin-left:0; padding:1rem; } 
+            .stats-grid { grid-template-columns:repeat(2,1fr); } 
+            .gallery-images { grid-template-columns:repeat(auto-fill, minmax(100px, 1fr)); }
+        }
     </style>
 </head>
 <body>
@@ -122,20 +143,35 @@
             <div id="products" class="admin-section">
                 <h2><i class="fas fa-box"></i> Товари</h2>
                 <div class="admin-form">
-                    <h3 id="productFormTitle">Додати товар</h3>
+                    <h3 id="productFormTitle"><i class="fas fa-plus"></i> Додати товар</h3>
                     <input type="hidden" id="editProductId">
                     <div class="form-group"><label>Категорія</label><select id="productCategory"></select></div>
                     <div class="form-group"><input type="text" id="productName" placeholder="Назва товару"></div>
                     <div class="form-group"><input type="number" id="productPrice" placeholder="Ціна (грн)"></div>
                     <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
                     <div class="form-group"><textarea id="productSpecs" rows="4" placeholder="Характеристики (кожен рядок - нова характеристика)"></textarea></div>
-                    <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button class="btn" id="addVariantBtn">+ Додати варіант</button></div>
+                    <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
+                    
+                    <!-- Галерея зображень -->
+                    <div class="gallery-container">
+                        <div class="gallery-title">
+                            <label>Галерея зображень</label>
+                            <span class="badge" id="galleryCount">0 зображень</span>
+                        </div>
+                        <div class="gallery-images" id="galleryImages"></div>
+                        <div class="upload-gallery-area" id="uploadGalleryArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Натисніть або перетягніть файли для завантаження</p>
+                            <input type="file" id="galleryFiles" accept="image/*" multiple style="display:none;">
+                        </div>
+                    </div>
+                    
                     <button class="btn" id="submitProductBtn">Додати товар</button>
                     <button class="btn btn-danger" id="cancelEditBtn" style="display:none;">Скасувати</button>
                 </div>
                 <div class="category-tabs" id="categoryTabs"></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Галерея</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
             </div>
             <div id="orders" class="admin-section">
                 <h2><i class="fas fa-shopping-cart"></i> Замовлення</h2>
@@ -171,6 +207,8 @@
         let currentEditPlatform = null;
         let currentCategory = 'all';
         let editProductId = null;
+        let galleryImages = []; // Масив для зберігання зображень галереї
+        let uploadedGalleryFiles = []; // Масив для зберігання нових файлів галереї
 
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOM loaded - initializing admin panel');
@@ -178,6 +216,7 @@
             loadData();
             initEventListeners();
             initPreviewImages();
+            initGalleryUpload();
         });
 
         function initNavigation() {
@@ -220,6 +259,112 @@
             if (document.getElementById('updateSocialBtn')) document.getElementById('updateSocialBtn').addEventListener('click', updateSocial);
             if (document.getElementById('closeSocialModal')) document.getElementById('closeSocialModal').addEventListener('click', function() { closeModal('editSocialModal'); });
         }
+
+        function initGalleryUpload() {
+            const uploadArea = document.getElementById('uploadGalleryArea');
+            const fileInput = document.getElementById('galleryFiles');
+            
+            uploadArea.addEventListener('click', () => fileInput.click());
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#5a5a5a';
+                uploadArea.style.background = '#1a1a1a';
+            });
+            
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#333';
+                uploadArea.style.background = 'transparent';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#333';
+                uploadArea.style.background = 'transparent';
+                const files = Array.from(e.dataTransfer.files);
+                handleGalleryFiles(files);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                handleGalleryFiles(files);
+                fileInput.value = '';
+            });
+        }
+
+        function handleGalleryFiles(files) {
+            const imageFiles = files.filter(f => f.type.startsWith('image/'));
+            
+            imageFiles.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const imageData = {
+                        id: Date.now() + Math.random(),
+                        file: file,
+                        preview: e.target.result,
+                        isNew: true
+                    };
+                    uploadedGalleryFiles.push(imageData);
+                    renderGalleryImages();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function renderGalleryImages() {
+            const container = document.getElementById('galleryImages');
+            const allImages = [...galleryImages, ...uploadedGalleryFiles];
+            
+            container.innerHTML = allImages.map((img, index) => `
+                <div class="gallery-item">
+                    <img src="${img.preview || img.url}" alt="Gallery image">
+                    <div class="gallery-item-actions">
+                        ${!img.isMain ? `<button class="set-main-btn" onclick="setAsMainImage(${index})" title="Зробити головним"><i class="fas fa-star"></i></button>` : ''}
+                        <button class="delete-gallery-btn" onclick="removeGalleryImage(${index})" title="Видалити"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('galleryCount').textContent = `${allImages.length} зображень`;
+        }
+
+        window.setAsMainImage = function(index) {
+            const allImages = [...galleryImages, ...uploadedGalleryFiles];
+            const selectedImage = allImages[index];
+            
+            // Видаляємо позначку "головне" з усіх зображень
+            galleryImages = galleryImages.map(img => ({...img, isMain: false}));
+            uploadedGalleryFiles = uploadedGalleryFiles.map(img => ({...img, isMain: false}));
+            
+            // Встановлюємо вибране зображення як головне
+            if (selectedImage.isNew) {
+                const newIndex = uploadedGalleryFiles.findIndex(img => img.id === selectedImage.id);
+                if (newIndex !== -1) {
+                    uploadedGalleryFiles[newIndex].isMain = true;
+                }
+            } else {
+                const existingIndex = galleryImages.findIndex(img => img.id === selectedImage.id);
+                if (existingIndex !== -1) {
+                    galleryImages[existingIndex].isMain = true;
+                }
+            }
+            
+            renderGalleryImages();
+        };
+
+        window.removeGalleryImage = function(index) {
+            const allImages = [...galleryImages, ...uploadedGalleryFiles];
+            const selectedImage = allImages[index];
+            
+            if (selectedImage.isNew) {
+                uploadedGalleryFiles = uploadedGalleryFiles.filter(img => img.id !== selectedImage.id);
+            } else {
+                galleryImages = galleryImages.filter(img => img.id !== selectedImage.id);
+            }
+            
+            renderGalleryImages();
+        };
 
         async function checkAuth() {
             try {
@@ -483,7 +628,11 @@
             document.getElementById('productsList').innerHTML = filtered.map(p => `
                 <tr>
                     <td><img src="${p.image || 'https://via.placeholder.com/50'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
-                    <td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants.length}</td>
+                    <td>${escapeHtml(p.name)}</td>
+                    <td>${escapeHtml(p.category)}</td>
+                    <td>${p.price.toLocaleString()} грн</td>
+                    <td>${p.variants.length}</td>
+                    <td>${p.gallery ? p.gallery.length : 0} зобр.</td>
                     <td class="action-btns">
                         <button class="edit-btn" data-id="${p.id}"><i class="fas fa-edit"></i></button>
                         <button class="delete-btn" data-id="${p.id}"><i class="fas fa-trash"></i></button>
@@ -502,7 +651,7 @@
             const container = document.getElementById('variantsContainer');
             const div = document.createElement('div');
             div.className = 'variant-row';
-            div.innerHTML = '<input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+            div.innerHTML = '<input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
             container.appendChild(div);
         }
 
@@ -515,14 +664,21 @@
             document.getElementById('productPrice').value = p.price;
             document.getElementById('productDescription').value = p.description || '';
             document.getElementById('productSpecs').value = p.specs || '';
+            
             const container = document.getElementById('variantsContainer');
             container.innerHTML = '';
             p.variants.forEach(v => {
                 const div = document.createElement('div');
                 div.className = 'variant-row';
-                div.innerHTML = `<input type="text" value="${v}" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                div.innerHTML = `<input type="text" value="${v}" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
                 container.appendChild(div);
             });
+            
+            // Завантажуємо галерею
+            galleryImages = p.gallery || [];
+            uploadedGalleryFiles = [];
+            renderGalleryImages();
+            
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-edit"></i> Редагувати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Оновити товар';
             document.getElementById('cancelEditBtn').style.display = 'inline-block';
@@ -533,6 +689,8 @@
 
         function cancelEdit() {
             editProductId = null;
+            galleryImages = [];
+            uploadedGalleryFiles = [];
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-plus"></i> Додати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Додати товар';
             document.getElementById('cancelEditBtn').style.display = 'none';
@@ -540,27 +698,49 @@
             document.getElementById('productPrice').value = '';
             document.getElementById('productDescription').value = '';
             document.getElementById('productSpecs').value = '';
-            document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
+            document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
             document.getElementById('productImage').value = '';
             document.getElementById('imagePreview').style.display = 'none';
+            renderGalleryImages();
         }
 
         async function submitProduct() {
             const url = editProductId ? `/api/products/${editProductId}` : '/api/products';
             const method = editProductId ? 'PUT' : 'POST';
             const fd = new FormData();
+            
             fd.append('category', document.getElementById('productCategory').value);
             fd.append('name', document.getElementById('productName').value.trim());
             fd.append('price', document.getElementById('productPrice').value);
             fd.append('description', document.getElementById('productDescription').value);
             fd.append('specs', document.getElementById('productSpecs').value);
+            
             const variants = [];
             document.querySelectorAll('#variantsContainer input').forEach(i => { 
                 if (i.value.trim()) variants.push(i.value.trim()); 
             });
             fd.append('variants', JSON.stringify(variants.length ? variants : ['Стандарт']));
+            
             const img = document.getElementById('productImage').files[0];
             if (img) fd.append('image', img);
+            
+            // Додаємо інформацію про галерею
+            const galleryData = {
+                existing: galleryImages,
+                newFilesCount: uploadedGalleryFiles.length
+            };
+            fd.append('gallery', JSON.stringify(galleryData));
+            
+            // Додаємо нові файли галереї
+            uploadedGalleryFiles.forEach((fileData, index) => {
+                if (fileData.file) {
+                    fd.append(`gallery_${index}`, fileData.file);
+                }
+                if (fileData.isMain) {
+                    fd.append('main_gallery_index', index.toString());
+                }
+            });
+            
             try {
                 const res = await fetch(url, { method, body: fd });
                 if (res.ok) {
@@ -1019,4 +1199,4 @@
         }
     </script>
 </body>
-</html>
+</html>і
