@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Дані в пам'яті
+// ============ БАЗА ДАНИХ В ПАМ'ЯТІ ============
 const db = {
     users: [{ username: 'admin', password: 'admin', isAdmin: true }],
     categories: ['Дрони', 'Реб'],
@@ -13,36 +13,41 @@ const db = {
     orders: [],
     social: [],
     reviews: [],
-    about: 'Ми — команда професіоналів.',
-    contact: 'Телефон: +380 99 123 45 67\nEmail: info@example.com',
+    about: 'Ми — команда професіоналів, яка займається продажем дронів та комплектуючих для FPV.',
+    contact: 'Телефон: +380 99 123 45 67\nEmail: info@zahiddrone.com\nГрафік: Пн-Пт 10:00-19:00\nАдреса: м. Львів',
     settings: { product_display_style: 'classic' },
-    images: { logo: '', banner: '', brandLogo: '', background: '' }
+    images: {
+        logo: '',
+        banner: '',
+        brandLogo: '',
+        background: ''
+    }
 };
 
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// ============ НАЛАШТУВАННЯ ============
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.static(__dirname));
 
-// Логування всіх запитів
+app.use(session({
+    secret: 'zahid-dron-secret-key-2025',
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
+}));
+
+// Логування
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 });
 
-// Статичні файли
-app.use(express.static(__dirname));
-
-app.use(session({
-    secret: 'zahid-dron-secret',
-    resave: true,
-    saveUninitialized: true
-}));
-
-// Перевірка адміна
+// Middleware для перевірки адміна
 function isAdmin(req, res, next) {
     if (req.session && req.session.user && req.session.user.isAdmin) {
         return next();
     }
-    res.status(403).json({ error: 'Access denied' });
+    res.status(403).json({ error: 'Доступ заборонено' });
 }
 
 // ============ АУТЕНТИФІКАЦІЯ ============
@@ -50,7 +55,7 @@ app.get('/api/user', (req, res) => {
     if (req.session.user) {
         res.json(req.session.user);
     } else {
-        res.status(401).json({ error: 'Not authorized' });
+        res.status(401).json({ error: 'Не авторизований' });
     }
 });
 
@@ -61,7 +66,7 @@ app.post('/api/login', (req, res) => {
         req.session.user = { username: user.username, isAdmin: user.isAdmin };
         res.json({ username: user.username, isAdmin: user.isAdmin });
     } else {
-        res.status(401).json({ error: 'Wrong credentials' });
+        res.status(401).json({ error: 'Невірний логін або пароль' });
     }
 });
 
@@ -71,54 +76,73 @@ app.post('/api/logout', (req, res) => {
 
 app.post('/api/register', (req, res) => {
     const { username, password } = req.body;
-    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
-    if (db.users.find(u => u.username === username)) return res.status(400).json({ error: 'User exists' });
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Заповніть всі поля' });
+    }
+    if (db.users.find(u => u.username === username)) {
+        return res.status(400).json({ error: 'Користувач вже існує' });
+    }
     db.users.push({ username, password, isAdmin: false });
     res.status(201).json({ success: true });
 });
 
 app.post('/api/admin/change-password', isAdmin, (req, res) => {
     const { currentPassword, newUsername, newPassword } = req.body;
-    const idx = db.users.findIndex(u => u.username === req.session.user.username);
-    if (idx === -1) return res.status(404).json({ error: 'User not found' });
-    if (db.users[idx].password !== currentPassword) return res.status(401).json({ error: 'Wrong password' });
-    if (newUsername) db.users[idx].username = newUsername;
-    if (newPassword) db.users[idx].password = newPassword;
+    const user = db.users.find(u => u.username === req.session.user.username);
+    if (!user) return res.status(404).json({ error: 'Користувача не знайдено' });
+    if (user.password !== currentPassword) {
+        return res.status(401).json({ error: 'Невірний поточний пароль' });
+    }
+    if (newUsername) user.username = newUsername;
+    if (newPassword) user.password = newPassword;
     res.json({ success: true });
 });
 
 // ============ КАТЕГОРІЇ ============
-app.get('/api/categories', (req, res) => res.json(db.categories));
+app.get('/api/categories', (req, res) => {
+    res.json(db.categories);
+});
 
 app.post('/api/categories', isAdmin, (req, res) => {
-    const cat = req.body.category?.trim();
-    if (!cat) return res.status(400).json({ error: 'Category required' });
-    if (db.categories.includes(cat)) return res.status(400).json({ error: 'Exists' });
-    db.categories.push(cat);
+    const { category } = req.body;
+    if (!category || !category.trim()) {
+        return res.status(400).json({ error: 'Назва обов\'язкова' });
+    }
+    if (db.categories.includes(category)) {
+        return res.status(400).json({ error: 'Категорія вже існує' });
+    }
+    db.categories.push(category);
     res.json({ success: true });
 });
 
 app.delete('/api/categories/:category', isAdmin, (req, res) => {
     const cat = decodeURIComponent(req.params.category);
+    if (db.products.some(p => p.category === cat)) {
+        return res.status(400).json({ error: 'Категорія має товари' });
+    }
     const idx = db.categories.indexOf(cat);
     if (idx > -1) db.categories.splice(idx, 1);
     res.json({ success: true });
 });
 
 // ============ ТОВАРИ ============
-app.get('/api/products', (req, res) => res.json(db.products));
+app.get('/api/products', (req, res) => {
+    res.json(db.products);
+});
 
 app.post('/api/products', isAdmin, (req, res) => {
     try {
         const { name, category, price, description, specs, variants, image } = req.body;
+        
         if (!name || !category || !price) {
-            return res.status(400).json({ error: 'Missing fields' });
+            return res.status(400).json({ error: 'Заповніть обов\'язкові поля' });
         }
-        const product = {
+        
+        const newProduct = {
             id: Date.now(),
             name: name.trim(),
-            category,
-            price: Number(price),
+            category: category,
+            price: parseFloat(price),
             description: description || '',
             specs: specs || '',
             variants: variants || ['Стандарт'],
@@ -127,30 +151,43 @@ app.post('/api/products', isAdmin, (req, res) => {
             images: [],
             createdAt: new Date().toISOString()
         };
-        db.products.push(product);
-        res.status(201).json(product);
+        
+        db.products.push(newProduct);
+        console.log('Товар додано:', newProduct.id);
+        res.status(201).json(newProduct);
     } catch(e) {
+        console.error('Помилка додавання товару:', e);
         res.status(500).json({ error: e.message });
     }
 });
 
 app.put('/api/products/:id', isAdmin, (req, res) => {
-    const idx = db.products.findIndex(p => p.id == req.params.id);
-    if (idx === -1) return res.status(404).json({ error: 'Not found' });
-    
-    const { name, category, price, description, specs, variants, image } = req.body;
-    db.products[idx] = {
-        ...db.products[idx],
-        name: name?.trim() || db.products[idx].name,
-        category: category || db.products[idx].category,
-        price: price ? Number(price) : db.products[idx].price,
-        description: description || db.products[idx].description,
-        specs: specs || db.products[idx].specs,
-        variants: variants || db.products[idx].variants,
-        image: image || db.products[idx].image,
-        updatedAt: new Date().toISOString()
-    };
-    res.json(db.products[idx]);
+    try {
+        const idx = db.products.findIndex(p => p.id == req.params.id);
+        if (idx === -1) {
+            return res.status(404).json({ error: 'Товар не знайдено' });
+        }
+        
+        const { name, category, price, description, specs, variants, image } = req.body;
+        
+        db.products[idx] = {
+            ...db.products[idx],
+            name: name?.trim() || db.products[idx].name,
+            category: category || db.products[idx].category,
+            price: price ? parseFloat(price) : db.products[idx].price,
+            description: description || db.products[idx].description,
+            specs: specs || db.products[idx].specs,
+            variants: variants || db.products[idx].variants,
+            image: image !== undefined ? image : db.products[idx].image,
+            updatedAt: new Date().toISOString()
+        };
+        
+        console.log('Товар оновлено:', req.params.id);
+        res.json(db.products[idx]);
+    } catch(e) {
+        console.error('Помилка оновлення товару:', e);
+        res.status(500).json({ error: e.message });
+    }
 });
 
 app.delete('/api/products/:id', isAdmin, (req, res) => {
@@ -160,19 +197,32 @@ app.delete('/api/products/:id', isAdmin, (req, res) => {
 });
 
 // ============ ЗАМОВЛЕННЯ ============
-app.get('/api/orders', isAdmin, (req, res) => res.json(db.orders));
+app.get('/api/orders', isAdmin, (req, res) => {
+    res.json(db.orders);
+});
 
 app.post('/api/orders', (req, res) => {
-    const order = { id: Date.now(), ...req.body, date: new Date().toISOString(), status: 'нове' };
+    const order = {
+        id: Date.now(),
+        ...req.body,
+        date: new Date().toISOString(),
+        status: 'нове'
+    };
     db.orders.push(order);
     res.status(201).json(order);
 });
 
 // ============ ВІДГУКИ ============
-app.get('/api/reviews', (req, res) => res.json(db.reviews));
+app.get('/api/reviews', (req, res) => {
+    res.json(db.reviews);
+});
 
 app.post('/api/reviews', (req, res) => {
-    const review = { id: Date.now(), ...req.body, date: new Date().toISOString() };
+    const review = {
+        id: Date.now(),
+        ...req.body,
+        date: new Date().toISOString()
+    };
     db.reviews.push(review);
     res.status(201).json(review);
 });
@@ -184,48 +234,100 @@ app.delete('/api/reviews/:id', isAdmin, (req, res) => {
 });
 
 // ============ ПРО НАС / КОНТАКТИ ============
-app.get('/api/about', (req, res) => res.send(db.about));
-app.post('/api/about', isAdmin, (req, res) => { db.about = req.body.text; res.json({ success: true }); });
+app.get('/api/about', (req, res) => {
+    res.send(db.about);
+});
 
-app.get('/api/contact', (req, res) => res.send(db.contact));
-app.post('/api/contact', isAdmin, (req, res) => { db.contact = req.body.text; res.json({ success: true }); });
+app.post('/api/about', isAdmin, (req, res) => {
+    db.about = req.body.text || '';
+    res.json({ success: true });
+});
+
+app.get('/api/contact', (req, res) => {
+    res.send(db.contact);
+});
+
+app.post('/api/contact', isAdmin, (req, res) => {
+    db.contact = req.body.text || '';
+    res.json({ success: true });
+});
 
 // ============ СОЦМЕРЕЖІ ============
-app.get('/api/social', (req, res) => res.json(db.social));
-app.post('/api/social', isAdmin, (req, res) => { db.social = req.body; res.json({ success: true }); });
+app.get('/api/social', (req, res) => {
+    res.json(db.social);
+});
+
+app.post('/api/social', isAdmin, (req, res) => {
+    db.social = Array.isArray(req.body) ? req.body : [];
+    res.json({ success: true });
+});
 
 // ============ НАЛАШТУВАННЯ ============
-app.get('/api/settings', (req, res) => res.json(db.settings));
-app.post('/api/settings', isAdmin, (req, res) => { db.settings = { ...db.settings, ...req.body }; res.json({ success: true }); });
+app.get('/api/settings', (req, res) => {
+    res.json(db.settings);
+});
+
+app.post('/api/settings', isAdmin, (req, res) => {
+    db.settings = { ...db.settings, ...req.body };
+    res.json({ success: true });
+});
 
 // ============ ЗОБРАЖЕННЯ ============
-app.get('/api/logo', (req, res) => res.send(db.images.logo || ''));
-app.post('/api/logo', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
-    db.images.logo = req.body.image || req.body.path || '';
+app.get('/api/logo', (req, res) => {
+    res.send(db.images.logo || '');
+});
+
+app.post('/api/logo', isAdmin, (req, res) => {
+    db.images.logo = req.body.image || '';
     res.json({ path: db.images.logo });
 });
-app.delete('/api/logo', isAdmin, (req, res) => { db.images.logo = ''; res.json({ success: true }); });
 
-app.get('/api/banner', (req, res) => res.send(db.images.banner || ''));
-app.post('/api/banner', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
-    db.images.banner = req.body.image || req.body.path || '';
+app.delete('/api/logo', isAdmin, (req, res) => {
+    db.images.logo = '';
+    res.json({ success: true });
+});
+
+app.get('/api/banner', (req, res) => {
+    res.send(db.images.banner || '');
+});
+
+app.post('/api/banner', isAdmin, (req, res) => {
+    db.images.banner = req.body.image || '';
     res.json({ path: db.images.banner });
 });
-app.delete('/api/banner', isAdmin, (req, res) => { db.images.banner = ''; res.json({ success: true }); });
 
-app.get('/api/brand-logo', (req, res) => res.send(db.images.brandLogo || ''));
-app.post('/api/brand-logo', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
-    db.images.brandLogo = req.body.image || req.body.path || '';
+app.delete('/api/banner', isAdmin, (req, res) => {
+    db.images.banner = '';
+    res.json({ success: true });
+});
+
+app.get('/api/brand-logo', (req, res) => {
+    res.send(db.images.brandLogo || '');
+});
+
+app.post('/api/brand-logo', isAdmin, (req, res) => {
+    db.images.brandLogo = req.body.image || '';
     res.json({ path: db.images.brandLogo });
 });
-app.delete('/api/brand-logo', isAdmin, (req, res) => { db.images.brandLogo = ''; res.json({ success: true }); });
 
-app.get('/api/background', (req, res) => res.send(db.images.background || ''));
-app.post('/api/background', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
-    db.images.background = req.body.image || req.body.path || '';
+app.delete('/api/brand-logo', isAdmin, (req, res) => {
+    db.images.brandLogo = '';
+    res.json({ success: true });
+});
+
+app.get('/api/background', (req, res) => {
+    res.send(db.images.background || '');
+});
+
+app.post('/api/background', isAdmin, (req, res) => {
+    db.images.background = req.body.image || '';
     res.json({ path: db.images.background });
 });
-app.delete('/api/background', isAdmin, (req, res) => { db.images.background = ''; res.json({ success: true }); });
+
+app.delete('/api/background', isAdmin, (req, res) => {
+    db.images.background = '';
+    res.json({ success: true });
+});
 
 // ============ СТАТИСТИКА ============
 app.get('/api/stats', isAdmin, (req, res) => {
@@ -239,19 +341,29 @@ app.get('/api/stats', isAdmin, (req, res) => {
 
 // ============ СТОРІНКИ ============
 app.get('/admin', (req, res) => {
-    if (!req.session?.user?.isAdmin) return res.redirect('/');
+    if (!req.session?.user?.isAdmin) {
+        return res.redirect('/');
+    }
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
+});
 
-// Всі інші запити -> index.html
 app.get('*', (req, res) => {
+    // Ігноруємо ботів
+    if (req.url.includes('wp-') || req.url.includes('.php')) {
+        return res.status(404).end();
+    }
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Запуск
+// ============ ЗАПУСК ============
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log(`http://localhost:${PORT}`);
+    console.log(`\n=================================`);
+    console.log(`🚀 Сервер запущено: http://localhost:${PORT}`);
+    console.log(`📌 Адмін-панель: http://localhost:${PORT}/admin`);
+    console.log(`👤 Логін: admin / admin`);
+    console.log(`=================================\n`);
 });
