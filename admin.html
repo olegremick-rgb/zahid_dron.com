@@ -92,7 +92,7 @@
             <div id="dashboard" class="admin-section active">
                 <h2><i class="fas fa-chart-line"></i> Дашборд</h2>
                 <div class="stats-grid" id="stats"></div>
-                <div><h3>Останні замовлення</h3><div class="table-container"><table><thead><tr><th>ID</th><th>Товар</th><th>Клієнт</th><th>Сума</th><th>Дата</th></tr></thead><tbody id="recentOrders"></tbody></table></div></div>
+                <div><h3>Останні замовлення</h3><div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Товар</th><th>Клієнт</th><th>Сума</th><th>Дата</th></tr></thead><tbody id="recentOrders"></tbody></table></div></div>
             </div>
             <div id="profile" class="admin-section">
                 <h2><i class="fas fa-user-cog"></i> Профіль</h2>
@@ -117,7 +117,7 @@
             <div id="categories" class="admin-section">
                 <h2><i class="fas fa-tags"></i> Категорії</h2>
                 <div class="admin-form"><div class="form-group"><input type="text" id="newCategory" placeholder="Назва категорії"></div><button class="btn" id="addCategoryBtn">Додати</button></div>
-                <div class="table-container"><table><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></tr></thead><tbody id="categoriesList"></tbody></tr></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></td></thead><tbody id="categoriesList"></tbody></table></div>
             </div>
             <div id="products" class="admin-section">
                 <h2><i class="fas fa-box"></i> Товари</h2>
@@ -135,11 +135,11 @@
                     <button class="btn btn-danger" id="cancelEditBtn" style="display:none;">Скасувати</button>
                 </div>
                 <div class="category-tabs" id="categoryTabs"></div>
-                <div class="table-container"><table><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
             </div>
             <div id="orders" class="admin-section">
                 <h2><i class="fas fa-shopping-cart"></i> Замовлення</h2>
-                <div class="table-container"><table><thead><tr><th>ID</th><th>Товар</th><th>Ім'я</th><th>Телефон</th><th>Варіант</th><th>Дата</th><th>Статус</th></tr></thead><tbody id="ordersList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Товар</th><th>Ім'я</th><th>Телефон</th><th>Варіант</th><th>Дата</th><th>Статус</th></tr></thead><tbody id="ordersList"></tbody></table></div>
             </div>
             <div id="about" class="admin-section">
                 <h2><i class="fas fa-info-circle"></i> Про нас</h2>
@@ -152,18 +152,17 @@
             <div id="social" class="admin-section">
                 <h2><i class="fas fa-share-alt"></i> Соціальні мережі</h2>
                 <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><div class="social-icon-preview" id="socialPreview"><i class="fab fa-telegram"></i><span>Попередній перегляд</span></div><button class="btn" id="addSocialBtn">Додати</button></div>
-                <div class="table-container"><table><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
             </div>
             <div id="reviews" class="admin-section">
                 <h2><i class="fas fa-star"></i> Відгуки</h2>
-                <div class="table-container"><table><thead><tr><th>Автор</th><th>Рейтинг</th><th>Текст</th><th>Дата</th><th>Дії</th></tr></thead><tbody id="reviewsListAdmin"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Автор</th><th>Рейтинг</th><th>Текст</th><th>Дата</th><th>Дії</th></tr></thead><tbody id="reviewsListAdmin"></tbody></table></div>
             </div>
         </div>
     </div>
     <div id="editSocialModal" class="modal"><div class="modal-content"><span class="modal-close" id="closeSocialModal">&times;</span><h2>Редагувати соцмережу</h2><div class="form-group"><input type="text" id="editSocialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="editSocialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="editSocialIcon" placeholder="Іконка"></div><div class="form-group"><label><input type="checkbox" id="editSocialActive"> Активна</label></div><button class="btn" id="updateSocialBtn">Зберегти</button></div></div>
 
     <script>
-        // ============ Глобальні змінні ============
         let currentUser = null;
         let categories = [];
         let products = [];
@@ -173,7 +172,6 @@
         let currentCategory = 'all';
         let editProductId = null;
 
-        // ============ Ініціалізація ============
         document.addEventListener('DOMContentLoaded', function() {
             initNavigation();
             loadData();
@@ -181,7 +179,6 @@
             initPreviewImages();
         });
 
-        // ============ Навігація ============
         function initNavigation() {
             document.querySelectorAll('.sidebar-menu a').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -201,39 +198,27 @@
             document.getElementById(sectionId).classList.add('active');
         }
 
-        // ============ Обробники подій ============
         function initEventListeners() {
-            // Профіль
-            document.getElementById('changePasswordBtn')?.addEventListener('click', changePassword);
-            // Фон
-            document.getElementById('uploadBgBtn')?.addEventListener('click', uploadBackground);
-            document.getElementById('deleteBgBtn')?.addEventListener('click', deleteBackground);
-            // Банер
-            document.getElementById('uploadBannerBtn')?.addEventListener('click', uploadBanner);
-            document.getElementById('deleteBannerBtn')?.addEventListener('click', deleteBanner);
-            // Бренд-лого
-            document.getElementById('uploadBrandLogoBtn')?.addEventListener('click', uploadBrandLogo);
-            document.getElementById('deleteBrandLogoBtn')?.addEventListener('click', deleteBrandLogo);
-            // Логотип
-            document.getElementById('uploadLogoBtn')?.addEventListener('click', uploadLogo);
-            document.getElementById('deleteLogoBtn')?.addEventListener('click', deleteLogo);
-            // Категорії
-            document.getElementById('addCategoryBtn')?.addEventListener('click', addCategory);
-            // Товари
-            document.getElementById('addVariantBtn')?.addEventListener('click', addVariantField);
-            document.getElementById('submitProductBtn')?.addEventListener('click', submitProduct);
-            document.getElementById('cancelEditBtn')?.addEventListener('click', cancelEdit);
-            // Про нас
-            document.getElementById('saveAboutBtn')?.addEventListener('click', saveAbout);
-            // Контакти
-            document.getElementById('saveContactBtn')?.addEventListener('click', saveContact);
-            // Соцмережі
-            document.getElementById('addSocialBtn')?.addEventListener('click', addSocial);
-            document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
-            document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
+            if (document.getElementById('changePasswordBtn')) document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
+            if (document.getElementById('uploadBgBtn')) document.getElementById('uploadBgBtn').addEventListener('click', uploadBackground);
+            if (document.getElementById('deleteBgBtn')) document.getElementById('deleteBgBtn').addEventListener('click', deleteBackground);
+            if (document.getElementById('uploadBannerBtn')) document.getElementById('uploadBannerBtn').addEventListener('click', uploadBanner);
+            if (document.getElementById('deleteBannerBtn')) document.getElementById('deleteBannerBtn').addEventListener('click', deleteBanner);
+            if (document.getElementById('uploadBrandLogoBtn')) document.getElementById('uploadBrandLogoBtn').addEventListener('click', uploadBrandLogo);
+            if (document.getElementById('deleteBrandLogoBtn')) document.getElementById('deleteBrandLogoBtn').addEventListener('click', deleteBrandLogo);
+            if (document.getElementById('uploadLogoBtn')) document.getElementById('uploadLogoBtn').addEventListener('click', uploadLogo);
+            if (document.getElementById('deleteLogoBtn')) document.getElementById('deleteLogoBtn').addEventListener('click', deleteLogo);
+            if (document.getElementById('addCategoryBtn')) document.getElementById('addCategoryBtn').addEventListener('click', addCategory);
+            if (document.getElementById('addVariantBtn')) document.getElementById('addVariantBtn').addEventListener('click', addVariantField);
+            if (document.getElementById('submitProductBtn')) document.getElementById('submitProductBtn').addEventListener('click', submitProduct);
+            if (document.getElementById('cancelEditBtn')) document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
+            if (document.getElementById('saveAboutBtn')) document.getElementById('saveAboutBtn').addEventListener('click', saveAbout);
+            if (document.getElementById('saveContactBtn')) document.getElementById('saveContactBtn').addEventListener('click', saveContact);
+            if (document.getElementById('addSocialBtn')) document.getElementById('addSocialBtn').addEventListener('click', addSocial);
+            if (document.getElementById('updateSocialBtn')) document.getElementById('updateSocialBtn').addEventListener('click', updateSocial);
+            if (document.getElementById('closeSocialModal')) document.getElementById('closeSocialModal').addEventListener('click', function() { closeModal('editSocialModal'); });
         }
 
-        // ============ Авторизація ============
         async function checkAuth() {
             try {
                 const res = await fetch('/api/user');
@@ -246,7 +231,6 @@
             } catch(e) { location.href = '/'; return false; }
         }
 
-        // ============ Завантаження даних ============
         async function loadData() {
             if (!await checkAuth()) return;
             try {
@@ -280,7 +264,6 @@
             } catch(e) { console.error(e); alert('Помилка завантаження даних'); }
         }
 
-        // ============ Завантаження зображень ============
         async function loadLogo() {
             try { const res = await fetch('/api/logo'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = url; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
         }
@@ -294,11 +277,11 @@
             try { const res = await fetch('/api/background'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('currentBg').src = url; document.getElementById('currentBg').style.display = 'block'; document.getElementById('noBgText').style.display = 'none'; } } } catch(e){} }
         }
         async function loadReviews() {
-            try { const res = await fetch('/api/reviews'); const reviews = await res.json(); document.getElementById('reviewsListAdmin').innerHTML = reviews.map(r => `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${escapeHtml(r.text.substring(0,80))}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            try { const res = await fetch('/api/reviews'); const reviews = await res.json(); document.getElementById('reviewsListAdmin').innerHTML = reviews.map(r => `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${escapeHtml(r.text.substring(0,80))}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`).join('');
                 document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(btn => {
                     btn.addEventListener('click', () => deleteReview(btn.getAttribute('data-id')));
                 });
-            } catch(e){} }
+            } catch(e){} 
         }
 
         function parseContactInfo(text) {
@@ -311,7 +294,6 @@
 
         function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
 
-        // ============ Дашборд ============
         function updateDashboard(stats) {
             document.getElementById('stats').innerHTML = `
                 <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${stats.productsCount || products.length}</p></div>
@@ -322,16 +304,13 @@
             const recent = orders.slice(-5).reverse();
             document.getElementById('recentOrders').innerHTML = recent.map(o => {
                 const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`;
-            }).join('');
+                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td>`; }).join('');
         }
 
-        // ============ Категорії ============
         function updateCategoriesList() {
             document.getElementById('categoriesList').innerHTML = categories.map(cat => {
                 const cnt = products.filter(p => p.category === cat).length;
-                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td></tr>`;
-            }).join('');
+                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td>`; }).join('');
             document.querySelectorAll('#categoriesList .delete-btn').forEach(btn => {
                 if (!btn.disabled) {
                     btn.addEventListener('click', () => deleteCategory(btn.getAttribute('data-cat')));
@@ -362,7 +341,6 @@
             } catch(e) { alert('Помилка'); }
         }
 
-        // ============ Товари ============
         function updateCategorySelect() {
             document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
         }
@@ -384,10 +362,7 @@
             document.getElementById('productsList').innerHTML = filtered.map(p => `
                 <tr>
                     <td><img src="${p.image || 'https://via.placeholder.com/50'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
-                    <td>${escapeHtml(p.name)}</td>
-                    <td>${escapeHtml(p.category)}</td>
-                    <td>${p.price.toLocaleString()} грн</td>
-                    <td>${p.variants.length}</td>
+                    <td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants.length}</td>
                     <td class="action-btns">
                         <button class="edit-btn" data-id="${p.id}"><i class="fas fa-edit"></i></button>
                         <button class="delete-btn" data-id="${p.id}"><i class="fas fa-trash"></i></button>
@@ -485,15 +460,12 @@
             } catch(e) { alert('Помилка'); }
         }
 
-        // ============ Замовлення ============
         function updateOrdersList() {
             document.getElementById('ordersList').innerHTML = orders.sort((a,b) => new Date(b.date) - new Date(a.date)).map(o => {
                 const p = products.find(p => p.id == o.productId);
-                return `<td><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`;
-            }).join('');
+                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td>`; }).join('');
         }
 
-        // ============ Соціальні мережі ============
         function updateSocialList() {
             document.getElementById('socialList').innerHTML = social.map(s => `
                 <tr>
@@ -590,7 +562,6 @@
             } catch(e) { alert('Помилка'); }
         }
 
-        // ============ Про нас та контакти ============
         async function saveAbout() {
             const text = document.getElementById('aboutText').value;
             try {
@@ -625,7 +596,6 @@
             } catch(e) { alert('Помилка'); }
         }
 
-        // ============ Завантаження зображень (фото, фон, лого) ============
         async function uploadBackground() { const f = document.getElementById('bgFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('background', f); try { const res = await fetch('/api/background', { method: 'POST', body: fd }); if (res.ok) { alert('Фон збережено!'); loadBackground(); document.getElementById('bgPreview').style.display = 'none'; document.getElementById('bgFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
         async function deleteBackground() { if (!confirm('Видалити фон?')) return; try { const res = await fetch('/api/background', { method: 'DELETE' }); if (res.ok) { alert('Фон видалено!'); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
         async function uploadBanner() { const f = document.getElementById('bannerFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('banner', f); try { const res = await fetch('/api/banner', { method: 'POST', body: fd }); if (res.ok) { alert('Банер збережено!'); loadBanner(); document.getElementById('bannerPreview').style.display = 'none'; document.getElementById('bannerFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
@@ -635,7 +605,6 @@
         async function uploadLogo() { const f = document.getElementById('logoFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('logo', f); try { const res = await fetch('/api/logo', { method: 'POST', body: fd }); if (res.ok) { alert('Логотип збережено!'); loadLogo(); document.getElementById('logoPreview').style.display = 'none'; document.getElementById('logoFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
         async function deleteLogo() { if (!confirm('Видалити логотип?')) return; try { const res = await fetch('/api/logo', { method: 'DELETE' }); if (res.ok) { alert('Логотип видалено!'); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
 
-        // ============ Зміна пароля ============
         async function changePassword() {
             const cur = document.getElementById('currentPassword').value;
             const newU = document.getElementById('newUsername').value;
@@ -654,7 +623,6 @@
             } catch(e) { alert('Помилка сервера'); }
         }
 
-        // ============ Відгуки ============
         async function deleteReview(id) {
             if (!confirm('Видалити відгук?')) return;
             try {
@@ -664,40 +632,57 @@
             } catch(e) { alert('Помилка'); }
         }
 
-        // ============ Допоміжні функції ============
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         function initPreviewImages() {
-            document.getElementById('productImage')?.addEventListener('change', function(e) {
-                const reader = new FileReader();
-                reader.onload = function() { document.getElementById('imagePreview').src = reader.result; document.getElementById('imagePreview').style.display = 'block'; };
-                if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-            });
-            document.getElementById('logoFile')?.addEventListener('change', function(e) {
-                const reader = new FileReader();
-                reader.onload = function() { document.getElementById('logoPreview').src = reader.result; document.getElementById('logoPreview').style.display = 'block'; };
-                if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-            });
-            document.getElementById('bannerFile')?.addEventListener('change', function(e) {
-                const reader = new FileReader();
-                reader.onload = function() { document.getElementById('bannerPreview').src = reader.result; document.getElementById('bannerPreview').style.display = 'block'; };
-                if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-            });
-            document.getElementById('brandLogoFile')?.addEventListener('change', function(e) {
-                const reader = new FileReader();
-                reader.onload = function() { document.getElementById('brandLogoPreview').src = reader.result; document.getElementById('brandLogoPreview').style.display = 'block'; };
-                if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-            });
-            document.getElementById('bgFile')?.addEventListener('change', function(e) {
-                const reader = new FileReader();
-                reader.onload = function() { document.getElementById('bgPreview').src = reader.result; document.getElementById('bgPreview').style.display = 'block'; };
-                if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-            });
-            document.getElementById('socialIcon')?.addEventListener('input', function(e) {
-                const preview = document.getElementById('socialPreview');
-                const icon = e.target.value || 'fa-brands fa-telegram';
-                preview.innerHTML = `<i class="${icon}" style="font-size:1.5rem;color:#aaa;"></i><span>Попередній перегляд</span>`;
-            });
+            const productImage = document.getElementById('productImage');
+            if (productImage) {
+                productImage.addEventListener('change', function(e) {
+                    const reader = new FileReader();
+                    reader.onload = function() { document.getElementById('imagePreview').src = reader.result; document.getElementById('imagePreview').style.display = 'block'; };
+                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                });
+            }
+            const logoFile = document.getElementById('logoFile');
+            if (logoFile) {
+                logoFile.addEventListener('change', function(e) {
+                    const reader = new FileReader();
+                    reader.onload = function() { document.getElementById('logoPreview').src = reader.result; document.getElementById('logoPreview').style.display = 'block'; };
+                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                });
+            }
+            const bannerFile = document.getElementById('bannerFile');
+            if (bannerFile) {
+                bannerFile.addEventListener('change', function(e) {
+                    const reader = new FileReader();
+                    reader.onload = function() { document.getElementById('bannerPreview').src = reader.result; document.getElementById('bannerPreview').style.display = 'block'; };
+                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                });
+            }
+            const brandLogoFile = document.getElementById('brandLogoFile');
+            if (brandLogoFile) {
+                brandLogoFile.addEventListener('change', function(e) {
+                    const reader = new FileReader();
+                    reader.onload = function() { document.getElementById('brandLogoPreview').src = reader.result; document.getElementById('brandLogoPreview').style.display = 'block'; };
+                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                });
+            }
+            const bgFile = document.getElementById('bgFile');
+            if (bgFile) {
+                bgFile.addEventListener('change', function(e) {
+                    const reader = new FileReader();
+                    reader.onload = function() { document.getElementById('bgPreview').src = reader.result; document.getElementById('bgPreview').style.display = 'block'; };
+                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                });
+            }
+            const socialIcon = document.getElementById('socialIcon');
+            if (socialIcon) {
+                socialIcon.addEventListener('input', function(e) {
+                    const preview = document.getElementById('socialPreview');
+                    const icon = e.target.value || 'fa-brands fa-telegram';
+                    preview.innerHTML = `<i class="${icon}" style="font-size:1.5rem;color:#aaa;"></i><span>Попередній перегляд</span>`;
+                });
+            }
         }
     </script>
 </body>
