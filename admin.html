@@ -117,7 +117,7 @@
             <div id="categories" class="admin-section">
                 <h2><i class="fas fa-tags"></i> Категорії</h2>
                 <div class="admin-form"><div class="form-group"><input type="text" id="newCategory" placeholder="Назва категорії"></div><button class="btn" id="addCategoryBtn">Додати</button></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></td></thead><tbody id="categoriesList"></tbody></table></div>
+                <div class="table-container"><table class="table"><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></tr></thead><tbody id="categoriesList"></tbody></table></div>
             </div>
             <div id="products" class="admin-section">
                 <h2><i class="fas fa-box"></i> Товари</h2>
@@ -173,6 +173,7 @@
         let editProductId = null;
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded - initializing admin panel');
             initNavigation();
             loadData();
             initEventListeners();
@@ -199,6 +200,7 @@
         }
 
         function initEventListeners() {
+            console.log('Initializing event listeners');
             if (document.getElementById('changePasswordBtn')) document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
             if (document.getElementById('uploadBgBtn')) document.getElementById('uploadBgBtn').addEventListener('click', uploadBackground);
             if (document.getElementById('deleteBgBtn')) document.getElementById('deleteBgBtn').addEventListener('click', deleteBackground);
@@ -228,21 +230,38 @@
                 currentUser = user;
                 document.getElementById('currentUsername').value = user.username;
                 return true;
-            } catch(e) { location.href = '/'; return false; }
+            } catch(e) { 
+                console.error('Auth error:', e);
+                location.href = '/'; 
+                return false; 
+            }
         }
 
         async function loadData() {
+            console.log('Loading data...');
             if (!await checkAuth()) return;
             try {
-                const [catRes, prodRes, orderRes, socialRes, aboutRes, contactRes, statsRes] = await Promise.all([
-                    fetch('/api/categories'), fetch('/api/products'), fetch('/api/orders'),
-                    fetch('/api/social'), fetch('/api/about'), fetch('/api/contact'), fetch('/api/stats')
+                const [catRes, prodRes, orderRes, socialRes, aboutRes, contactRes] = await Promise.all([
+                    fetch('/api/categories'), 
+                    fetch('/api/products'), 
+                    fetch('/api/orders'),
+                    fetch('/api/social'), 
+                    fetch('/api/about'), 
+                    fetch('/api/contact')
                 ]);
+                
                 categories = await catRes.json();
                 products = await prodRes.json();
                 orders = await orderRes.json();
                 social = await socialRes.json();
-                const stats = await statsRes.json();
+                
+                // Calculate stats
+                const stats = {
+                    productsCount: products.length,
+                    categoriesCount: categories.length,
+                    ordersCount: orders.length,
+                    variantsCount: products.reduce((a,p) => a + p.variants.length, 0)
+                };
                 
                 updateDashboard(stats);
                 updateCategoriesList();
@@ -252,7 +271,9 @@
                 updateCategorySelect();
                 updateCategoryTabs();
                 
-                document.getElementById('aboutText').value = await aboutRes.text();
+                const aboutText = await aboutRes.text();
+                document.getElementById('aboutText').value = aboutText;
+                
                 const contactText = await contactRes.text();
                 parseContactInfo(contactText);
                 
@@ -261,27 +282,91 @@
                 await loadBrandLogo();
                 await loadBackground();
                 await loadReviews();
-            } catch(e) { console.error(e); alert('Помилка завантаження даних'); }
+            } catch(e) { 
+                console.error('Error loading data:', e); 
+                alert('Помилка завантаження даних: ' + e.message); 
+            }
         }
 
         async function loadLogo() {
-            try { const res = await fetch('/api/logo'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = url; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
+            try { 
+                const res = await fetch('/api/logo'); 
+                if(res.ok){ 
+                    const url = await res.text(); 
+                    if(url){ 
+                        document.getElementById('headerLogo').src = url; 
+                        document.getElementById('headerLogo').style.display = 'block'; 
+                        document.getElementById('currentLogo').src = url; 
+                        document.getElementById('currentLogo').style.display = 'block'; 
+                        document.getElementById('noLogoText').style.display = 'none'; 
+                    } 
+                } 
+            } catch(e){
+                console.error('Error loading logo:', e);
+            }
+        }
         
         async function loadBanner() {
-            try { const res = await fetch('/api/banner'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('currentBanner').src = url; document.getElementById('currentBanner').style.display = 'block'; document.getElementById('noBannerText').style.display = 'none'; } } } catch(e){} }
+            try { 
+                const res = await fetch('/api/banner'); 
+                if(res.ok){ 
+                    const url = await res.text(); 
+                    if(url){ 
+                        document.getElementById('currentBanner').src = url; 
+                        document.getElementById('currentBanner').style.display = 'block'; 
+                        document.getElementById('noBannerText').style.display = 'none'; 
+                    } 
+                } 
+            } catch(e){
+                console.error('Error loading banner:', e);
+            }
         }
+        
         async function loadBrandLogo() {
-            try { const res = await fetch('/api/brand-logo'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('currentBrandLogo').src = url; document.getElementById('currentBrandLogo').style.display = 'block'; document.getElementById('noBrandLogoText').style.display = 'none'; } } } catch(e){} }
+            try { 
+                const res = await fetch('/api/brand-logo'); 
+                if(res.ok){ 
+                    const url = await res.text(); 
+                    if(url){ 
+                        document.getElementById('currentBrandLogo').src = url; 
+                        document.getElementById('currentBrandLogo').style.display = 'block'; 
+                        document.getElementById('noBrandLogoText').style.display = 'none'; 
+                    } 
+                } 
+            } catch(e){
+                console.error('Error loading brand logo:', e);
+            }
         }
+        
         async function loadBackground() {
-            try { const res = await fetch('/api/background'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('currentBg').src = url; document.getElementById('currentBg').style.display = 'block'; document.getElementById('noBgText').style.display = 'none'; } } } catch(e){} }
+            try { 
+                const res = await fetch('/api/background'); 
+                if(res.ok){ 
+                    const url = await res.text(); 
+                    if(url){ 
+                        document.getElementById('currentBg').src = url; 
+                        document.getElementById('currentBg').style.display = 'block'; 
+                        document.getElementById('noBgText').style.display = 'none'; 
+                    } 
+                } 
+            } catch(e){
+                console.error('Error loading background:', e);
+            }
         }
+        
         async function loadReviews() {
-            try { const res = await fetch('/api/reviews'); const reviews = await res.json(); document.getElementById('reviewsListAdmin').innerHTML = reviews.map(r => `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${escapeHtml(r.text.substring(0,80))}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`).join('');
+            try { 
+                const res = await fetch('/api/reviews'); 
+                const reviews = await res.json(); 
+                document.getElementById('reviewsListAdmin').innerHTML = reviews.map(r => 
+                    `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${escapeHtml(r.text.substring(0,80))}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`
+                ).join('');
                 document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(btn => {
                     btn.addEventListener('click', () => deleteReview(btn.getAttribute('data-id')));
                 });
-            } catch(e){} 
+            } catch(e){
+                console.error('Error loading reviews:', e);
+            } 
         }
 
         function parseContactInfo(text) {
@@ -292,25 +377,35 @@
             document.getElementById('contactAddress').value = lines.find(l => l.includes('Адреса'))?.replace('Адреса:', '').trim() || '';
         }
 
-        function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, function(m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+        function escapeHtml(str) { 
+            if (!str) return ''; 
+            return str.replace(/[&<>]/g, function(m) { 
+                if (m === '&') return '&amp;'; 
+                if (m === '<') return '&lt;'; 
+                if (m === '>') return '&gt;'; 
+                return m; 
+            }); 
+        }
 
         function updateDashboard(stats) {
             document.getElementById('stats').innerHTML = `
-                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${stats.productsCount || products.length}</p></div>
-                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${stats.categoriesCount || categories.length}</p></div>
-                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${stats.ordersCount || orders.length}</p></div>
-                <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${stats.variantsCount || products.reduce((a,p)=>a+p.variants.length,0)}</p></div>
+                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${stats.productsCount || 0}</p></div>
+                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${stats.categoriesCount || 0}</p></div>
+                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${stats.ordersCount || 0}</p></div>
+                <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${stats.variantsCount || 0}</p></div>
             `;
             const recent = orders.slice(-5).reverse();
             document.getElementById('recentOrders').innerHTML = recent.map(o => {
                 const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td>`; }).join('');
+                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`; 
+            }).join('');
         }
 
         function updateCategoriesList() {
             document.getElementById('categoriesList').innerHTML = categories.map(cat => {
                 const cnt = products.filter(p => p.category === cat).length;
-                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td>`; }).join('');
+                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td></tr>`; 
+            }).join('');
             document.querySelectorAll('#categoriesList .delete-btn').forEach(btn => {
                 if (!btn.disabled) {
                     btn.addEventListener('click', () => deleteCategory(btn.getAttribute('data-cat')));
@@ -327,34 +422,60 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ category: cat })
                 });
-                if (res.ok) { alert('Категорію додано!'); document.getElementById('newCategory').value = ''; loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+                if (res.ok) { 
+                    alert('Категорію додано!'); 
+                    document.getElementById('newCategory').value = ''; 
+                    loadData(); 
+                } else {
+                    const err = await res.json();
+                    alert(err.error || 'Помилка');
+                }
+            } catch(e) { 
+                console.error('Error adding category:', e);
+                alert('Помилка'); 
+            }
         }
 
         async function deleteCategory(cat) {
             if (!confirm(`Видалити категорію "${cat}"?`)) return;
             try {
                 const res = await fetch(`/api/categories/${encodeURIComponent(cat)}`, { method: 'DELETE' });
-                if (res.ok) { alert('Категорію видалено!'); loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+                if (res.ok) { 
+                    alert('Категорію видалено!'); 
+                    loadData(); 
+                } else {
+                    const err = await res.json();
+                    alert(err.error || 'Помилка');
+                }
+            } catch(e) { 
+                console.error('Error deleting category:', e);
+                alert('Помилка'); 
+            }
         }
 
         function updateCategorySelect() {
-            document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            const select = document.getElementById('productCategory');
+            if (select) {
+                select.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
+            }
         }
 
         function updateCategoryTabs() {
             let html = `<button class="category-tab ${currentCategory === 'all' ? 'active' : ''}" data-cat="all">Всі</button>`;
-            categories.forEach(c => { html += `<button class="category-tab ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`; });
+            categories.forEach(c => { 
+                html += `<button class="category-tab ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`; 
+            });
             document.getElementById('categoryTabs').innerHTML = html;
             document.querySelectorAll('#categoryTabs .category-tab').forEach(tab => {
                 tab.addEventListener('click', () => filterByCategory(tab.getAttribute('data-cat')));
             });
         }
 
-        function filterByCategory(c) { currentCategory = c; updateCategoryTabs(); updateProductsList(); }
+        function filterByCategory(c) { 
+            currentCategory = c; 
+            updateCategoryTabs(); 
+            updateProductsList(); 
+        }
 
         function updateProductsList() {
             let filtered = products;
@@ -434,7 +555,9 @@
             fd.append('description', document.getElementById('productDescription').value);
             fd.append('specs', document.getElementById('productSpecs').value);
             const variants = [];
-            document.querySelectorAll('#variantsContainer input').forEach(i => { if (i.value.trim()) variants.push(i.value.trim()); });
+            document.querySelectorAll('#variantsContainer input').forEach(i => { 
+                if (i.value.trim()) variants.push(i.value.trim()); 
+            });
             fd.append('variants', JSON.stringify(variants.length ? variants : ['Стандарт']));
             const img = document.getElementById('productImage').files[0];
             if (img) fd.append('image', img);
@@ -448,22 +571,34 @@
                     const err = await res.json();
                     alert(err.error || 'Помилка при збереженні');
                 }
-            } catch(e) { alert('Помилка з\'єднання'); }
+            } catch(e) { 
+                console.error('Error submitting product:', e);
+                alert('Помилка з\'єднання'); 
+            }
         }
 
         async function deleteProduct(id) {
             if (!confirm('Видалити товар?')) return;
             try {
                 const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
-                if (res.ok) { alert('Товар видалено!'); loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+                if (res.ok) { 
+                    alert('Товар видалено!'); 
+                    loadData(); 
+                } else {
+                    const err = await res.json();
+                    alert(err.error || 'Помилка');
+                }
+            } catch(e) { 
+                console.error('Error deleting product:', e);
+                alert('Помилка'); 
+            }
         }
 
         function updateOrdersList() {
             document.getElementById('ordersList').innerHTML = orders.sort((a,b) => new Date(b.date) - new Date(a.date)).map(o => {
                 const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td>`; }).join('');
+                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`; 
+            }).join('');
         }
 
         function updateSocialList() {
@@ -495,20 +630,38 @@
             let icon = document.getElementById('socialIcon').value.trim();
             const active = document.getElementById('socialActive').checked;
             if (!name || !url) { alert('Заповніть всі поля'); return; }
-            const icons = { telegram: 'fa-brands fa-telegram', instagram: 'fa-brands fa-instagram', facebook: 'fa-brands fa-facebook', viber: 'fa-brands fa-viber', whatsapp: 'fa-brands fa-whatsapp', tiktok: 'fa-brands fa-tiktok', youtube: 'fa-brands fa-youtube' };
+            const icons = { 
+                telegram: 'fa-brands fa-telegram', 
+                instagram: 'fa-brands fa-instagram', 
+                facebook: 'fa-brands fa-facebook', 
+                viber: 'fa-brands fa-viber', 
+                whatsapp: 'fa-brands fa-whatsapp', 
+                tiktok: 'fa-brands fa-tiktok', 
+                youtube: 'fa-brands fa-youtube' 
+            };
             if (!icon) icon = icons[platform] || 'fa-solid fa-link';
             try {
-                const getRes = await fetch('/api/social');
-                let cur = await getRes.json();
-                cur.push({ platform, name, url, icon, active });
+                const newSocial = { platform, name, url, icon, active };
+                const updatedSocial = [...social, newSocial];
                 const res = await fetch('/api/social', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(cur)
+                    body: JSON.stringify(updatedSocial)
                 });
-                if (res.ok) { alert('Додано!'); document.getElementById('socialName').value = ''; document.getElementById('socialUrl').value = ''; document.getElementById('socialIcon').value = ''; loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+                if (res.ok) { 
+                    alert('Додано!'); 
+                    document.getElementById('socialName').value = ''; 
+                    document.getElementById('socialUrl').value = ''; 
+                    document.getElementById('socialIcon').value = ''; 
+                    loadData(); 
+                } else {
+                    const err = await res.json();
+                    alert(err.error || 'Помилка');
+                }
+            } catch(e) { 
+                console.error('Error adding social:', e);
+                alert('Помилка'); 
+            }
         }
 
         function openEditSocial(platform) {
@@ -530,36 +683,48 @@
             const icon = document.getElementById('editSocialIcon').value;
             const active = document.getElementById('editSocialActive').checked;
             try {
-                const getRes = await fetch('/api/social');
-                let cur = await getRes.json();
-                const idx = cur.findIndex(s => s.platform === currentEditPlatform);
-                if (idx !== -1) {
-                    cur[idx] = { ...cur[idx], name, url, icon, active };
-                    const res = await fetch('/api/social', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(cur)
-                    });
-                    if (res.ok) { alert('Оновлено!'); closeModal('editSocialModal'); loadData(); }
-                    else alert('Помилка');
+                const updatedSocial = social.map(s => 
+                    s.platform === currentEditPlatform ? { ...s, name, url, icon, active } : s
+                );
+                const res = await fetch('/api/social', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedSocial)
+                });
+                if (res.ok) { 
+                    alert('Оновлено!'); 
+                    closeModal('editSocialModal'); 
+                    loadData(); 
+                } else {
+                    const err = await res.json();
+                    alert(err.error || 'Помилка');
                 }
-            } catch(e) { alert('Помилка'); }
+            } catch(e) { 
+                console.error('Error updating social:', e);
+                alert('Помилка'); 
+            }
         }
 
         async function deleteSocial(platform) {
             if (!confirm('Видалити?')) return;
             try {
-                const getRes = await fetch('/api/social');
-                let cur = await getRes.json();
-                cur = cur.filter(s => s.platform !== platform);
+                const updatedSocial = social.filter(s => s.platform !== platform);
                 const res = await fetch('/api/social', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(cur)
+                    body: JSON.stringify(updatedSocial)
                 });
-                if (res.ok) { alert('Видалено!'); loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+                if (res.ok) { 
+                    alert('Видалено!'); 
+                    loadData(); 
+                } else {
+                    const err = await res.json();
+                    alert(err.error || 'Помилка');
+                }
+            } catch(e) { 
+                console.error('Error deleting social:', e);
+                alert('Помилка'); 
+            }
         }
 
         async function saveAbout() {
@@ -572,7 +737,10 @@
                 });
                 if (res.ok) alert('Текст збережено!');
                 else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+            } catch(e) { 
+                console.error('Error saving about:', e);
+                alert('Помилка'); 
+            }
         }
 
         async function saveContact() {
@@ -593,17 +761,148 @@
                 });
                 if (res.ok) alert('Контакти збережено!');
                 else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+            } catch(e) { 
+                console.error('Error saving contact:', e);
+                alert('Помилка'); 
+            }
         }
 
-        async function uploadBackground() { const f = document.getElementById('bgFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('background', f); try { const res = await fetch('/api/background', { method: 'POST', body: fd }); if (res.ok) { alert('Фон збережено!'); loadBackground(); document.getElementById('bgPreview').style.display = 'none'; document.getElementById('bgFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function deleteBackground() { if (!confirm('Видалити фон?')) return; try { const res = await fetch('/api/background', { method: 'DELETE' }); if (res.ok) { alert('Фон видалено!'); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function uploadBanner() { const f = document.getElementById('bannerFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('banner', f); try { const res = await fetch('/api/banner', { method: 'POST', body: fd }); if (res.ok) { alert('Банер збережено!'); loadBanner(); document.getElementById('bannerPreview').style.display = 'none'; document.getElementById('bannerFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function deleteBanner() { if (!confirm('Видалити банер?')) return; try { const res = await fetch('/api/banner', { method: 'DELETE' }); if (res.ok) { alert('Банер видалено!'); document.getElementById('currentBanner').style.display = 'none'; document.getElementById('noBannerText').style.display = 'block'; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function uploadBrandLogo() { const f = document.getElementById('brandLogoFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('brand-logo', f); try { const res = await fetch('/api/brand-logo', { method: 'POST', body: fd }); if (res.ok) { alert('Зображення збережено!'); loadBrandLogo(); document.getElementById('brandLogoPreview').style.display = 'none'; document.getElementById('brandLogoFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function deleteBrandLogo() { if (!confirm('Видалити зображення?')) return; try { const res = await fetch('/api/brand-logo', { method: 'DELETE' }); if (res.ok) { alert('Зображення видалено!'); document.getElementById('currentBrandLogo').style.display = 'none'; document.getElementById('noBrandLogoText').style.display = 'block'; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function uploadLogo() { const f = document.getElementById('logoFile').files[0]; if (!f) { alert('Виберіть файл'); return; } const fd = new FormData(); fd.append('logo', f); try { const res = await fetch('/api/logo', { method: 'POST', body: fd }); if (res.ok) { alert('Логотип збережено!'); loadLogo(); document.getElementById('logoPreview').style.display = 'none'; document.getElementById('logoFile').value = ''; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
-        async function deleteLogo() { if (!confirm('Видалити логотип?')) return; try { const res = await fetch('/api/logo', { method: 'DELETE' }); if (res.ok) { alert('Логотип видалено!'); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; } else alert('Помилка'); } catch(e) { alert('Помилка'); } }
+        async function uploadBackground() { 
+            const f = document.getElementById('bgFile').files[0]; 
+            if (!f) { alert('Виберіть файл'); return; } 
+            const fd = new FormData(); 
+            fd.append('background', f); 
+            try { 
+                const res = await fetch('/api/background', { method: 'POST', body: fd }); 
+                if (res.ok) { 
+                    alert('Фон збережено!'); 
+                    await loadBackground(); 
+                    document.getElementById('bgPreview').style.display = 'none'; 
+                    document.getElementById('bgFile').value = ''; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error uploading background:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function deleteBackground() { 
+            if (!confirm('Видалити фон?')) return; 
+            try { 
+                const res = await fetch('/api/background', { method: 'DELETE' }); 
+                if (res.ok) { 
+                    alert('Фон видалено!'); 
+                    document.getElementById('currentBg').style.display = 'none'; 
+                    document.getElementById('noBgText').style.display = 'block'; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error deleting background:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function uploadBanner() { 
+            const f = document.getElementById('bannerFile').files[0]; 
+            if (!f) { alert('Виберіть файл'); return; } 
+            const fd = new FormData(); 
+            fd.append('banner', f); 
+            try { 
+                const res = await fetch('/api/banner', { method: 'POST', body: fd }); 
+                if (res.ok) { 
+                    alert('Банер збережено!'); 
+                    await loadBanner(); 
+                    document.getElementById('bannerPreview').style.display = 'none'; 
+                    document.getElementById('bannerFile').value = ''; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error uploading banner:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function deleteBanner() { 
+            if (!confirm('Видалити банер?')) return; 
+            try { 
+                const res = await fetch('/api/banner', { method: 'DELETE' }); 
+                if (res.ok) { 
+                    alert('Банер видалено!'); 
+                    document.getElementById('currentBanner').style.display = 'none'; 
+                    document.getElementById('noBannerText').style.display = 'block'; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error deleting banner:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function uploadBrandLogo() { 
+            const f = document.getElementById('brandLogoFile').files[0]; 
+            if (!f) { alert('Виберіть файл'); return; } 
+            const fd = new FormData(); 
+            fd.append('brand-logo', f); 
+            try { 
+                const res = await fetch('/api/brand-logo', { method: 'POST', body: fd }); 
+                if (res.ok) { 
+                    alert('Зображення збережено!'); 
+                    await loadBrandLogo(); 
+                    document.getElementById('brandLogoPreview').style.display = 'none'; 
+                    document.getElementById('brandLogoFile').value = ''; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error uploading brand logo:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function deleteBrandLogo() { 
+            if (!confirm('Видалити зображення?')) return; 
+            try { 
+                const res = await fetch('/api/brand-logo', { method: 'DELETE' }); 
+                if (res.ok) { 
+                    alert('Зображення видалено!'); 
+                    document.getElementById('currentBrandLogo').style.display = 'none'; 
+                    document.getElementById('noBrandLogoText').style.display = 'block'; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error deleting brand logo:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function uploadLogo() { 
+            const f = document.getElementById('logoFile').files[0]; 
+            if (!f) { alert('Виберіть файл'); return; } 
+            const fd = new FormData(); 
+            fd.append('logo', f); 
+            try { 
+                const res = await fetch('/api/logo', { method: 'POST', body: fd }); 
+                if (res.ok) { 
+                    alert('Логотип збережено!'); 
+                    await loadLogo(); 
+                    document.getElementById('logoPreview').style.display = 'none'; 
+                    document.getElementById('logoFile').value = ''; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error uploading logo:', e);
+                alert('Помилка'); 
+            } 
+        }
+        
+        async function deleteLogo() { 
+            if (!confirm('Видалити логотип?')) return; 
+            try { 
+                const res = await fetch('/api/logo', { method: 'DELETE' }); 
+                if (res.ok) { 
+                    alert('Логотип видалено!'); 
+                    document.getElementById('headerLogo').style.display = 'none'; 
+                    document.getElementById('currentLogo').style.display = 'none'; 
+                    document.getElementById('noLogoText').style.display = 'block'; 
+                } else alert('Помилка'); 
+            } catch(e) { 
+                console.error('Error deleting logo:', e);
+                alert('Помилка'); 
+            } 
+        }
 
         async function changePassword() {
             const cur = document.getElementById('currentPassword').value;
@@ -618,28 +917,50 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ currentPassword: cur, newUsername: newU, newPassword: newP })
                 });
-                if (res.ok) alert('Дані оновлено!');
-                else { const e = await res.json(); alert(e.error || 'Помилка'); }
-            } catch(e) { alert('Помилка сервера'); }
+                if (res.ok) {
+                    alert('Дані оновлено!');
+                    document.getElementById('currentPassword').value = '';
+                    document.getElementById('newUsername').value = '';
+                    document.getElementById('newPassword').value = '';
+                    document.getElementById('confirmPassword').value = '';
+                } else { 
+                    const e = await res.json(); 
+                    alert(e.error || 'Помилка'); 
+                }
+            } catch(e) { 
+                console.error('Error changing password:', e);
+                alert('Помилка сервера'); 
+            }
         }
 
         async function deleteReview(id) {
             if (!confirm('Видалити відгук?')) return;
             try {
                 const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
-                if (res.ok) { alert('Відгук видалено'); loadReviews(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
+                if (res.ok) { 
+                    alert('Відгук видалено'); 
+                    await loadReviews(); 
+                } else alert('Помилка');
+            } catch(e) { 
+                console.error('Error deleting review:', e);
+                alert('Помилка'); 
+            }
         }
 
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active'); 
+        }
 
         function initPreviewImages() {
+            console.log('Initializing image previews');
             const productImage = document.getElementById('productImage');
             if (productImage) {
                 productImage.addEventListener('change', function(e) {
                     const reader = new FileReader();
-                    reader.onload = function() { document.getElementById('imagePreview').src = reader.result; document.getElementById('imagePreview').style.display = 'block'; };
+                    reader.onload = function() { 
+                        document.getElementById('imagePreview').src = reader.result; 
+                        document.getElementById('imagePreview').style.display = 'block'; 
+                    };
                     if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
                 });
             }
@@ -647,7 +968,10 @@
             if (logoFile) {
                 logoFile.addEventListener('change', function(e) {
                     const reader = new FileReader();
-                    reader.onload = function() { document.getElementById('logoPreview').src = reader.result; document.getElementById('logoPreview').style.display = 'block'; };
+                    reader.onload = function() { 
+                        document.getElementById('logoPreview').src = reader.result; 
+                        document.getElementById('logoPreview').style.display = 'block'; 
+                    };
                     if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
                 });
             }
@@ -655,7 +979,10 @@
             if (bannerFile) {
                 bannerFile.addEventListener('change', function(e) {
                     const reader = new FileReader();
-                    reader.onload = function() { document.getElementById('bannerPreview').src = reader.result; document.getElementById('bannerPreview').style.display = 'block'; };
+                    reader.onload = function() { 
+                        document.getElementById('bannerPreview').src = reader.result; 
+                        document.getElementById('bannerPreview').style.display = 'block'; 
+                    };
                     if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
                 });
             }
@@ -663,7 +990,10 @@
             if (brandLogoFile) {
                 brandLogoFile.addEventListener('change', function(e) {
                     const reader = new FileReader();
-                    reader.onload = function() { document.getElementById('brandLogoPreview').src = reader.result; document.getElementById('brandLogoPreview').style.display = 'block'; };
+                    reader.onload = function() { 
+                        document.getElementById('brandLogoPreview').src = reader.result; 
+                        document.getElementById('brandLogoPreview').style.display = 'block'; 
+                    };
                     if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
                 });
             }
@@ -671,7 +1001,10 @@
             if (bgFile) {
                 bgFile.addEventListener('change', function(e) {
                     const reader = new FileReader();
-                    reader.onload = function() { document.getElementById('bgPreview').src = reader.result; document.getElementById('bgPreview').style.display = 'block'; };
+                    reader.onload = function() { 
+                        document.getElementById('bgPreview').src = reader.result; 
+                        document.getElementById('bgPreview').style.display = 'block'; 
+                    };
                     if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
                 });
             }
