@@ -3,7 +3,7 @@ const session = require('express-session');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // Дані в пам'яті
 const db = {
@@ -21,34 +21,37 @@ const db = {
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(express.static(__dirname));
 
-// Проста сесія без попередження
-app.use(session({
-    secret: 'zahid-dron-secret',
-    resave: true,
-    saveUninitialized: true,
-    cookie: { secure: false }
-}));
-
-// Блокування ботів
+// Логування всіх запитів
 app.use((req, res, next) => {
-    const blocked = ['wp-login', 'wp-admin', 'wordpress', 'xmlrpc', '.env', 'phpmyadmin'];
-    if (blocked.some(path => req.url.toLowerCase().includes(path))) {
-        return res.status(404).end();
-    }
+    console.log(`${req.method} ${req.url}`);
     next();
 });
 
-// Перевірка адміна
-const isAdmin = (req, res, next) => {
-    if (req.session?.user?.isAdmin) return next();
-    res.status(403).json({ error: 'Access denied' });
-};
+// Статичні файли
+app.use(express.static(__dirname));
 
-// API маршрути
+app.use(session({
+    secret: 'zahid-dron-secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
+// Перевірка адміна
+function isAdmin(req, res, next) {
+    if (req.session && req.session.user && req.session.user.isAdmin) {
+        return next();
+    }
+    res.status(403).json({ error: 'Access denied' });
+}
+
+// ============ АУТЕНТИФІКАЦІЯ ============
 app.get('/api/user', (req, res) => {
-    res.json(req.session.user || null);
+    if (req.session.user) {
+        res.json(req.session.user);
+    } else {
+        res.status(401).json({ error: 'Not authorized' });
+    }
 });
 
 app.post('/api/login', (req, res) => {
@@ -63,9 +66,28 @@ app.post('/api/login', (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-    req.session.destroy(() => res.json({ ok: true }));
+    req.session.destroy(() => res.json({ success: true }));
 });
 
+app.post('/api/register', (req, res) => {
+    const { username, password } = req.body;
+    if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
+    if (db.users.find(u => u.username === username)) return res.status(400).json({ error: 'User exists' });
+    db.users.push({ username, password, isAdmin: false });
+    res.status(201).json({ success: true });
+});
+
+app.post('/api/admin/change-password', isAdmin, (req, res) => {
+    const { currentPassword, newUsername, newPassword } = req.body;
+    const idx = db.users.findIndex(u => u.username === req.session.user.username);
+    if (idx === -1) return res.status(404).json({ error: 'User not found' });
+    if (db.users[idx].password !== currentPassword) return res.status(401).json({ error: 'Wrong password' });
+    if (newUsername) db.users[idx].username = newUsername;
+    if (newPassword) db.users[idx].password = newPassword;
+    res.json({ success: true });
+});
+
+// ============ КАТЕГОРІЇ ============
 app.get('/api/categories', (req, res) => res.json(db.categories));
 
 app.post('/api/categories', isAdmin, (req, res) => {
@@ -73,37 +95,43 @@ app.post('/api/categories', isAdmin, (req, res) => {
     if (!cat) return res.status(400).json({ error: 'Category required' });
     if (db.categories.includes(cat)) return res.status(400).json({ error: 'Exists' });
     db.categories.push(cat);
-    res.json({ ok: true });
+    res.json({ success: true });
 });
 
-app.delete('/api/categories/:cat', isAdmin, (req, res) => {
-    const cat = decodeURIComponent(req.params.cat);
+app.delete('/api/categories/:category', isAdmin, (req, res) => {
+    const cat = decodeURIComponent(req.params.category);
     const idx = db.categories.indexOf(cat);
     if (idx > -1) db.categories.splice(idx, 1);
-    res.json({ ok: true });
+    res.json({ success: true });
 });
 
+// ============ ТОВАРИ ============
 app.get('/api/products', (req, res) => res.json(db.products));
 
 app.post('/api/products', isAdmin, (req, res) => {
-    const { name, category, price, description, specs, variants, image } = req.body;
-    if (!name || !category || !price) {
-        return res.status(400).json({ error: 'Missing fields' });
+    try {
+        const { name, category, price, description, specs, variants, image } = req.body;
+        if (!name || !category || !price) {
+            return res.status(400).json({ error: 'Missing fields' });
+        }
+        const product = {
+            id: Date.now(),
+            name: name.trim(),
+            category,
+            price: Number(price),
+            description: description || '',
+            specs: specs || '',
+            variants: variants || ['Стандарт'],
+            image: image || null,
+            gallery: [],
+            images: [],
+            createdAt: new Date().toISOString()
+        };
+        db.products.push(product);
+        res.status(201).json(product);
+    } catch(e) {
+        res.status(500).json({ error: e.message });
     }
-    const product = {
-        id: Date.now(),
-        name: name.trim(),
-        category,
-        price: Number(price),
-        description: description || '',
-        specs: specs || '',
-        variants: variants || ['Стандарт'],
-        image: image || null,
-        gallery: [],
-        createdAt: new Date().toISOString()
-    };
-    db.products.push(product);
-    res.status(201).json(product);
 });
 
 app.put('/api/products/:id', isAdmin, (req, res) => {
@@ -128,17 +156,19 @@ app.put('/api/products/:id', isAdmin, (req, res) => {
 app.delete('/api/products/:id', isAdmin, (req, res) => {
     const idx = db.products.findIndex(p => p.id == req.params.id);
     if (idx > -1) db.products.splice(idx, 1);
-    res.json({ ok: true });
+    res.json({ success: true });
 });
 
+// ============ ЗАМОВЛЕННЯ ============
 app.get('/api/orders', isAdmin, (req, res) => res.json(db.orders));
 
 app.post('/api/orders', (req, res) => {
-    const order = { id: Date.now(), ...req.body, date: new Date().toISOString(), status: 'new' };
+    const order = { id: Date.now(), ...req.body, date: new Date().toISOString(), status: 'нове' };
     db.orders.push(order);
     res.status(201).json(order);
 });
 
+// ============ ВІДГУКИ ============
 app.get('/api/reviews', (req, res) => res.json(db.reviews));
 
 app.post('/api/reviews', (req, res) => {
@@ -150,57 +180,78 @@ app.post('/api/reviews', (req, res) => {
 app.delete('/api/reviews/:id', isAdmin, (req, res) => {
     const idx = db.reviews.findIndex(r => r.id == req.params.id);
     if (idx > -1) db.reviews.splice(idx, 1);
-    res.json({ ok: true });
+    res.json({ success: true });
 });
 
+// ============ ПРО НАС / КОНТАКТИ ============
 app.get('/api/about', (req, res) => res.send(db.about));
-app.post('/api/about', isAdmin, (req, res) => { db.about = req.body.text; res.json({ ok: true }); });
+app.post('/api/about', isAdmin, (req, res) => { db.about = req.body.text; res.json({ success: true }); });
 
 app.get('/api/contact', (req, res) => res.send(db.contact));
-app.post('/api/contact', isAdmin, (req, res) => { db.contact = req.body.text; res.json({ ok: true }); });
+app.post('/api/contact', isAdmin, (req, res) => { db.contact = req.body.text; res.json({ success: true }); });
 
+// ============ СОЦМЕРЕЖІ ============
 app.get('/api/social', (req, res) => res.json(db.social));
-app.post('/api/social', isAdmin, (req, res) => { db.social = req.body; res.json({ ok: true }); });
+app.post('/api/social', isAdmin, (req, res) => { db.social = req.body; res.json({ success: true }); });
 
+// ============ НАЛАШТУВАННЯ ============
 app.get('/api/settings', (req, res) => res.json(db.settings));
-app.post('/api/settings', isAdmin, (req, res) => { db.settings = { ...db.settings, ...req.body }; res.json({ ok: true }); });
+app.post('/api/settings', isAdmin, (req, res) => { db.settings = { ...db.settings, ...req.body }; res.json({ success: true }); });
 
-app.get('/api/logo', (req, res) => res.send(db.images.logo));
-app.get('/api/banner', (req, res) => res.send(db.images.banner));
-app.get('/api/brand-logo', (req, res) => res.send(db.images.brandLogo));
-app.get('/api/background', (req, res) => res.send(db.images.background));
+// ============ ЗОБРАЖЕННЯ ============
+app.get('/api/logo', (req, res) => res.send(db.images.logo || ''));
+app.post('/api/logo', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
+    db.images.logo = req.body.image || req.body.path || '';
+    res.json({ path: db.images.logo });
+});
+app.delete('/api/logo', isAdmin, (req, res) => { db.images.logo = ''; res.json({ success: true }); });
 
+app.get('/api/banner', (req, res) => res.send(db.images.banner || ''));
+app.post('/api/banner', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
+    db.images.banner = req.body.image || req.body.path || '';
+    res.json({ path: db.images.banner });
+});
+app.delete('/api/banner', isAdmin, (req, res) => { db.images.banner = ''; res.json({ success: true }); });
+
+app.get('/api/brand-logo', (req, res) => res.send(db.images.brandLogo || ''));
+app.post('/api/brand-logo', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
+    db.images.brandLogo = req.body.image || req.body.path || '';
+    res.json({ path: db.images.brandLogo });
+});
+app.delete('/api/brand-logo', isAdmin, (req, res) => { db.images.brandLogo = ''; res.json({ success: true }); });
+
+app.get('/api/background', (req, res) => res.send(db.images.background || ''));
+app.post('/api/background', isAdmin, express.json({ limit: '10mb' }), (req, res) => {
+    db.images.background = req.body.image || req.body.path || '';
+    res.json({ path: db.images.background });
+});
+app.delete('/api/background', isAdmin, (req, res) => { db.images.background = ''; res.json({ success: true }); });
+
+// ============ СТАТИСТИКА ============
 app.get('/api/stats', isAdmin, (req, res) => {
     res.json({
-        products: db.products.length,
-        categories: db.categories.length,
-        orders: db.orders.length,
-        variants: db.products.reduce((s, p) => s + (p.variants?.length || 0), 0)
+        productsCount: db.products.length,
+        categoriesCount: db.categories.length,
+        ordersCount: db.orders.length,
+        variantsCount: db.products.reduce((s, p) => s + (p.variants?.length || 0), 0)
     });
 });
 
-// Health check
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
-
-// Сторінки
+// ============ СТОРІНКИ ============
 app.get('/admin', (req, res) => {
     if (!req.session?.user?.isAdmin) return res.redirect('/');
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
+
+// Всі інші запити -> index.html
 app.get('*', (req, res) => {
-    // Ігноруємо запити ботів
-    if (req.url.includes('wp-') || req.url.includes('.php') || req.url.includes('.env')) {
-        return res.status(404).end();
-    }
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Запуск
-const server = app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`http://localhost:${PORT}`);
 });
-
-// Для Railway - відповідаємо на health checks швидко
-server.keepAliveTimeout = 5000;
-server.headersTimeout = 6000;
