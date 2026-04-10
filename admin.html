@@ -61,28 +61,7 @@
         .modal-content { background:#111; padding:1.5rem; border-radius:24px; width:90%; max-width:500px; border:1px solid #333; }
         .modal-content h2 { margin-bottom:1rem; color:#fff; border-bottom:1px solid #333; padding-bottom:0.5rem; }
         .modal-close { float:right; font-size:1.5rem; cursor:pointer; color:#aaa; }
-        
-        /* Стилі для галереї зображень */
-        .gallery-container { margin-top:1rem; }
-        .gallery-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; }
-        .gallery-images { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:0.5rem; margin-bottom:1rem; }
-        .gallery-item { position:relative; border-radius:8px; overflow:hidden; border:1px solid #333; background:#1a1a1a; }
-        .gallery-item img { width:100%; height:100px; object-fit:cover; display:block; }
-        .gallery-item-actions { position:absolute; top:5px; right:5px; display:flex; gap:5px; opacity:0; transition:0.2s; }
-        .gallery-item:hover .gallery-item-actions { opacity:1; }
-        .gallery-item-actions button { width:28px; height:28px; border-radius:6px; border:none; cursor:pointer; color:white; }
-        .set-main-btn { background:#3b82f6; }
-        .delete-gallery-btn { background:#7a2e2e; }
-        .upload-gallery-area { border:2px dashed #333; border-radius:12px; padding:1rem; text-align:center; cursor:pointer; transition:0.2s; }
-        .upload-gallery-area:hover { border-color:#5a5a5a; background:#1a1a1a; }
-        .upload-gallery-area i { font-size:2rem; color:#5a5a5a; margin-bottom:0.5rem; }
-        
-        @media (max-width:768px) { 
-            .sidebar { display:none; } 
-            .admin-content { margin-left:0; padding:1rem; } 
-            .stats-grid { grid-template-columns:repeat(2,1fr); } 
-            .gallery-images { grid-template-columns:repeat(auto-fill, minmax(100px, 1fr)); }
-        }
+        @media (max-width:768px) { .sidebar { display:none; } .admin-content { margin-left:0; padding:1rem; } .stats-grid { grid-template-columns:repeat(2,1fr); } }
     </style>
 </head>
 <body>
@@ -94,52 +73,60 @@
         <div class="sidebar">
             <h3>Адмін-панель</h3>
             <ul class="sidebar-menu" id="sidebarMenu">
-                <li><a data-section="dashboard" class="active">📊 Дашборд</a></li>
-                <li><a data-section="profile">👤 Профіль</a></li>
-                <li><a data-section="background">🖼️ Фон</a></li>
-                <li><a data-section="banner">🎯 Банер</a></li>
-                <li><a data-section="brand-logo">👑 Бренд-лого</a></li>
-                <li><a data-section="logo">📷 Логотип</a></li>
-                <li><a data-section="categories">🏷️ Категорії</a></li>
-                <li><a data-section="products">📦 Товари</a></li>
-                <li><a data-section="orders">🛒 Замовлення</a></li>
-                <li><a data-section="about">ℹ️ Про нас</a></li>
-                <li><a data-section="contacts">📞 Контакти</a></li>
-                <li><a data-section="social">🌐 Соцмережі</a></li>
-                <li><a data-section="reviews">⭐ Відгуки</a></li>
+                <li><a data-section="dashboard" class="active"><i class="fas fa-chart-line"></i> Дашборд</a></li>
+                <li><a data-section="profile"><i class="fas fa-user-cog"></i> Профіль</a></li>
+                <li><a data-section="background"><i class="fas fa-image"></i> Фон</a></li>
+                <li><a data-section="banner"><i class="fas fa-image"></i> Банер</a></li>
+                <li><a data-section="brand-logo"><i class="fas fa-crown"></i> Бренд-лого</a></li>
+                <li><a data-section="logo"><i class="fas fa-camera"></i> Логотип</a></li>
+                <li><a data-section="categories"><i class="fas fa-tags"></i> Категорії</a></li>
+                <li><a data-section="products"><i class="fas fa-box"></i> Товари</a></li>
+                <li><a data-section="orders"><i class="fas fa-shopping-cart"></i> Замовлення</a></li>
+                <li><a data-section="about"><i class="fas fa-info-circle"></i> Про нас</a></li>
+                <li><a data-section="contacts"><i class="fas fa-address-book"></i> Контакти</a></li>
+                <li><a data-section="social"><i class="fas fa-share-alt"></i> Соцмережі</a></li>
+                <li><a data-section="reviews"><i class="fas fa-star"></i> Відгуки</a></li>
             </ul>
         </div>
         <div class="admin-content">
+            <!-- Дашборд -->
             <div id="dashboard" class="admin-section active">
                 <h2><i class="fas fa-chart-line"></i> Дашборд</h2>
                 <div class="stats-grid" id="stats"></div>
-                <div><h3>Останні замовлення</h3><div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Товар</th><th>Клієнт</th><th>Сума</th><th>Дата</th></tr></thead><tbody id="recentOrders"></tbody></table></div></div>
+                <div><h3>Останні замовлення</h3><div class="table-container"><table><thead><tr><th>ID</th><th>Товар</th><th>Клієнт</th><th>Сума</th><th>Дата</th></tr></thead><tbody id="recentOrders"></tbody></table></div></div>
             </div>
+            <!-- Профіль -->
             <div id="profile" class="admin-section">
                 <h2><i class="fas fa-user-cog"></i> Профіль</h2>
-                <div class="admin-form"><h3>Зміна пароля</h3><div class="form-group"><label>Поточний логін</label><input type="text" id="currentUsername" readonly disabled></div><div class="form-group"><label>Новий логін</label><input type="text" id="newUsername" placeholder="Новий логін (необов'язково)"></div><div class="form-group"><label>Поточний пароль</label><input type="password" id="currentPassword" placeholder="Поточний пароль"></div><div class="form-group"><label>Новий пароль</label><input type="password" id="newPassword" placeholder="Новий пароль"></div><div class="form-group"><label>Підтвердіть пароль</label><input type="password" id="confirmPassword" placeholder="Підтвердіть пароль"></div><button class="btn" id="changePasswordBtn">Зберегти</button></div>
+                <div class="admin-form"><h3>Зміна пароля</h3><div class="form-group"><label>Поточний логін</label><input type="text" id="currentUsername" readonly disabled></div><div class="form-group"><label>Новий логін</label><input type="text" id="newUsername" placeholder="Новий логін"></div><div class="form-group"><label>Поточний пароль</label><input type="password" id="currentPassword" placeholder="Поточний пароль"></div><div class="form-group"><label>Новий пароль</label><input type="password" id="newPassword" placeholder="Новий пароль"></div><div class="form-group"><label>Підтвердіть пароль</label><input type="password" id="confirmPassword" placeholder="Підтвердіть пароль"></div><button class="btn" id="changePasswordBtn">Зберегти</button></div>
             </div>
+            <!-- Фон -->
             <div id="background" class="admin-section">
                 <h2><i class="fas fa-image"></i> Фон сайту</h2>
-                <div class="admin-form"><div class="form-group"><label>Поточний фон</label><div><img src="" id="currentBg" class="logo-preview"><p id="noBgText">Не завантажено</p></div></div><div class="form-group"><label>Новий фон</label><input type="file" id="bgFile" accept="image/*"><img id="bgPreview" class="logo-preview"></div><button class="btn" id="uploadBgBtn">Зберегти</button><button class="btn btn-danger" id="deleteBgBtn">Видалити</button></div>
+                <div class="admin-form"><div class="form-group"><label>Поточний фон</label><div><img src="" id="currentBg" class="logo-preview" style="max-width:100%;"><p id="noBgText">Не завантажено</p></div></div><div class="form-group"><label>Новий фон</label><input type="file" id="bgFile" accept="image/*"><img id="bgPreview" class="logo-preview"></div><button class="btn" id="uploadBgBtn">Зберегти</button><button class="btn btn-danger" id="deleteBgBtn">Видалити</button></div>
             </div>
+            <!-- Банер -->
             <div id="banner" class="admin-section">
                 <h2><i class="fas fa-image"></i> Банер</h2>
-                <div class="admin-form"><div class="form-group"><label>Поточний банер</label><div><img src="" id="currentBanner" class="logo-preview"><p id="noBannerText">Не завантажено</p></div></div><div class="form-group"><label>Новий банер</label><input type="file" id="bannerFile" accept="image/*"><img id="bannerPreview" class="logo-preview"></div><button class="btn" id="uploadBannerBtn">Зберегти</button><button class="btn btn-danger" id="deleteBannerBtn">Видалити</button></div>
+                <div class="admin-form"><div class="form-group"><label>Поточний банер</label><div><img src="" id="currentBanner" class="logo-preview" style="max-width:100%;"><p id="noBannerText">Не завантажено</p></div></div><div class="form-group"><label>Новий банер</label><input type="file" id="bannerFile" accept="image/*"><img id="bannerPreview" class="logo-preview"></div><button class="btn" id="uploadBannerBtn">Зберегти</button><button class="btn btn-danger" id="deleteBannerBtn">Видалити</button></div>
             </div>
+            <!-- Бренд-лого -->
             <div id="brand-logo" class="admin-section">
                 <h2><i class="fas fa-crown"></i> Бренд-лого</h2>
-                <div class="admin-form"><div class="form-group"><label>Поточне зображення</label><div><img src="" id="currentBrandLogo" class="logo-preview"><p id="noBrandLogoText">Не завантажено</p></div></div><div class="form-group"><label>Нове зображення</label><input type="file" id="brandLogoFile" accept="image/*"><img id="brandLogoPreview" class="logo-preview"></div><button class="btn" id="uploadBrandLogoBtn">Зберегти</button><button class="btn btn-danger" id="deleteBrandLogoBtn">Видалити</button></div>
+                <div class="admin-form"><div class="form-group"><label>Поточне зображення</label><div><img src="" id="currentBrandLogo" class="logo-preview" style="max-width:100%;"><p id="noBrandLogoText">Не завантажено</p></div></div><div class="form-group"><label>Нове зображення</label><input type="file" id="brandLogoFile" accept="image/*"><img id="brandLogoPreview" class="logo-preview"></div><button class="btn" id="uploadBrandLogoBtn">Зберегти</button><button class="btn btn-danger" id="deleteBrandLogoBtn">Видалити</button></div>
             </div>
+            <!-- Логотип -->
             <div id="logo" class="admin-section">
                 <h2><i class="fas fa-camera"></i> Логотип сайту</h2>
-                <div class="admin-form"><div class="form-group"><label>Поточний логотип</label><div><img src="" id="currentLogo" class="logo-preview"><p id="noLogoText">Не завантажено</p></div></div><div class="form-group"><label>Новий логотип</label><input type="file" id="logoFile" accept="image/*"><img id="logoPreview" class="logo-preview"></div><button class="btn" id="uploadLogoBtn">Зберегти</button><button class="btn btn-danger" id="deleteLogoBtn">Видалити</button></div>
+                <div class="admin-form"><div class="form-group"><label>Поточний логотип</label><div><img src="" id="currentLogo" class="logo-preview" style="max-width:100%;"><p id="noLogoText">Не завантажено</p></div></div><div class="form-group"><label>Новий логотип</label><input type="file" id="logoFile" accept="image/*"><img id="logoPreview" class="logo-preview"></div><button class="btn" id="uploadLogoBtn">Зберегти</button><button class="btn btn-danger" id="deleteLogoBtn">Видалити</button></div>
             </div>
+            <!-- Категорії -->
             <div id="categories" class="admin-section">
                 <h2><i class="fas fa-tags"></i> Категорії</h2>
                 <div class="admin-form"><div class="form-group"><input type="text" id="newCategory" placeholder="Назва категорії"></div><button class="btn" id="addCategoryBtn">Додати</button></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></tr></thead><tbody id="categoriesList"></tbody></table></div>
+                <div class="table-container"><table><thead><tr><th>Назва</th><th>Товарів</th><th>Дії</th></tr></thead><tbody id="categoriesList"></tbody></table></div>
             </div>
+            <!-- Товари -->
             <div id="products" class="admin-section">
                 <h2><i class="fas fa-box"></i> Товари</h2>
                 <div class="admin-form">
@@ -152,50 +139,41 @@
                     <div class="form-group"><textarea id="productSpecs" rows="4" placeholder="Характеристики (кожен рядок - нова характеристика)"></textarea></div>
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
-                    
-                    <!-- Галерея зображень -->
-                    <div class="gallery-container">
-                        <div class="gallery-title">
-                            <label>Галерея зображень</label>
-                            <span class="badge" id="galleryCount">0 зображень</span>
-                        </div>
-                        <div class="gallery-images" id="galleryImages"></div>
-                        <div class="upload-gallery-area" id="uploadGalleryArea">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Натисніть або перетягніть файли для завантаження</p>
-                            <input type="file" id="galleryFiles" accept="image/*" multiple style="display:none;">
-                        </div>
-                    </div>
-                    
                     <button class="btn" id="submitProductBtn">Додати товар</button>
                     <button class="btn btn-danger" id="cancelEditBtn" style="display:none;">Скасувати</button>
                 </div>
                 <div class="category-tabs" id="categoryTabs"></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Галерея</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
+                <div class="table-container"><table><thead><tr><th>Фото</th><th>Назва</th><th>Категорія</th><th>Ціна</th><th>Варіанти</th><th>Дії</th></tr></thead><tbody id="productsList"></tbody></table></div>
             </div>
+            <!-- Замовлення -->
             <div id="orders" class="admin-section">
                 <h2><i class="fas fa-shopping-cart"></i> Замовлення</h2>
-                <div class="table-container"><table class="table"><thead><tr><th>ID</th><th>Товар</th><th>Ім'я</th><th>Телефон</th><th>Варіант</th><th>Дата</th><th>Статус</th></tr></thead><tbody id="ordersList"></tbody></table></div>
+                <div class="table-container"><table><thead><tr><th>ID</th><th>Товар</th><th>Ім'я</th><th>Телефон</th><th>Варіант</th><th>Дата</th><th>Статус</th></tr></thead><tbody id="ordersList"></tbody></table></div>
             </div>
+            <!-- Про нас -->
             <div id="about" class="admin-section">
                 <h2><i class="fas fa-info-circle"></i> Про нас</h2>
                 <div class="admin-form"><textarea id="aboutText" rows="10"></textarea><button class="btn" id="saveAboutBtn">Зберегти</button></div>
             </div>
+            <!-- Контакти -->
             <div id="contacts" class="admin-section">
                 <h2><i class="fas fa-address-book"></i> Контакти</h2>
                 <div class="admin-form"><div class="form-group"><input type="text" id="contactPhone" placeholder="Телефон"></div><div class="form-group"><input type="email" id="contactEmail" placeholder="Email"></div><div class="form-group"><input type="text" id="contactSchedule" placeholder="Графік роботи"></div><div class="form-group"><input type="text" id="contactAddress" placeholder="Адреса"></div><button class="btn" id="saveContactBtn">Зберегти</button></div>
             </div>
+            <!-- Соцмережі -->
             <div id="social" class="admin-section">
                 <h2><i class="fas fa-share-alt"></i> Соціальні мережі</h2>
-                <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><div class="social-icon-preview" id="socialPreview"><i class="fab fa-telegram"></i><span>Попередній перегляд</span></div><button class="btn" id="addSocialBtn">Додати</button></div>
-                <div class="table-container"><table class="table"><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
+                <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><button class="btn" id="addSocialBtn">Додати</button></div>
+                <div class="table-container"><table><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
             </div>
+            <!-- Відгуки -->
             <div id="reviews" class="admin-section">
                 <h2><i class="fas fa-star"></i> Відгуки</h2>
-                <div class="table-container"><table class="table"><thead><tr><th>Автор</th><th>Рейтинг</th><th>Текст</th><th>Дата</th><th>Дії</th></tr></thead><tbody id="reviewsListAdmin"></tbody></table></div>
+                <div class="table-container"><table><thead><tr><th>Автор</th><th>Рейтинг</th><th>Текст</th><th>Дата</th><th>Дії</th></tr></thead><tbody id="reviewsListAdmin"></tbody></table></div>
             </div>
         </div>
     </div>
+    <!-- Модальне вікно -->
     <div id="editSocialModal" class="modal"><div class="modal-content"><span class="modal-close" id="closeSocialModal">&times;</span><h2>Редагувати соцмережу</h2><div class="form-group"><input type="text" id="editSocialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="editSocialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="editSocialIcon" placeholder="Іконка"></div><div class="form-group"><label><input type="checkbox" id="editSocialActive"> Активна</label></div><button class="btn" id="updateSocialBtn">Зберегти</button></div></div>
 
     <script>
@@ -207,16 +185,12 @@
         let currentEditPlatform = null;
         let currentCategory = 'all';
         let editProductId = null;
-        let galleryImages = []; // Масив для зберігання зображень галереї
-        let uploadedGalleryFiles = []; // Масив для зберігання нових файлів галереї
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded - initializing admin panel');
             initNavigation();
             loadData();
             initEventListeners();
             initPreviewImages();
-            initGalleryUpload();
         });
 
         function initNavigation() {
@@ -232,139 +206,40 @@
         }
 
         function showSection(sectionId) {
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.classList.remove('active');
-            });
+            document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
         }
 
         function initEventListeners() {
-            console.log('Initializing event listeners');
-            if (document.getElementById('changePasswordBtn')) document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
-            if (document.getElementById('uploadBgBtn')) document.getElementById('uploadBgBtn').addEventListener('click', uploadBackground);
-            if (document.getElementById('deleteBgBtn')) document.getElementById('deleteBgBtn').addEventListener('click', deleteBackground);
-            if (document.getElementById('uploadBannerBtn')) document.getElementById('uploadBannerBtn').addEventListener('click', uploadBanner);
-            if (document.getElementById('deleteBannerBtn')) document.getElementById('deleteBannerBtn').addEventListener('click', deleteBanner);
-            if (document.getElementById('uploadBrandLogoBtn')) document.getElementById('uploadBrandLogoBtn').addEventListener('click', uploadBrandLogo);
-            if (document.getElementById('deleteBrandLogoBtn')) document.getElementById('deleteBrandLogoBtn').addEventListener('click', deleteBrandLogo);
-            if (document.getElementById('uploadLogoBtn')) document.getElementById('uploadLogoBtn').addEventListener('click', uploadLogo);
-            if (document.getElementById('deleteLogoBtn')) document.getElementById('deleteLogoBtn').addEventListener('click', deleteLogo);
-            if (document.getElementById('addCategoryBtn')) document.getElementById('addCategoryBtn').addEventListener('click', addCategory);
-            if (document.getElementById('addVariantBtn')) document.getElementById('addVariantBtn').addEventListener('click', addVariantField);
-            if (document.getElementById('submitProductBtn')) document.getElementById('submitProductBtn').addEventListener('click', submitProduct);
-            if (document.getElementById('cancelEditBtn')) document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
-            if (document.getElementById('saveAboutBtn')) document.getElementById('saveAboutBtn').addEventListener('click', saveAbout);
-            if (document.getElementById('saveContactBtn')) document.getElementById('saveContactBtn').addEventListener('click', saveContact);
-            if (document.getElementById('addSocialBtn')) document.getElementById('addSocialBtn').addEventListener('click', addSocial);
-            if (document.getElementById('updateSocialBtn')) document.getElementById('updateSocialBtn').addEventListener('click', updateSocial);
-            if (document.getElementById('closeSocialModal')) document.getElementById('closeSocialModal').addEventListener('click', function() { closeModal('editSocialModal'); });
+            document.getElementById('changePasswordBtn')?.addEventListener('click', changePassword);
+            document.getElementById('uploadBgBtn')?.addEventListener('click', uploadBackground);
+            document.getElementById('deleteBgBtn')?.addEventListener('click', deleteBackground);
+            document.getElementById('uploadBannerBtn')?.addEventListener('click', uploadBanner);
+            document.getElementById('deleteBannerBtn')?.addEventListener('click', deleteBanner);
+            document.getElementById('uploadBrandLogoBtn')?.addEventListener('click', uploadBrandLogo);
+            document.getElementById('deleteBrandLogoBtn')?.addEventListener('click', deleteBrandLogo);
+            document.getElementById('uploadLogoBtn')?.addEventListener('click', uploadLogo);
+            document.getElementById('deleteLogoBtn')?.addEventListener('click', deleteLogo);
+            document.getElementById('addCategoryBtn')?.addEventListener('click', addCategory);
+            document.getElementById('addVariantBtn')?.addEventListener('click', addVariantField);
+            document.getElementById('submitProductBtn')?.addEventListener('click', submitProduct);
+            document.getElementById('cancelEditBtn')?.addEventListener('click', cancelEdit);
+            document.getElementById('saveAboutBtn')?.addEventListener('click', saveAbout);
+            document.getElementById('saveContactBtn')?.addEventListener('click', saveContact);
+            document.getElementById('addSocialBtn')?.addEventListener('click', addSocial);
+            document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
+            document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
         }
 
-        function initGalleryUpload() {
-            const uploadArea = document.getElementById('uploadGalleryArea');
-            const fileInput = document.getElementById('galleryFiles');
-            
-            uploadArea.addEventListener('click', () => fileInput.click());
-            
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#5a5a5a';
-                uploadArea.style.background = '#1a1a1a';
-            });
-            
-            uploadArea.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#333';
-                uploadArea.style.background = 'transparent';
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#333';
-                uploadArea.style.background = 'transparent';
-                const files = Array.from(e.dataTransfer.files);
-                handleGalleryFiles(files);
-            });
-            
-            fileInput.addEventListener('change', (e) => {
-                const files = Array.from(e.target.files);
-                handleGalleryFiles(files);
-                fileInput.value = '';
-            });
-        }
-
-        function handleGalleryFiles(files) {
-            const imageFiles = files.filter(f => f.type.startsWith('image/'));
-            
-            imageFiles.forEach(file => {
+        // Конвертація файлу в base64
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const imageData = {
-                        id: Date.now() + Math.random(),
-                        file: file,
-                        preview: e.target.result,
-                        isNew: true
-                    };
-                    uploadedGalleryFiles.push(imageData);
-                    renderGalleryImages();
-                };
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
         }
-
-        function renderGalleryImages() {
-            const container = document.getElementById('galleryImages');
-            const allImages = [...galleryImages, ...uploadedGalleryFiles];
-            
-            container.innerHTML = allImages.map((img, index) => `
-                <div class="gallery-item">
-                    <img src="${img.preview || img.url}" alt="Gallery image">
-                    <div class="gallery-item-actions">
-                        ${!img.isMain ? `<button class="set-main-btn" onclick="setAsMainImage(${index})" title="Зробити головним"><i class="fas fa-star"></i></button>` : ''}
-                        <button class="delete-gallery-btn" onclick="removeGalleryImage(${index})" title="Видалити"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
-            
-            document.getElementById('galleryCount').textContent = `${allImages.length} зображень`;
-        }
-
-        window.setAsMainImage = function(index) {
-            const allImages = [...galleryImages, ...uploadedGalleryFiles];
-            const selectedImage = allImages[index];
-            
-            // Видаляємо позначку "головне" з усіх зображень
-            galleryImages = galleryImages.map(img => ({...img, isMain: false}));
-            uploadedGalleryFiles = uploadedGalleryFiles.map(img => ({...img, isMain: false}));
-            
-            // Встановлюємо вибране зображення як головне
-            if (selectedImage.isNew) {
-                const newIndex = uploadedGalleryFiles.findIndex(img => img.id === selectedImage.id);
-                if (newIndex !== -1) {
-                    uploadedGalleryFiles[newIndex].isMain = true;
-                }
-            } else {
-                const existingIndex = galleryImages.findIndex(img => img.id === selectedImage.id);
-                if (existingIndex !== -1) {
-                    galleryImages[existingIndex].isMain = true;
-                }
-            }
-            
-            renderGalleryImages();
-        };
-
-        window.removeGalleryImage = function(index) {
-            const allImages = [...galleryImages, ...uploadedGalleryFiles];
-            const selectedImage = allImages[index];
-            
-            if (selectedImage.isNew) {
-                uploadedGalleryFiles = uploadedGalleryFiles.filter(img => img.id !== selectedImage.id);
-            } else {
-                galleryImages = galleryImages.filter(img => img.id !== selectedImage.id);
-            }
-            
-            renderGalleryImages();
-        };
 
         async function checkAuth() {
             try {
@@ -375,37 +250,26 @@
                 currentUser = user;
                 document.getElementById('currentUsername').value = user.username;
                 return true;
-            } catch(e) { 
-                console.error('Auth error:', e);
-                location.href = '/'; 
-                return false; 
-            }
+            } catch(e) { location.href = '/'; return false; }
         }
 
         async function loadData() {
-            console.log('Loading data...');
             if (!await checkAuth()) return;
             try {
                 const [catRes, prodRes, orderRes, socialRes, aboutRes, contactRes] = await Promise.all([
-                    fetch('/api/categories'), 
-                    fetch('/api/products'), 
-                    fetch('/api/orders'),
-                    fetch('/api/social'), 
-                    fetch('/api/about'), 
-                    fetch('/api/contact')
+                    fetch('/api/categories'), fetch('/api/products'), fetch('/api/orders'),
+                    fetch('/api/social'), fetch('/api/about'), fetch('/api/contact')
                 ]);
-                
                 categories = await catRes.json();
                 products = await prodRes.json();
                 orders = await orderRes.json();
                 social = await socialRes.json();
                 
-                // Calculate stats
                 const stats = {
                     productsCount: products.length,
                     categoriesCount: categories.length,
                     ordersCount: orders.length,
-                    variantsCount: products.reduce((a,p) => a + p.variants.length, 0)
+                    variantsCount: products.reduce((a,p) => a + (p.variants?.length || 0), 0)
                 };
                 
                 updateDashboard(stats);
@@ -416,102 +280,86 @@
                 updateCategorySelect();
                 updateCategoryTabs();
                 
-                const aboutText = await aboutRes.text();
-                document.getElementById('aboutText').value = aboutText;
-                
-                const contactText = await contactRes.text();
-                parseContactInfo(contactText);
+                document.getElementById('aboutText').value = await aboutRes.text();
+                parseContactInfo(await contactRes.text());
                 
                 await loadLogo();
                 await loadBanner();
                 await loadBrandLogo();
                 await loadBackground();
                 await loadReviews();
-            } catch(e) { 
-                console.error('Error loading data:', e); 
-                alert('Помилка завантаження даних: ' + e.message); 
-            }
+            } catch(e) { console.error(e); alert('Помилка завантаження даних'); }
         }
 
         async function loadLogo() {
-            try { 
-                const res = await fetch('/api/logo'); 
-                if(res.ok){ 
-                    const url = await res.text(); 
-                    if(url){ 
-                        document.getElementById('headerLogo').src = url; 
-                        document.getElementById('headerLogo').style.display = 'block'; 
-                        document.getElementById('currentLogo').src = url; 
-                        document.getElementById('currentLogo').style.display = 'block'; 
-                        document.getElementById('noLogoText').style.display = 'none'; 
-                    } 
-                } 
-            } catch(e){
-                console.error('Error loading logo:', e);
-            }
+            try {
+                const res = await fetch('/api/logo');
+                if(res.ok) {
+                    const url = await res.text();
+                    if(url) {
+                        document.getElementById('headerLogo').src = url;
+                        document.getElementById('headerLogo').style.display = 'block';
+                        document.getElementById('currentLogo').src = url;
+                        document.getElementById('currentLogo').style.display = 'block';
+                        document.getElementById('noLogoText').style.display = 'none';
+                    }
+                }
+            } catch(e) {}
         }
-        
+
         async function loadBanner() {
-            try { 
-                const res = await fetch('/api/banner'); 
-                if(res.ok){ 
-                    const url = await res.text(); 
-                    if(url){ 
-                        document.getElementById('currentBanner').src = url; 
-                        document.getElementById('currentBanner').style.display = 'block'; 
-                        document.getElementById('noBannerText').style.display = 'none'; 
-                    } 
-                } 
-            } catch(e){
-                console.error('Error loading banner:', e);
-            }
+            try {
+                const res = await fetch('/api/banner');
+                if(res.ok) {
+                    const url = await res.text();
+                    if(url) {
+                        document.getElementById('currentBanner').src = url;
+                        document.getElementById('currentBanner').style.display = 'block';
+                        document.getElementById('noBannerText').style.display = 'none';
+                    }
+                }
+            } catch(e) {}
         }
-        
+
         async function loadBrandLogo() {
-            try { 
-                const res = await fetch('/api/brand-logo'); 
-                if(res.ok){ 
-                    const url = await res.text(); 
-                    if(url){ 
-                        document.getElementById('currentBrandLogo').src = url; 
-                        document.getElementById('currentBrandLogo').style.display = 'block'; 
-                        document.getElementById('noBrandLogoText').style.display = 'none'; 
-                    } 
-                } 
-            } catch(e){
-                console.error('Error loading brand logo:', e);
-            }
+            try {
+                const res = await fetch('/api/brand-logo');
+                if(res.ok) {
+                    const url = await res.text();
+                    if(url) {
+                        document.getElementById('currentBrandLogo').src = url;
+                        document.getElementById('currentBrandLogo').style.display = 'block';
+                        document.getElementById('noBrandLogoText').style.display = 'none';
+                    }
+                }
+            } catch(e) {}
         }
-        
+
         async function loadBackground() {
-            try { 
-                const res = await fetch('/api/background'); 
-                if(res.ok){ 
-                    const url = await res.text(); 
-                    if(url){ 
-                        document.getElementById('currentBg').src = url; 
-                        document.getElementById('currentBg').style.display = 'block'; 
-                        document.getElementById('noBgText').style.display = 'none'; 
-                    } 
-                } 
-            } catch(e){
-                console.error('Error loading background:', e);
-            }
+            try {
+                const res = await fetch('/api/background');
+                if(res.ok) {
+                    const url = await res.text();
+                    if(url) {
+                        document.getElementById('currentBg').src = url;
+                        document.getElementById('currentBg').style.display = 'block';
+                        document.getElementById('noBgText').style.display = 'none';
+                    }
+                }
+            } catch(e) {}
         }
-        
+
         async function loadReviews() {
-            try { 
-                const res = await fetch('/api/reviews'); 
-                const reviews = await res.json(); 
+            try {
+                const res = await fetch('/api/reviews');
+                const reviews = await res.json();
                 document.getElementById('reviewsListAdmin').innerHTML = reviews.map(r => 
                     `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${escapeHtml(r.text.substring(0,80))}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`
                 ).join('');
                 document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(btn => {
                     btn.addEventListener('click', () => deleteReview(btn.getAttribute('data-id')));
                 });
-            } catch(e){
-                console.error('Error loading reviews:', e);
-            } 
+            } catch(e) {}
         }
 
         function parseContactInfo(text) {
@@ -524,37 +372,30 @@
 
         function escapeHtml(str) { 
             if (!str) return ''; 
-            return str.replace(/[&<>]/g, function(m) { 
-                if (m === '&') return '&amp;'; 
-                if (m === '<') return '&lt;'; 
-                if (m === '>') return '&gt;'; 
-                return m; 
-            }); 
+            return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[m]); 
         }
 
         function updateDashboard(stats) {
             document.getElementById('stats').innerHTML = `
-                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${stats.productsCount || 0}</p></div>
-                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${stats.categoriesCount || 0}</p></div>
-                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${stats.ordersCount || 0}</p></div>
-                <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${stats.variantsCount || 0}</p></div>
+                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${stats.productsCount}</p></div>
+                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${stats.categoriesCount}</p></div>
+                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${stats.ordersCount}</p></div>
+                <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${stats.variantsCount}</p></div>
             `;
             const recent = orders.slice(-5).reverse();
             document.getElementById('recentOrders').innerHTML = recent.map(o => {
                 const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`; 
+                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`;
             }).join('');
         }
 
         function updateCategoriesList() {
             document.getElementById('categoriesList').innerHTML = categories.map(cat => {
                 const cnt = products.filter(p => p.category === cat).length;
-                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td></tr>`; 
+                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td></tr>`;
             }).join('');
             document.querySelectorAll('#categoriesList .delete-btn').forEach(btn => {
-                if (!btn.disabled) {
-                    btn.addEventListener('click', () => deleteCategory(btn.getAttribute('data-cat')));
-                }
+                if (!btn.disabled) btn.addEventListener('click', () => deleteCategory(btn.getAttribute('data-cat')));
             });
         }
 
@@ -567,92 +408,54 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ category: cat })
                 });
-                if (res.ok) { 
-                    alert('Категорію додано!'); 
-                    document.getElementById('newCategory').value = ''; 
-                    loadData(); 
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка');
-                }
-            } catch(e) { 
-                console.error('Error adding category:', e);
-                alert('Помилка'); 
-            }
+                if (res.ok) { alert('Додано!'); document.getElementById('newCategory').value = ''; loadData(); }
+                else { const err = await res.json(); alert(err.error || 'Помилка'); }
+            } catch(e) { alert('Помилка'); }
         }
 
         async function deleteCategory(cat) {
-            if (!confirm(`Видалити категорію "${cat}"?`)) return;
+            if (!confirm(`Видалити "${cat}"?`)) return;
             try {
                 const res = await fetch(`/api/categories/${encodeURIComponent(cat)}`, { method: 'DELETE' });
-                if (res.ok) { 
-                    alert('Категорію видалено!'); 
-                    loadData(); 
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка');
-                }
-            } catch(e) { 
-                console.error('Error deleting category:', e);
-                alert('Помилка'); 
-            }
+                if (res.ok) { alert('Видалено!'); loadData(); }
+                else { const err = await res.json(); alert(err.error || 'Помилка'); }
+            } catch(e) { alert('Помилка'); }
         }
 
         function updateCategorySelect() {
-            const select = document.getElementById('productCategory');
-            if (select) {
-                select.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
-            }
+            document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
         }
 
         function updateCategoryTabs() {
             let html = `<button class="category-tab ${currentCategory === 'all' ? 'active' : ''}" data-cat="all">Всі</button>`;
-            categories.forEach(c => { 
-                html += `<button class="category-tab ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`; 
-            });
+            categories.forEach(c => html += `<button class="category-tab ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`);
             document.getElementById('categoryTabs').innerHTML = html;
             document.querySelectorAll('#categoryTabs .category-tab').forEach(tab => {
-                tab.addEventListener('click', () => filterByCategory(tab.getAttribute('data-cat')));
+                tab.addEventListener('click', () => { currentCategory = tab.getAttribute('data-cat'); updateCategoryTabs(); updateProductsList(); });
             });
-        }
-
-        function filterByCategory(c) { 
-            currentCategory = c; 
-            updateCategoryTabs(); 
-            updateProductsList(); 
         }
 
         function updateProductsList() {
-            let filtered = products;
-            if (currentCategory !== 'all') filtered = products.filter(p => p.category === currentCategory);
+            let filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
             document.getElementById('productsList').innerHTML = filtered.map(p => `
                 <tr>
                     <td><img src="${p.image || 'https://via.placeholder.com/50'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
-                    <td>${escapeHtml(p.name)}</td>
-                    <td>${escapeHtml(p.category)}</td>
-                    <td>${p.price.toLocaleString()} грн</td>
-                    <td>${p.variants.length}</td>
-                    <td>${p.gallery ? p.gallery.length : 0} зобр.</td>
+                    <td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td><td>${p.price.toLocaleString()} грн</td><td>${p.variants?.length || 0}</td>
                     <td class="action-btns">
                         <button class="edit-btn" data-id="${p.id}"><i class="fas fa-edit"></i></button>
                         <button class="delete-btn" data-id="${p.id}"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
             `).join('');
-            document.querySelectorAll('#productsList .edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => editProduct(btn.getAttribute('data-id')));
-            });
-            document.querySelectorAll('#productsList .delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => deleteProduct(btn.getAttribute('data-id')));
-            });
+            document.querySelectorAll('#productsList .edit-btn').forEach(btn => btn.addEventListener('click', () => editProduct(btn.getAttribute('data-id'))));
+            document.querySelectorAll('#productsList .delete-btn').forEach(btn => btn.addEventListener('click', () => deleteProduct(btn.getAttribute('data-id'))));
         }
 
         function addVariantField() {
-            const container = document.getElementById('variantsContainer');
             const div = document.createElement('div');
             div.className = 'variant-row';
             div.innerHTML = '<input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
-            container.appendChild(div);
+            document.getElementById('variantsContainer').appendChild(div);
         }
 
         function editProduct(id) {
@@ -664,33 +467,23 @@
             document.getElementById('productPrice').value = p.price;
             document.getElementById('productDescription').value = p.description || '';
             document.getElementById('productSpecs').value = p.specs || '';
-            
             const container = document.getElementById('variantsContainer');
             container.innerHTML = '';
-            p.variants.forEach(v => {
+            (p.variants || ['Стандарт']).forEach(v => {
                 const div = document.createElement('div');
                 div.className = 'variant-row';
-                div.innerHTML = `<input type="text" value="${v}" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                div.innerHTML = `<input type="text" value="${v}"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
                 container.appendChild(div);
             });
-            
-            // Завантажуємо галерею
-            galleryImages = p.gallery || [];
-            uploadedGalleryFiles = [];
-            renderGalleryImages();
-            
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-edit"></i> Редагувати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Оновити товар';
             document.getElementById('cancelEditBtn').style.display = 'inline-block';
             document.getElementById('imagePreview').style.display = 'none';
             document.getElementById('productImage').value = '';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function cancelEdit() {
             editProductId = null;
-            galleryImages = [];
-            uploadedGalleryFiles = [];
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-plus"></i> Додати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Додати товар';
             document.getElementById('cancelEditBtn').style.display = 'none';
@@ -701,92 +494,56 @@
             document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
             document.getElementById('productImage').value = '';
             document.getElementById('imagePreview').style.display = 'none';
-            renderGalleryImages();
         }
 
         async function submitProduct() {
             const url = editProductId ? `/api/products/${editProductId}` : '/api/products';
             const method = editProductId ? 'PUT' : 'POST';
-            const fd = new FormData();
-            
-            fd.append('category', document.getElementById('productCategory').value);
-            fd.append('name', document.getElementById('productName').value.trim());
-            fd.append('price', document.getElementById('productPrice').value);
-            fd.append('description', document.getElementById('productDescription').value);
-            fd.append('specs', document.getElementById('productSpecs').value);
-            
-            const variants = [];
-            document.querySelectorAll('#variantsContainer input').forEach(i => { 
-                if (i.value.trim()) variants.push(i.value.trim()); 
-            });
-            fd.append('variants', JSON.stringify(variants.length ? variants : ['Стандарт']));
-            
-            const img = document.getElementById('productImage').files[0];
-            if (img) fd.append('image', img);
-            
-            // Додаємо інформацію про галерею
-            const galleryData = {
-                existing: galleryImages,
-                newFilesCount: uploadedGalleryFiles.length
-            };
-            fd.append('gallery', JSON.stringify(galleryData));
-            
-            // Додаємо нові файли галереї
-            uploadedGalleryFiles.forEach((fileData, index) => {
-                if (fileData.file) {
-                    fd.append(`gallery_${index}`, fileData.file);
-                }
-                if (fileData.isMain) {
-                    fd.append('main_gallery_index', index.toString());
-                }
-            });
-            
             try {
-                const res = await fetch(url, { method, body: fd });
-                if (res.ok) {
-                    alert(editProductId ? 'Товар оновлено!' : 'Товар додано!');
-                    cancelEdit();
-                    loadData();
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка при збереженні');
-                }
-            } catch(e) { 
-                console.error('Error submitting product:', e);
-                alert('Помилка з\'єднання'); 
-            }
+                const variants = [];
+                document.querySelectorAll('#variantsContainer input').forEach(i => { if (i.value.trim()) variants.push(i.value.trim()); });
+                let image = null;
+                const imgFile = document.getElementById('productImage').files[0];
+                if (imgFile) image = await fileToBase64(imgFile);
+                
+                const data = {
+                    category: document.getElementById('productCategory').value,
+                    name: document.getElementById('productName').value.trim(),
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    description: document.getElementById('productDescription').value,
+                    specs: document.getElementById('productSpecs').value,
+                    variants: variants.length ? variants : ['Стандарт'],
+                    image: image
+                };
+                
+                if (!data.name || !data.category || !data.price) { alert('Заповніть обов\'язкові поля'); return; }
+                
+                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                if (res.ok) { alert(editProductId ? 'Оновлено!' : 'Додано!'); cancelEdit(); loadData(); }
+                else { const err = await res.json(); alert(err.error || 'Помилка'); }
+            } catch(e) { alert('Помилка'); }
         }
 
         async function deleteProduct(id) {
             if (!confirm('Видалити товар?')) return;
             try {
                 const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
-                if (res.ok) { 
-                    alert('Товар видалено!'); 
-                    loadData(); 
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка');
-                }
-            } catch(e) { 
-                console.error('Error deleting product:', e);
-                alert('Помилка'); 
-            }
+                if (res.ok) { alert('Видалено!'); loadData(); }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
 
         function updateOrdersList() {
             document.getElementById('ordersList').innerHTML = orders.sort((a,b) => new Date(b.date) - new Date(a.date)).map(o => {
                 const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`; 
+                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`;
             }).join('');
         }
 
         function updateSocialList() {
             document.getElementById('socialList').innerHTML = social.map(s => `
                 <tr>
-                    <td><i class="${s.icon}"></i></td>
-                    <td>${s.platform}</td>
-                    <td>${s.name}</td>
+                    <td><i class="${s.icon}"></i></td><td>${s.platform}</td><td>${s.name}</td>
                     <td><a href="${s.url}" target="_blank">${s.url.substring(0,30)}...</a></td>
                     <td>${s.active ? 'Активна' : 'Неактивна'}</td>
                     <td class="action-btns">
@@ -795,12 +552,8 @@
                     </td>
                 </tr>
             `).join('');
-            document.querySelectorAll('#socialList .edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => openEditSocial(btn.getAttribute('data-platform')));
-            });
-            document.querySelectorAll('#socialList .delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => deleteSocial(btn.getAttribute('data-platform')));
-            });
+            document.querySelectorAll('#socialList .edit-btn').forEach(btn => btn.addEventListener('click', () => openEditSocial(btn.getAttribute('data-platform'))));
+            document.querySelectorAll('#socialList .delete-btn').forEach(btn => btn.addEventListener('click', () => deleteSocial(btn.getAttribute('data-platform'))));
         }
 
         async function addSocial() {
@@ -809,39 +562,14 @@
             const url = document.getElementById('socialUrl').value.trim();
             let icon = document.getElementById('socialIcon').value.trim();
             const active = document.getElementById('socialActive').checked;
-            if (!name || !url) { alert('Заповніть всі поля'); return; }
-            const icons = { 
-                telegram: 'fa-brands fa-telegram', 
-                instagram: 'fa-brands fa-instagram', 
-                facebook: 'fa-brands fa-facebook', 
-                viber: 'fa-brands fa-viber', 
-                whatsapp: 'fa-brands fa-whatsapp', 
-                tiktok: 'fa-brands fa-tiktok', 
-                youtube: 'fa-brands fa-youtube' 
-            };
+            if (!name || !url) { alert('Заповніть поля'); return; }
+            const icons = { telegram: 'fa-brands fa-telegram', instagram: 'fa-brands fa-instagram', facebook: 'fa-brands fa-facebook', viber: 'fa-brands fa-viber', whatsapp: 'fa-brands fa-whatsapp', tiktok: 'fa-brands fa-tiktok', youtube: 'fa-brands fa-youtube' };
             if (!icon) icon = icons[platform] || 'fa-solid fa-link';
             try {
-                const newSocial = { platform, name, url, icon, active };
-                const updatedSocial = [...social, newSocial];
-                const res = await fetch('/api/social', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedSocial)
-                });
-                if (res.ok) { 
-                    alert('Додано!'); 
-                    document.getElementById('socialName').value = ''; 
-                    document.getElementById('socialUrl').value = ''; 
-                    document.getElementById('socialIcon').value = ''; 
-                    loadData(); 
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка');
-                }
-            } catch(e) { 
-                console.error('Error adding social:', e);
-                alert('Помилка'); 
-            }
+                const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify([...social, { platform, name, url, icon, active }]) });
+                if (res.ok) { alert('Додано!'); document.getElementById('socialName').value = ''; document.getElementById('socialUrl').value = ''; loadData(); }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
 
         function openEditSocial(platform) {
@@ -863,226 +591,93 @@
             const icon = document.getElementById('editSocialIcon').value;
             const active = document.getElementById('editSocialActive').checked;
             try {
-                const updatedSocial = social.map(s => 
-                    s.platform === currentEditPlatform ? { ...s, name, url, icon, active } : s
-                );
-                const res = await fetch('/api/social', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedSocial)
-                });
-                if (res.ok) { 
-                    alert('Оновлено!'); 
-                    closeModal('editSocialModal'); 
-                    loadData(); 
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка');
-                }
-            } catch(e) { 
-                console.error('Error updating social:', e);
-                alert('Помилка'); 
-            }
+                const updated = social.map(s => s.platform === currentEditPlatform ? { ...s, name, url, icon, active } : s);
+                const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updated) });
+                if (res.ok) { alert('Оновлено!'); closeModal('editSocialModal'); loadData(); }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
 
         async function deleteSocial(platform) {
             if (!confirm('Видалити?')) return;
             try {
-                const updatedSocial = social.filter(s => s.platform !== platform);
-                const res = await fetch('/api/social', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updatedSocial)
-                });
-                if (res.ok) { 
-                    alert('Видалено!'); 
-                    loadData(); 
-                } else {
-                    const err = await res.json();
-                    alert(err.error || 'Помилка');
-                }
-            } catch(e) { 
-                console.error('Error deleting social:', e);
-                alert('Помилка'); 
-            }
+                const updated = social.filter(s => s.platform !== platform);
+                const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updated) });
+                if (res.ok) { alert('Видалено!'); loadData(); }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
 
         async function saveAbout() {
-            const text = document.getElementById('aboutText').value;
             try {
-                const res = await fetch('/api/about', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text })
-                });
-                if (res.ok) alert('Текст збережено!');
-                else alert('Помилка');
-            } catch(e) { 
-                console.error('Error saving about:', e);
-                alert('Помилка'); 
-            }
+                await fetch('/api/about', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: document.getElementById('aboutText').value }) });
+                alert('Збережено!');
+            } catch(e) { alert('Помилка'); }
         }
 
         async function saveContact() {
+            const parts = [];
             const phone = document.getElementById('contactPhone').value;
             const email = document.getElementById('contactEmail').value;
             const schedule = document.getElementById('contactSchedule').value;
             const address = document.getElementById('contactAddress').value;
-            const parts = [];
             if (phone) parts.push(`Телефон: ${phone}`);
             if (email) parts.push(`Email: ${email}`);
             if (schedule) parts.push(`Графік: ${schedule}`);
             if (address) parts.push(`Адреса: ${address}`);
             try {
-                const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ text: parts.join('\n') })
-                });
-                if (res.ok) alert('Контакти збережено!');
-                else alert('Помилка');
-            } catch(e) { 
-                console.error('Error saving contact:', e);
-                alert('Помилка'); 
-            }
+                await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: parts.join('\n') }) });
+                alert('Збережено!');
+            } catch(e) { alert('Помилка'); }
         }
 
         async function uploadBackground() { 
             const f = document.getElementById('bgFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; } 
-            const fd = new FormData(); 
-            fd.append('background', f); 
-            try { 
-                const res = await fetch('/api/background', { method: 'POST', body: fd }); 
-                if (res.ok) { 
-                    alert('Фон збережено!'); 
-                    await loadBackground(); 
-                    document.getElementById('bgPreview').style.display = 'none'; 
-                    document.getElementById('bgFile').value = ''; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error uploading background:', e);
-                alert('Помилка'); 
-            } 
+            if (!f) { alert('Виберіть файл'); return; }
+            try {
+                const base64 = await fileToBase64(f);
+                const res = await fetch('/api/background', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
+                if (res.ok) { alert('Збережено!'); loadBackground(); document.getElementById('bgPreview').style.display = 'none'; document.getElementById('bgFile').value = ''; }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
-        
-        async function deleteBackground() { 
-            if (!confirm('Видалити фон?')) return; 
-            try { 
-                const res = await fetch('/api/background', { method: 'DELETE' }); 
-                if (res.ok) { 
-                    alert('Фон видалено!'); 
-                    document.getElementById('currentBg').style.display = 'none'; 
-                    document.getElementById('noBgText').style.display = 'block'; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error deleting background:', e);
-                alert('Помилка'); 
-            } 
-        }
-        
+        async function deleteBackground() { if (!confirm('Видалити?')) return; await fetch('/api/background', { method: 'DELETE' }); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; alert('Видалено!'); }
+
         async function uploadBanner() { 
             const f = document.getElementById('bannerFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; } 
-            const fd = new FormData(); 
-            fd.append('banner', f); 
-            try { 
-                const res = await fetch('/api/banner', { method: 'POST', body: fd }); 
-                if (res.ok) { 
-                    alert('Банер збережено!'); 
-                    await loadBanner(); 
-                    document.getElementById('bannerPreview').style.display = 'none'; 
-                    document.getElementById('bannerFile').value = ''; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error uploading banner:', e);
-                alert('Помилка'); 
-            } 
+            if (!f) { alert('Виберіть файл'); return; }
+            try {
+                const base64 = await fileToBase64(f);
+                const res = await fetch('/api/banner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
+                if (res.ok) { alert('Збережено!'); loadBanner(); document.getElementById('bannerPreview').style.display = 'none'; document.getElementById('bannerFile').value = ''; }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
-        
-        async function deleteBanner() { 
-            if (!confirm('Видалити банер?')) return; 
-            try { 
-                const res = await fetch('/api/banner', { method: 'DELETE' }); 
-                if (res.ok) { 
-                    alert('Банер видалено!'); 
-                    document.getElementById('currentBanner').style.display = 'none'; 
-                    document.getElementById('noBannerText').style.display = 'block'; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error deleting banner:', e);
-                alert('Помилка'); 
-            } 
-        }
-        
+        async function deleteBanner() { if (!confirm('Видалити?')) return; await fetch('/api/banner', { method: 'DELETE' }); document.getElementById('currentBanner').style.display = 'none'; document.getElementById('noBannerText').style.display = 'block'; alert('Видалено!'); }
+
         async function uploadBrandLogo() { 
             const f = document.getElementById('brandLogoFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; } 
-            const fd = new FormData(); 
-            fd.append('brand-logo', f); 
-            try { 
-                const res = await fetch('/api/brand-logo', { method: 'POST', body: fd }); 
-                if (res.ok) { 
-                    alert('Зображення збережено!'); 
-                    await loadBrandLogo(); 
-                    document.getElementById('brandLogoPreview').style.display = 'none'; 
-                    document.getElementById('brandLogoFile').value = ''; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error uploading brand logo:', e);
-                alert('Помилка'); 
-            } 
+            if (!f) { alert('Виберіть файл'); return; }
+            try {
+                const base64 = await fileToBase64(f);
+                const res = await fetch('/api/brand-logo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
+                if (res.ok) { alert('Збережено!'); loadBrandLogo(); document.getElementById('brandLogoPreview').style.display = 'none'; document.getElementById('brandLogoFile').value = ''; }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
-        
-        async function deleteBrandLogo() { 
-            if (!confirm('Видалити зображення?')) return; 
-            try { 
-                const res = await fetch('/api/brand-logo', { method: 'DELETE' }); 
-                if (res.ok) { 
-                    alert('Зображення видалено!'); 
-                    document.getElementById('currentBrandLogo').style.display = 'none'; 
-                    document.getElementById('noBrandLogoText').style.display = 'block'; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error deleting brand logo:', e);
-                alert('Помилка'); 
-            } 
-        }
-        
+        async function deleteBrandLogo() { if (!confirm('Видалити?')) return; await fetch('/api/brand-logo', { method: 'DELETE' }); document.getElementById('currentBrandLogo').style.display = 'none'; document.getElementById('noBrandLogoText').style.display = 'block'; alert('Видалено!'); }
+
         async function uploadLogo() { 
             const f = document.getElementById('logoFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; } 
-            const fd = new FormData(); 
-            fd.append('logo', f); 
-            try { 
-                const res = await fetch('/api/logo', { method: 'POST', body: fd }); 
-                if (res.ok) { 
-                    alert('Логотип збережено!'); 
-                    await loadLogo(); 
-                    document.getElementById('logoPreview').style.display = 'none'; 
-                    document.getElementById('logoFile').value = ''; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error uploading logo:', e);
-                alert('Помилка'); 
-            } 
+            if (!f) { alert('Виберіть файл'); return; }
+            try {
+                const base64 = await fileToBase64(f);
+                const res = await fetch('/api/logo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
+                if (res.ok) { alert('Збережено!'); loadLogo(); document.getElementById('logoPreview').style.display = 'none'; document.getElementById('logoFile').value = ''; }
+                else alert('Помилка');
+            } catch(e) { alert('Помилка'); }
         }
-        
-        async function deleteLogo() { 
-            if (!confirm('Видалити логотип?')) return; 
-            try { 
-                const res = await fetch('/api/logo', { method: 'DELETE' }); 
-                if (res.ok) { 
-                    alert('Логотип видалено!'); 
-                    document.getElementById('headerLogo').style.display = 'none'; 
-                    document.getElementById('currentLogo').style.display = 'none'; 
-                    document.getElementById('noLogoText').style.display = 'block'; 
-                } else alert('Помилка'); 
-            } catch(e) { 
-                console.error('Error deleting logo:', e);
-                alert('Помилка'); 
-            } 
-        }
+        async function deleteLogo() { if (!confirm('Видалити?')) return; await fetch('/api/logo', { method: 'DELETE' }); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; alert('Видалено!'); }
 
         async function changePassword() {
             const cur = document.getElementById('currentPassword').value;
@@ -1092,111 +687,36 @@
             if (!cur) { alert('Введіть поточний пароль'); return; }
             if (newP && newP !== conf) { alert('Паролі не співпадають'); return; }
             try {
-                const res = await fetch('/api/admin/change-password', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ currentPassword: cur, newUsername: newU, newPassword: newP })
-                });
-                if (res.ok) {
-                    alert('Дані оновлено!');
-                    document.getElementById('currentPassword').value = '';
-                    document.getElementById('newUsername').value = '';
-                    document.getElementById('newPassword').value = '';
-                    document.getElementById('confirmPassword').value = '';
-                } else { 
-                    const e = await res.json(); 
-                    alert(e.error || 'Помилка'); 
-                }
-            } catch(e) { 
-                console.error('Error changing password:', e);
-                alert('Помилка сервера'); 
-            }
+                const res = await fetch('/api/admin/change-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword: cur, newUsername: newU, newPassword: newP }) });
+                if (res.ok) { alert('Оновлено!'); document.getElementById('currentPassword').value = document.getElementById('newPassword').value = document.getElementById('confirmPassword').value = ''; }
+                else { const e = await res.json(); alert(e.error || 'Помилка'); }
+            } catch(e) { alert('Помилка'); }
         }
 
         async function deleteReview(id) {
-            if (!confirm('Видалити відгук?')) return;
-            try {
-                const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
-                if (res.ok) { 
-                    alert('Відгук видалено'); 
-                    await loadReviews(); 
-                } else alert('Помилка');
-            } catch(e) { 
-                console.error('Error deleting review:', e);
-                alert('Помилка'); 
-            }
+            if (!confirm('Видалити?')) return;
+            await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+            loadReviews();
         }
 
-        function closeModal(id) { 
-            document.getElementById(id).classList.remove('active'); 
-        }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         function initPreviewImages() {
-            console.log('Initializing image previews');
-            const productImage = document.getElementById('productImage');
-            if (productImage) {
-                productImage.addEventListener('change', function(e) {
-                    const reader = new FileReader();
-                    reader.onload = function() { 
-                        document.getElementById('imagePreview').src = reader.result; 
-                        document.getElementById('imagePreview').style.display = 'block'; 
-                    };
-                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                });
-            }
-            const logoFile = document.getElementById('logoFile');
-            if (logoFile) {
-                logoFile.addEventListener('change', function(e) {
-                    const reader = new FileReader();
-                    reader.onload = function() { 
-                        document.getElementById('logoPreview').src = reader.result; 
-                        document.getElementById('logoPreview').style.display = 'block'; 
-                    };
-                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                });
-            }
-            const bannerFile = document.getElementById('bannerFile');
-            if (bannerFile) {
-                bannerFile.addEventListener('change', function(e) {
-                    const reader = new FileReader();
-                    reader.onload = function() { 
-                        document.getElementById('bannerPreview').src = reader.result; 
-                        document.getElementById('bannerPreview').style.display = 'block'; 
-                    };
-                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                });
-            }
-            const brandLogoFile = document.getElementById('brandLogoFile');
-            if (brandLogoFile) {
-                brandLogoFile.addEventListener('change', function(e) {
-                    const reader = new FileReader();
-                    reader.onload = function() { 
-                        document.getElementById('brandLogoPreview').src = reader.result; 
-                        document.getElementById('brandLogoPreview').style.display = 'block'; 
-                    };
-                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                });
-            }
-            const bgFile = document.getElementById('bgFile');
-            if (bgFile) {
-                bgFile.addEventListener('change', function(e) {
-                    const reader = new FileReader();
-                    reader.onload = function() { 
-                        document.getElementById('bgPreview').src = reader.result; 
-                        document.getElementById('bgPreview').style.display = 'block'; 
-                    };
-                    if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                });
-            }
-            const socialIcon = document.getElementById('socialIcon');
-            if (socialIcon) {
-                socialIcon.addEventListener('input', function(e) {
-                    const preview = document.getElementById('socialPreview');
-                    const icon = e.target.value || 'fa-brands fa-telegram';
-                    preview.innerHTML = `<i class="${icon}" style="font-size:1.5rem;color:#aaa;"></i><span>Попередній перегляд</span>`;
-                });
-            }
+            ['productImage', 'logoFile', 'bannerFile', 'brandLogoFile', 'bgFile'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('change', function(e) {
+                        const reader = new FileReader();
+                        const previewId = id === 'productImage' ? 'imagePreview' : id.replace('File', 'Preview');
+                        reader.onload = function() { 
+                            const preview = document.getElementById(previewId);
+                            if (preview) { preview.src = reader.result; preview.style.display = 'block'; }
+                        };
+                        if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                    });
+                }
+            });
         }
     </script>
 </body>
-</html>і
+</html>
