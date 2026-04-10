@@ -266,7 +266,7 @@
 
         async function loadLogo() {
             try { const res = await fetch('/api/logo'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = url; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
-        }
+        
         async function loadBanner() {
             try { const res = await fetch('/api/banner'); if(res.ok){ const url = await res.text(); if(url){ document.getElementById('currentBanner').src = url; document.getElementById('currentBanner').style.display = 'block'; document.getElementById('noBannerText').style.display = 'none'; } } } catch(e){} }
         }
