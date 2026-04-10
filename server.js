@@ -7,9 +7,9 @@ const session = require('express-session');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname)); // Віддаємо файли з кореневої папки
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+app.use(express.static(__dirname));
 app.use('/uploads', express.static('uploads'));
 
 // НАЛАШТУВАННЯ СЕСІЇ
@@ -31,13 +31,27 @@ app.use((req, res, next) => {
     next();
 });
 
+// Обробка помилок multer
+app.use((error, req, res, next) => {
+    if (error instanceof multer.MulterError) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: 'Файл занадто великий. Максимальний розмір 10MB' });
+        }
+        return res.status(400).json({ error: `Помилка завантаження: ${error.message}` });
+    }
+    next(error);
+});
+
 // Налаштування multer
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
         await fs.mkdir('./uploads', { recursive: true });
         cb(null, './uploads/');
     },
-    filename: (req, file, cb) => cb(null, Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname))
+    filename: (req, file, cb) => {
+        const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1E9) + path.extname(file.originalname);
+        cb(null, uniqueName);
+    }
 });
 
 const fileFilter = (req, file, cb) => {
@@ -47,8 +61,13 @@ const fileFilter = (req, file, cb) => {
     cb(null, mime && ext);
 };
 
-const upload = multer({ storage, fileFilter, limits: { fileSize: 10 * 1024 * 1024 } });
-const uploadGallery = multer({ storage, fileFilter, limits: { fileSize: 10 * 1024 * 1024 } }).array('gallery', 10);
+const upload = multer({ 
+    storage, 
+    fileFilter, 
+    limits: { 
+        fileSize: 10 * 1024 * 1024 // 10MB
+    } 
+});
 
 const DATA_DIR = './data';
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
@@ -96,8 +115,12 @@ async function initData() {
         if (!await fs.access(BANNER_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BANNER_FILE, '');
         if (!await fs.access(BRAND_LOGO_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BRAND_LOGO_FILE, '');
         if (!await fs.access(BACKGROUND_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BACKGROUND_FILE, '');
-        if (!await fs.access(SETTINGS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(SETTINGS_FILE, JSON.stringify({ product_display_style: 'classic' }, null, 2));
-        if (!await fs.access(REVIEWS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(REVIEWS_FILE, JSON.stringify([], null, 2));
+        if (!await fs.access(SETTINGS_FILE).then(()=>true).catch(()=>false)) {
+            await fs.writeFile(SETTINGS_FILE, JSON.stringify({ product_display_style: 'classic' }, null, 2));
+        }
+        if (!await fs.access(REVIEWS_FILE).then(()=>true).catch(()=>false)) {
+            await fs.writeFile(REVIEWS_FILE, JSON.stringify([], null, 2));
+        }
         
         console.log('✅ Ініціалізацію даних завершено');
     } catch (err) { 
@@ -183,98 +206,65 @@ app.post('/api/admin/change-password', isAdmin, async (req, res) => {
 
 // ============ Зображення ============
 app.get('/api/logo', async (req, res) => { 
-    try { 
-        const p = await fs.readFile(LOGO_FILE, 'utf8'); 
-        res.send(p || ''); 
-    } catch(e) { 
-        res.send(''); 
-    } 
+    try { const p = await fs.readFile(LOGO_FILE, 'utf8'); res.send(p || ''); } catch(e) { res.send(''); } 
 });
-
 app.post('/api/logo', isAdmin, upload.single('logo'), async (req, res) => { 
     if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
     const p = `/uploads/${req.file.filename}`; 
     await fs.writeFile(LOGO_FILE, p); 
     res.json({ path: p }); 
 });
-
 app.delete('/api/logo', isAdmin, async (req, res) => { 
     await fs.writeFile(LOGO_FILE, ''); 
     res.json({ success: true }); 
 });
 
 app.get('/api/banner', async (req, res) => { 
-    try { 
-        const p = await fs.readFile(BANNER_FILE, 'utf8'); 
-        res.send(p || ''); 
-    } catch(e) { 
-        res.send(''); 
-    } 
+    try { const p = await fs.readFile(BANNER_FILE, 'utf8'); res.send(p || ''); } catch(e) { res.send(''); } 
 });
-
 app.post('/api/banner', isAdmin, upload.single('banner'), async (req, res) => { 
     if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
     const p = `/uploads/${req.file.filename}`; 
     await fs.writeFile(BANNER_FILE, p); 
     res.json({ path: p }); 
 });
-
 app.delete('/api/banner', isAdmin, async (req, res) => { 
     await fs.writeFile(BANNER_FILE, ''); 
     res.json({ success: true }); 
 });
 
 app.get('/api/brand-logo', async (req, res) => { 
-    try { 
-        const p = await fs.readFile(BRAND_LOGO_FILE, 'utf8'); 
-        res.send(p || ''); 
-    } catch(e) { 
-        res.send(''); 
-    } 
+    try { const p = await fs.readFile(BRAND_LOGO_FILE, 'utf8'); res.send(p || ''); } catch(e) { res.send(''); } 
 });
-
 app.post('/api/brand-logo', isAdmin, upload.single('brand-logo'), async (req, res) => { 
     if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
     const p = `/uploads/${req.file.filename}`; 
     await fs.writeFile(BRAND_LOGO_FILE, p); 
     res.json({ path: p }); 
 });
-
 app.delete('/api/brand-logo', isAdmin, async (req, res) => { 
     await fs.writeFile(BRAND_LOGO_FILE, ''); 
     res.json({ success: true }); 
 });
 
 app.get('/api/background', async (req, res) => { 
-    try { 
-        const p = await fs.readFile(BACKGROUND_FILE, 'utf8'); 
-        res.send(p || ''); 
-    } catch(e) { 
-        res.send(''); 
-    } 
+    try { const p = await fs.readFile(BACKGROUND_FILE, 'utf8'); res.send(p || ''); } catch(e) { res.send(''); } 
 });
-
 app.post('/api/background', isAdmin, upload.single('background'), async (req, res) => { 
     if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
     const p = `/uploads/${req.file.filename}`; 
     await fs.writeFile(BACKGROUND_FILE, p); 
     res.json({ path: p }); 
 });
-
 app.delete('/api/background', isAdmin, async (req, res) => { 
     await fs.writeFile(BACKGROUND_FILE, ''); 
     res.json({ success: true }); 
 });
 
 app.get('/api/settings', async (req, res) => {
-    try { 
-        const s = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8')); 
-        res.json(s); 
-    } catch(e) { 
-        res.json({ product_display_style: 'classic' }); 
-    }
+    try { const s = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8')); res.json(s); } 
+    catch(e) { res.json({ product_display_style: 'classic' }); }
 });
-
 app.post('/api/settings', isAdmin, async (req, res) => { 
     await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2)); 
     res.json({ success: true }); 
@@ -282,12 +272,8 @@ app.post('/api/settings', isAdmin, async (req, res) => {
 
 // ============ Категорії ============
 app.get('/api/categories', async (req, res) => { 
-    try { 
-        const c = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8')); 
-        res.json(c); 
-    } catch(e) { 
-        res.status(500).json({error:'Помилка'}); 
-    } 
+    try { const c = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8')); res.json(c); } 
+    catch(e) { res.status(500).json({error:'Помилка'}); } 
 });
 
 app.post('/api/categories', isAdmin, async (req, res) => {
@@ -314,179 +300,149 @@ app.delete('/api/categories/:category', isAdmin, async (req, res) => {
 
 // ============ Товари ============
 app.get('/api/products', async (req, res) => { 
-    try { 
-        const p = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8')); 
-        res.json(p); 
+    try { const p = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8')); res.json(p); } 
+    catch(e) { res.status(500).json({error:'Помилка'}); } 
+});
+
+app.post('/api/products', isAdmin, upload.single('image'), async (req, res) => {
+    try {
+        console.log('=== Додавання товару ===');
+        console.log('Body:', req.body);
+        console.log('File:', req.file ? req.file.filename : 'немає');
+        
+        const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
+        
+        let variants = [];
+        try {
+            variants = JSON.parse(req.body.variants || '[]');
+        } catch(e) {
+            variants = ['Стандарт'];
+        }
+        
+        if (!req.body.name?.trim()) {
+            return res.status(400).json({ error: 'Назва товару обов\'язкова' });
+        }
+        if (!req.body.category) {
+            return res.status(400).json({ error: 'Категорія обов\'язкова' });
+        }
+        if (!req.body.price || isNaN(parseFloat(req.body.price))) {
+            return res.status(400).json({ error: 'Ціна обов\'язкова і має бути числом' });
+        }
+        
+        const newProduct = {
+            id: Date.now(),
+            name: req.body.name.trim(),
+            category: req.body.category,
+            price: parseFloat(req.body.price),
+            description: req.body.description || '',
+            specs: req.body.specs || '',
+            variants: variants.length ? variants : ['Стандарт'],
+            image: req.file ? `/uploads/${req.file.filename}` : null,
+            gallery: [],
+            images: [],
+            createdAt: new Date().toISOString()
+        };
+        
+        products.push(newProduct);
+        await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+        
+        console.log('✅ Товар додано:', newProduct.id);
+        res.status(201).json(newProduct);
+        
     } catch(e) { 
-        res.status(500).json({error:'Помилка'}); 
-    } 
+        console.error('❌ Помилка додавання:', e); 
+        res.status(500).json({ error: 'Помилка сервера: ' + e.message }); 
+    }
 });
 
-app.post('/api/products', isAdmin, (req, res) => {
-    uploadGallery(req, res, async (err) => {
-        if (err) {
-            console.error('Upload error:', err);
-            return res.status(400).json({ error: 'Помилка завантаження файлів' });
+app.put('/api/products/:id', isAdmin, upload.single('image'), async (req, res) => {
+    try {
+        console.log('=== Оновлення товару ===', req.params.id);
+        
+        const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
+        const idx = products.findIndex(p => p.id == req.params.id);
+        
+        if (idx === -1) {
+            return res.status(404).json({ error: 'Товар не знайдено' });
         }
         
+        let variants = [];
         try {
-            const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
-            const variants = JSON.parse(req.body.variants || '[]');
-            
-            if (!req.body.name?.trim() || !req.body.category || !req.body.price) {
-                return res.status(400).json({ error: 'Заповніть обов\'язкові поля' });
-            }
-            
-            // Головне зображення
-            let mainImage = null;
-            if (req.files && req.files.length > 0) {
-                const mainFile = req.files.find(f => f.fieldname === 'image') || req.files[0];
-                mainImage = `/uploads/${mainFile.filename}`;
-            }
-            
-            // Галерея
-            const galleryImages = [];
-            if (req.files && req.files.length > 0) {
-                const galleryFiles = req.files.filter(f => f.fieldname.startsWith('gallery_'));
-                galleryFiles.forEach(file => {
-                    galleryImages.push({
-                        id: Date.now() + Math.random(),
-                        url: `/uploads/${file.filename}`,
-                        isMain: false
-                    });
-                });
-            }
-            
-            let existingGallery = [];
-            if (req.body.gallery) {
-                try {
-                    const galleryData = JSON.parse(req.body.gallery);
-                    existingGallery = galleryData.existing || [];
-                } catch(e) {}
-            }
-            
-            const allGallery = [...existingGallery, ...galleryImages];
-            
-            const newProduct = {
-                id: Date.now(),
-                name: req.body.name.trim(),
-                category: req.body.category,
-                price: parseFloat(req.body.price),
-                description: req.body.description || '',
-                specs: req.body.specs || '',
-                variants: variants.length ? variants : ['Стандарт'],
-                image: mainImage,
-                gallery: allGallery,
-                images: allGallery.map(img => img.url),
-                createdAt: new Date().toISOString()
-            };
-            
-            products.push(newProduct);
-            await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
-            res.status(201).json(newProduct);
-            
-        } catch(e) { 
-            console.error(e); 
-            res.status(500).json({ error: 'Помилка сервера' }); 
-        }
-    });
-});
-
-app.put('/api/products/:id', isAdmin, (req, res) => {
-    uploadGallery(req, res, async (err) => {
-        if (err) {
-            return res.status(400).json({ error: 'Помилка завантаження файлів' });
+            variants = JSON.parse(req.body.variants || '[]');
+        } catch(e) {
+            variants = products[idx].variants || ['Стандарт'];
         }
         
-        try {
-            const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
-            const idx = products.findIndex(p => p.id == req.params.id);
-            if (idx === -1) return res.status(404).json({ error: 'Товар не знайдено' });
-            
-            const variants = JSON.parse(req.body.variants || '[]');
-            
-            let mainImage = products[idx].image;
-            if (req.files && req.files.length > 0) {
-                const mainFile = req.files.find(f => f.fieldname === 'image');
-                if (mainFile) {
-                    if (mainImage) { 
-                        try { await fs.unlink(path.join(__dirname, mainImage)); } catch(e){} 
-                    }
-                    mainImage = `/uploads/${mainFile.filename}`;
-                }
-            }
-            
-            const newGalleryImages = [];
-            if (req.files && req.files.length > 0) {
-                const galleryFiles = req.files.filter(f => f.fieldname.startsWith('gallery_'));
-                galleryFiles.forEach(file => {
-                    newGalleryImages.push({
-                        id: Date.now() + Math.random(),
-                        url: `/uploads/${file.filename}`,
-                        isMain: false
-                    });
-                });
-            }
-            
-            let existingGallery = products[idx].gallery || [];
-            if (req.body.gallery) {
-                try {
-                    const galleryData = JSON.parse(req.body.gallery);
-                    existingGallery = galleryData.existing || [];
-                } catch(e) {}
-            }
-            
-            const allGallery = [...existingGallery, ...newGalleryImages];
-            
-            products[idx] = {
-                ...products[idx],
-                name: req.body.name.trim(),
-                category: req.body.category,
-                price: parseFloat(req.body.price),
-                description: req.body.description || '',
-                specs: req.body.specs || '',
-                variants: variants.length ? variants : ['Стандарт'],
-                image: mainImage,
-                gallery: allGallery,
-                images: allGallery.map(img => img.url),
-                updatedAt: new Date().toISOString()
-            };
-            
-            await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
-            res.json(products[idx]);
-            
-        } catch(e) { 
-            res.status(500).json({ error: 'Помилка сервера' }); 
+        if (!req.body.name?.trim()) {
+            return res.status(400).json({ error: 'Назва товару обов\'язкова' });
         }
-    });
+        if (!req.body.category) {
+            return res.status(400).json({ error: 'Категорія обов\'язкова' });
+        }
+        if (!req.body.price || isNaN(parseFloat(req.body.price))) {
+            return res.status(400).json({ error: 'Ціна обов\'язкова і має бути числом' });
+        }
+        
+        let mainImage = products[idx].image;
+        if (req.file) {
+            if (mainImage) { 
+                try { 
+                    const oldPath = path.join(__dirname, mainImage);
+                    await fs.unlink(oldPath); 
+                    console.log('Старе зображення видалено');
+                } catch(e) {
+                    console.log('Не вдалося видалити старе зображення');
+                } 
+            }
+            mainImage = `/uploads/${req.file.filename}`;
+        }
+        
+        products[idx] = {
+            ...products[idx],
+            name: req.body.name.trim(),
+            category: req.body.category,
+            price: parseFloat(req.body.price),
+            description: req.body.description || '',
+            specs: req.body.specs || '',
+            variants: variants.length ? variants : ['Стандарт'],
+            image: mainImage,
+            updatedAt: new Date().toISOString()
+        };
+        
+        await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+        
+        console.log('✅ Товар оновлено');
+        res.json(products[idx]);
+        
+    } catch(e) { 
+        console.error('❌ Помилка оновлення:', e);
+        res.status(500).json({ error: 'Помилка сервера: ' + e.message }); 
+    }
 });
 
 app.delete('/api/products/:id', isAdmin, async (req, res) => {
-    const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
-    const idx = products.findIndex(p => p.id == req.params.id);
-    if (idx === -1) return res.status(404).json({ error: 'Товар не знайдено' });
-    const product = products[idx];
-    if (product.image) {
-        try { await fs.unlink(path.join(__dirname, product.image)); } catch(e){}
-    }
-    if (product.gallery) {
-        for (const img of product.gallery) {
-            try { await fs.unlink(path.join(__dirname, img.url)); } catch(e){}
+    try {
+        const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
+        const idx = products.findIndex(p => p.id == req.params.id);
+        if (idx === -1) return res.status(404).json({ error: 'Товар не знайдено' });
+        
+        const product = products[idx];
+        if (product.image) {
+            try { await fs.unlink(path.join(__dirname, product.image)); } catch(e){}
         }
+        
+        products.splice(idx, 1);
+        await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+        res.json({ success: true });
+    } catch(e) {
+        res.status(500).json({ error: 'Помилка сервера' });
     }
-    products.splice(idx, 1);
-    await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
-    res.json({ success: true });
 });
 
 // ============ Відгуки ============
 app.get('/api/reviews', async (req, res) => {
-    try { 
-        const r = JSON.parse(await fs.readFile(REVIEWS_FILE, 'utf8')); 
-        res.json(r); 
-    } catch(e) { 
-        res.json([]); 
-    }
+    try { const r = JSON.parse(await fs.readFile(REVIEWS_FILE, 'utf8')); res.json(r); } 
+    catch(e) { res.json([]); }
 });
 
 app.post('/api/reviews', async (req, res) => {
@@ -518,12 +474,8 @@ app.delete('/api/reviews/:id', isAdmin, async (req, res) => {
 
 // ============ Інші API ============
 app.get('/api/about', async (req, res) => { 
-    try { 
-        const t = await fs.readFile(ABOUT_FILE, 'utf8'); 
-        res.send(t); 
-    } catch(e) { 
-        res.send(''); 
-    } 
+    try { const t = await fs.readFile(ABOUT_FILE, 'utf8'); res.send(t); } 
+    catch(e) { res.send(''); } 
 });
 
 app.post('/api/about', isAdmin, async (req, res) => { 
@@ -532,12 +484,8 @@ app.post('/api/about', isAdmin, async (req, res) => {
 });
 
 app.get('/api/contact', async (req, res) => { 
-    try { 
-        const t = await fs.readFile(CONTACT_FILE, 'utf8'); 
-        res.send(t); 
-    } catch(e) { 
-        res.send(''); 
-    } 
+    try { const t = await fs.readFile(CONTACT_FILE, 'utf8'); res.send(t); } 
+    catch(e) { res.send(''); } 
 });
 
 app.post('/api/contact', isAdmin, async (req, res) => { 
@@ -546,12 +494,8 @@ app.post('/api/contact', isAdmin, async (req, res) => {
 });
 
 app.get('/api/social', async (req, res) => {
-    try { 
-        const s = JSON.parse(await fs.readFile(SOCIAL_FILE, 'utf8')); 
-        res.json(s); 
-    } catch(e) { 
-        res.json([]); 
-    }
+    try { const s = JSON.parse(await fs.readFile(SOCIAL_FILE, 'utf8')); res.json(s); } 
+    catch(e) { res.json([]); }
 });
 
 app.post('/api/social', isAdmin, async (req, res) => { 
@@ -560,12 +504,8 @@ app.post('/api/social', isAdmin, async (req, res) => {
 });
 
 app.get('/api/orders', isAdmin, async (req, res) => { 
-    try { 
-        const o = JSON.parse(await fs.readFile(ORDERS_FILE, 'utf8')); 
-        res.json(o); 
-    } catch(e) { 
-        res.json([]); 
-    } 
+    try { const o = JSON.parse(await fs.readFile(ORDERS_FILE, 'utf8')); res.json(o); } 
+    catch(e) { res.json([]); } 
 });
 
 app.post('/api/orders', async (req, res) => {
@@ -603,13 +543,11 @@ app.get('/api/stats', isAdmin, async (req, res) => {
     }
 });
 
-// ============ Маршрути для сторінок ============
-// Головна сторінка
+// ============ Маршрути сторінок ============
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Адмін-панель
 app.get('/admin', (req, res) => {
     if (!req.session.user?.isAdmin) {
         return res.redirect('/');
@@ -617,7 +555,6 @@ app.get('/admin', (req, res) => {
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Інші маршрути
 app.get('/catalog', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -645,7 +582,6 @@ initData().then(() => {
         console.log(`🚀 Сервер запущено: http://localhost:${PORT}`);
         console.log(`📌 Адмін-панель: http://localhost:${PORT}/admin`);
         console.log(`👤 Логін: admin, Пароль: admin`);
-        console.log(`📁 Поточна папка: ${__dirname}`);
         console.log(`=================================\n`);
     });
 });
