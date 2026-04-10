@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(__dirname)); // Віддаємо файли з кореневої папки
 app.use('/uploads', express.static('uploads'));
 
 // НАЛАШТУВАННЯ СЕСІЇ
@@ -25,15 +25,13 @@ app.use(session({
     }
 }));
 
-// Middleware для логування сесії
+// Middleware для логування
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-    console.log('Session ID:', req.sessionID);
-    console.log('Session user:', req.session.user);
     next();
 });
 
-// Налаштування multer для обробки масиву файлів
+// Налаштування multer
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
         await fs.mkdir('./uploads', { recursive: true });
@@ -50,13 +48,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({ storage, fileFilter, limits: { fileSize: 10 * 1024 * 1024 } });
-
-// Multer для обробки декількох файлів галереї
-const uploadGallery = multer({ 
-    storage, 
-    fileFilter, 
-    limits: { fileSize: 10 * 1024 * 1024 } 
-}).array('gallery', 10); // Максимум 10 зображень
+const uploadGallery = multer({ storage, fileFilter, limits: { fileSize: 10 * 1024 * 1024 } }).array('gallery', 10);
 
 const DATA_DIR = './data';
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
@@ -92,7 +84,7 @@ async function initData() {
             await fs.writeFile(ABOUT_FILE, 'Ми — команда професіоналів, яка займається продажем дронів та реб.');
         }
         if (!await fs.access(CONTACT_FILE).then(()=>true).catch(()=>false)) {
-            await fs.writeFile(CONTACT_FILE, 'Телефон: +380 99 123 45 67\nEmail: info@zahidron.ua\nГрафік: Пн-Пт 10:00-19:00');
+            await fs.writeFile(CONTACT_FILE, 'Телефон: +380 99 123 45 67\nEmail: info@zahidron.ua\nГрафік: Пн-Пт 10:00-19:00\nАдреса: м. Львів');
         }
         if (!await fs.access(ORDERS_FILE).then(()=>true).catch(()=>false)) {
             await fs.writeFile(ORDERS_FILE, JSON.stringify([], null, 2));
@@ -106,19 +98,17 @@ async function initData() {
         if (!await fs.access(BACKGROUND_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(BACKGROUND_FILE, '');
         if (!await fs.access(SETTINGS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(SETTINGS_FILE, JSON.stringify({ product_display_style: 'classic' }, null, 2));
         if (!await fs.access(REVIEWS_FILE).then(()=>true).catch(()=>false)) await fs.writeFile(REVIEWS_FILE, JSON.stringify([], null, 2));
+        
         console.log('✅ Ініціалізацію даних завершено');
-    } catch (err) { console.error('❌ Помилка ініціалізації:', err); }
+    } catch (err) { 
+        console.error('❌ Помилка ініціалізації:', err); 
+    }
 }
-initData();
 
 function isAdmin(req, res, next) {
-    console.log('=== isAdmin check ===');
-    console.log('Session user:', req.session.user);
     if (req.session.user && req.session.user.isAdmin === true) {
-        console.log('✅ Адмін авторизований');
         return next();
     }
-    console.log('❌ Доступ заборонено');
     res.status(403).json({ error: 'Доступ заборонено' });
 }
 
@@ -134,20 +124,16 @@ app.get('/api/user', (req, res) => {
 app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        console.log('Login attempt:', username);
         const users = JSON.parse(await fs.readFile(USERS_FILE, 'utf8'));
         const user = users.find(u => u.username === username && u.password === password);
         if (user) {
             req.session.user = { username: user.username, isAdmin: user.isAdmin };
             req.session.save();
-            console.log('Login successful, session saved:', req.session.user);
             res.json({ username: user.username, isAdmin: user.isAdmin });
         } else {
-            console.log('Login failed');
             res.status(401).json({ error: 'Невірний логін або пароль' });
         }
     } catch (err) { 
-        console.error('Login error:', err);
         res.status(500).json({ error: 'Помилка сервера' }); 
     }
 });
@@ -166,7 +152,9 @@ app.post('/api/register', async (req, res) => {
         users.push({ username, password, isAdmin: false });
         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
         res.status(201).json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Помилка сервера' }); }
+    } catch (err) { 
+        res.status(500).json({ error: 'Помилка сервера' }); 
+    }
 });
 
 app.post('/api/admin/change-password', isAdmin, async (req, res) => {
@@ -180,6 +168,7 @@ app.post('/api/admin/change-password', isAdmin, async (req, res) => {
             if (users.some(u => u.username === newUsername && u.username !== req.session.user.username))
                 return res.status(400).json({ error: 'Логін вже зайнятий' });
             users[idx].username = newUsername;
+            req.session.user.username = newUsername;
         }
         if (newPassword && newPassword.trim()) {
             if (newPassword.length < 6) return res.status(400).json({ error: 'Пароль має бути не менше 6 символів' });
@@ -187,33 +176,120 @@ app.post('/api/admin/change-password', isAdmin, async (req, res) => {
         }
         await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
         res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: 'Помилка сервера' }); }
+    } catch (err) { 
+        res.status(500).json({ error: 'Помилка сервера' }); 
+    }
 });
 
 // ============ Зображення ============
-app.get('/api/logo', async (req, res) => { try { const p = await fs.readFile(LOGO_FILE, 'utf8'); res.send(p || ''); } catch(e){res.send('');} });
-app.post('/api/logo', isAdmin, upload.single('logo'), async (req, res) => { if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); const p = `/uploads/${req.file.filename}`; await fs.writeFile(LOGO_FILE, p); res.json({ path: p }); });
-app.delete('/api/logo', isAdmin, async (req, res) => { await fs.writeFile(LOGO_FILE, ''); res.json({ success: true }); });
+app.get('/api/logo', async (req, res) => { 
+    try { 
+        const p = await fs.readFile(LOGO_FILE, 'utf8'); 
+        res.send(p || ''); 
+    } catch(e) { 
+        res.send(''); 
+    } 
+});
 
-app.get('/api/banner', async (req, res) => { try { const p = await fs.readFile(BANNER_FILE, 'utf8'); res.send(p || ''); } catch(e){res.send('');} });
-app.post('/api/banner', isAdmin, upload.single('banner'), async (req, res) => { if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); const p = `/uploads/${req.file.filename}`; await fs.writeFile(BANNER_FILE, p); res.json({ path: p }); });
-app.delete('/api/banner', isAdmin, async (req, res) => { await fs.writeFile(BANNER_FILE, ''); res.json({ success: true }); });
+app.post('/api/logo', isAdmin, upload.single('logo'), async (req, res) => { 
+    if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
+    const p = `/uploads/${req.file.filename}`; 
+    await fs.writeFile(LOGO_FILE, p); 
+    res.json({ path: p }); 
+});
 
-app.get('/api/brand-logo', async (req, res) => { try { const p = await fs.readFile(BRAND_LOGO_FILE, 'utf8'); res.send(p || ''); } catch(e){res.send('');} });
-app.post('/api/brand-logo', isAdmin, upload.single('brand-logo'), async (req, res) => { if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); const p = `/uploads/${req.file.filename}`; await fs.writeFile(BRAND_LOGO_FILE, p); res.json({ path: p }); });
-app.delete('/api/brand-logo', isAdmin, async (req, res) => { await fs.writeFile(BRAND_LOGO_FILE, ''); res.json({ success: true }); });
+app.delete('/api/logo', isAdmin, async (req, res) => { 
+    await fs.writeFile(LOGO_FILE, ''); 
+    res.json({ success: true }); 
+});
 
-app.get('/api/background', async (req, res) => { try { const p = await fs.readFile(BACKGROUND_FILE, 'utf8'); res.send(p || ''); } catch(e){res.send('');} });
-app.post('/api/background', isAdmin, upload.single('background'), async (req, res) => { if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); const p = `/uploads/${req.file.filename}`; await fs.writeFile(BACKGROUND_FILE, p); res.json({ path: p }); });
-app.delete('/api/background', isAdmin, async (req, res) => { await fs.writeFile(BACKGROUND_FILE, ''); res.json({ success: true }); });
+app.get('/api/banner', async (req, res) => { 
+    try { 
+        const p = await fs.readFile(BANNER_FILE, 'utf8'); 
+        res.send(p || ''); 
+    } catch(e) { 
+        res.send(''); 
+    } 
+});
+
+app.post('/api/banner', isAdmin, upload.single('banner'), async (req, res) => { 
+    if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
+    const p = `/uploads/${req.file.filename}`; 
+    await fs.writeFile(BANNER_FILE, p); 
+    res.json({ path: p }); 
+});
+
+app.delete('/api/banner', isAdmin, async (req, res) => { 
+    await fs.writeFile(BANNER_FILE, ''); 
+    res.json({ success: true }); 
+});
+
+app.get('/api/brand-logo', async (req, res) => { 
+    try { 
+        const p = await fs.readFile(BRAND_LOGO_FILE, 'utf8'); 
+        res.send(p || ''); 
+    } catch(e) { 
+        res.send(''); 
+    } 
+});
+
+app.post('/api/brand-logo', isAdmin, upload.single('brand-logo'), async (req, res) => { 
+    if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
+    const p = `/uploads/${req.file.filename}`; 
+    await fs.writeFile(BRAND_LOGO_FILE, p); 
+    res.json({ path: p }); 
+});
+
+app.delete('/api/brand-logo', isAdmin, async (req, res) => { 
+    await fs.writeFile(BRAND_LOGO_FILE, ''); 
+    res.json({ success: true }); 
+});
+
+app.get('/api/background', async (req, res) => { 
+    try { 
+        const p = await fs.readFile(BACKGROUND_FILE, 'utf8'); 
+        res.send(p || ''); 
+    } catch(e) { 
+        res.send(''); 
+    } 
+});
+
+app.post('/api/background', isAdmin, upload.single('background'), async (req, res) => { 
+    if (!req.file) return res.status(400).json({ error: 'Файл не завантажено' }); 
+    const p = `/uploads/${req.file.filename}`; 
+    await fs.writeFile(BACKGROUND_FILE, p); 
+    res.json({ path: p }); 
+});
+
+app.delete('/api/background', isAdmin, async (req, res) => { 
+    await fs.writeFile(BACKGROUND_FILE, ''); 
+    res.json({ success: true }); 
+});
 
 app.get('/api/settings', async (req, res) => {
-    try { const s = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8')); res.json(s); } catch(e) { res.json({ product_display_style: 'classic' }); }
+    try { 
+        const s = JSON.parse(await fs.readFile(SETTINGS_FILE, 'utf8')); 
+        res.json(s); 
+    } catch(e) { 
+        res.json({ product_display_style: 'classic' }); 
+    }
 });
-app.post('/api/settings', isAdmin, async (req, res) => { await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2)); res.json({ success: true }); });
+
+app.post('/api/settings', isAdmin, async (req, res) => { 
+    await fs.writeFile(SETTINGS_FILE, JSON.stringify(req.body, null, 2)); 
+    res.json({ success: true }); 
+});
 
 // ============ Категорії ============
-app.get('/api/categories', async (req, res) => { try { const c = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8')); res.json(c); } catch(e){res.status(500).json({error:'Помилка'});} });
+app.get('/api/categories', async (req, res) => { 
+    try { 
+        const c = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8')); 
+        res.json(c); 
+    } catch(e) { 
+        res.status(500).json({error:'Помилка'}); 
+    } 
+});
+
 app.post('/api/categories', isAdmin, async (req, res) => {
     const { category } = req.body;
     if (!category || !category.trim()) return res.status(400).json({ error: 'Назва обов\'язкова' });
@@ -223,6 +299,7 @@ app.post('/api/categories', isAdmin, async (req, res) => {
     await fs.writeFile(CATEGORIES_FILE, JSON.stringify(cats, null, 2));
     res.json({ success: true });
 });
+
 app.delete('/api/categories/:category', isAdmin, async (req, res) => {
     const cat = decodeURIComponent(req.params.category);
     const cats = JSON.parse(await fs.readFile(CATEGORIES_FILE, 'utf8'));
@@ -235,18 +312,17 @@ app.delete('/api/categories/:category', isAdmin, async (req, res) => {
     res.json({ success: true });
 });
 
-// ============ Товари з підтримкою галереї ============
+// ============ Товари ============
 app.get('/api/products', async (req, res) => { 
     try { 
         const p = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8')); 
         res.json(p); 
-    } catch(e){
-        res.status(500).json({error:'Помилка'});
+    } catch(e) { 
+        res.status(500).json({error:'Помилка'}); 
     } 
 });
 
 app.post('/api/products', isAdmin, (req, res) => {
-    // Використовуємо uploadGallery для обробки декількох файлів
     uploadGallery(req, res, async (err) => {
         if (err) {
             console.error('Upload error:', err);
@@ -254,10 +330,6 @@ app.post('/api/products', isAdmin, (req, res) => {
         }
         
         try {
-            console.log('Додавання товару адміном:', req.session.user);
-            console.log('Body:', req.body);
-            console.log('Files:', req.files);
-            
             const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
             const variants = JSON.parse(req.body.variants || '[]');
             
@@ -265,18 +337,16 @@ app.post('/api/products', isAdmin, (req, res) => {
                 return res.status(400).json({ error: 'Заповніть обов\'язкові поля' });
             }
             
-            // Обробка головного зображення
+            // Головне зображення
             let mainImage = null;
             if (req.files && req.files.length > 0) {
-                // Шукаємо файл з fieldname 'image' або перший файл
                 const mainFile = req.files.find(f => f.fieldname === 'image') || req.files[0];
                 mainImage = `/uploads/${mainFile.filename}`;
             }
             
-            // Обробка галереї
+            // Галерея
             const galleryImages = [];
             if (req.files && req.files.length > 0) {
-                // Фільтруємо файли галереї (fieldname починається з 'gallery_')
                 const galleryFiles = req.files.filter(f => f.fieldname.startsWith('gallery_'));
                 galleryFiles.forEach(file => {
                     galleryImages.push({
@@ -287,18 +357,14 @@ app.post('/api/products', isAdmin, (req, res) => {
                 });
             }
             
-            // Парсимо існуючі зображення галереї
             let existingGallery = [];
             if (req.body.gallery) {
                 try {
                     const galleryData = JSON.parse(req.body.gallery);
                     existingGallery = galleryData.existing || [];
-                } catch(e) {
-                    console.error('Error parsing gallery data:', e);
-                }
+                } catch(e) {}
             }
             
-            // Об'єднуємо галерею
             const allGallery = [...existingGallery, ...galleryImages];
             
             const newProduct = {
@@ -311,17 +377,17 @@ app.post('/api/products', isAdmin, (req, res) => {
                 variants: variants.length ? variants : ['Стандарт'],
                 image: mainImage,
                 gallery: allGallery,
+                images: allGallery.map(img => img.url),
                 createdAt: new Date().toISOString()
             };
             
             products.push(newProduct);
             await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
-            console.log('Товар додано:', newProduct);
             res.status(201).json(newProduct);
             
         } catch(e) { 
-            console.error('Server error:', e); 
-            res.status(500).json({ error: 'Помилка сервера: ' + e.message }); 
+            console.error(e); 
+            res.status(500).json({ error: 'Помилка сервера' }); 
         }
     });
 });
@@ -329,7 +395,6 @@ app.post('/api/products', isAdmin, (req, res) => {
 app.put('/api/products/:id', isAdmin, (req, res) => {
     uploadGallery(req, res, async (err) => {
         if (err) {
-            console.error('Upload error:', err);
             return res.status(400).json({ error: 'Помилка завантаження файлів' });
         }
         
@@ -339,21 +404,18 @@ app.put('/api/products/:id', isAdmin, (req, res) => {
             if (idx === -1) return res.status(404).json({ error: 'Товар не знайдено' });
             
             const variants = JSON.parse(req.body.variants || '[]');
-            if (!req.body.name?.trim() || !req.body.category || !req.body.price) {
-                return res.status(400).json({ error: 'Заповніть обов\'язкові поля' });
-            }
             
-            // Обробка головного зображення
             let mainImage = products[idx].image;
             if (req.files && req.files.length > 0) {
-                const mainFile = req.files.find(f => f.fieldname === 'image') || req.files[0];
-                if (mainImage) { 
-                    try { await fs.unlink(path.join(__dirname, mainImage)); } catch(e){} 
+                const mainFile = req.files.find(f => f.fieldname === 'image');
+                if (mainFile) {
+                    if (mainImage) { 
+                        try { await fs.unlink(path.join(__dirname, mainImage)); } catch(e){} 
+                    }
+                    mainImage = `/uploads/${mainFile.filename}`;
                 }
-                mainImage = `/uploads/${mainFile.filename}`;
             }
             
-            // Обробка галереї
             const newGalleryImages = [];
             if (req.files && req.files.length > 0) {
                 const galleryFiles = req.files.filter(f => f.fieldname.startsWith('gallery_'));
@@ -366,18 +428,14 @@ app.put('/api/products/:id', isAdmin, (req, res) => {
                 });
             }
             
-            // Парсимо існуючі зображення галереї
             let existingGallery = products[idx].gallery || [];
             if (req.body.gallery) {
                 try {
                     const galleryData = JSON.parse(req.body.gallery);
                     existingGallery = galleryData.existing || [];
-                } catch(e) {
-                    console.error('Error parsing gallery data:', e);
-                }
+                } catch(e) {}
             }
             
-            // Об'єднуємо галерею
             const allGallery = [...existingGallery, ...newGalleryImages];
             
             products[idx] = {
@@ -390,6 +448,7 @@ app.put('/api/products/:id', isAdmin, (req, res) => {
                 variants: variants.length ? variants : ['Стандарт'],
                 image: mainImage,
                 gallery: allGallery,
+                images: allGallery.map(img => img.url),
                 updatedAt: new Date().toISOString()
             };
             
@@ -397,39 +456,27 @@ app.put('/api/products/:id', isAdmin, (req, res) => {
             res.json(products[idx]);
             
         } catch(e) { 
-            console.error('Server error:', e);
-            res.status(500).json({ error: 'Помилка сервера: ' + e.message }); 
+            res.status(500).json({ error: 'Помилка сервера' }); 
         }
     });
 });
 
 app.delete('/api/products/:id', isAdmin, async (req, res) => {
-    try {
-        const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
-        const idx = products.findIndex(p => p.id == req.params.id);
-        if (idx === -1) return res.status(404).json({ error: 'Товар не знайдено' });
-        
-        const product = products[idx];
-        
-        // Видаляємо головне зображення
-        if (product.image) {
-            try { await fs.unlink(path.join(__dirname, product.image)); } catch(e){}
-        }
-        
-        // Видаляємо зображення галереї
-        if (product.gallery && product.gallery.length > 0) {
-            for (const img of product.gallery) {
-                try { await fs.unlink(path.join(__dirname, img.url)); } catch(e){}
-            }
-        }
-        
-        products.splice(idx, 1);
-        await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
-        res.json({ success: true });
-    } catch(e) {
-        console.error('Delete error:', e);
-        res.status(500).json({ error: 'Помилка сервера' });
+    const products = JSON.parse(await fs.readFile(PRODUCTS_FILE, 'utf8'));
+    const idx = products.findIndex(p => p.id == req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Товар не знайдено' });
+    const product = products[idx];
+    if (product.image) {
+        try { await fs.unlink(path.join(__dirname, product.image)); } catch(e){}
     }
+    if (product.gallery) {
+        for (const img of product.gallery) {
+            try { await fs.unlink(path.join(__dirname, img.url)); } catch(e){}
+        }
+    }
+    products.splice(idx, 1);
+    await fs.writeFile(PRODUCTS_FILE, JSON.stringify(products, null, 2));
+    res.json({ success: true });
 });
 
 // ============ Відгуки ============
@@ -469,7 +516,7 @@ app.delete('/api/reviews/:id', isAdmin, async (req, res) => {
     }
 });
 
-// ============ Інші маршрути ============
+// ============ Інші API ============
 app.get('/api/about', async (req, res) => { 
     try { 
         const t = await fs.readFile(ABOUT_FILE, 'utf8'); 
@@ -556,21 +603,49 @@ app.get('/api/stats', isAdmin, async (req, res) => {
     }
 });
 
-// Статичні файли
-app.use('/admin', express.static('public'));
-app.get('/admin', (req, res) => {
-    if (!req.session.user?.isAdmin) return res.redirect('/');
-    res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+// ============ Маршрути для сторінок ============
+// Головна сторінка
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.use(express.static('public'));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+// Адмін-панель
+app.get('/admin', (req, res) => {
+    if (!req.session.user?.isAdmin) {
+        return res.redirect('/');
+    }
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`\n=================================`);
-    console.log(`🚀 Сервер запущено: http://localhost:${PORT}`);
-    console.log(`📌 Адмін-панель: http://localhost:${PORT}/admin`);
-    console.log(`👤 Логін: admin, Пароль: admin`);
-    console.log(`🖼️  Підтримка галереї зображень: УВІМКНЕНО`);
-    console.log(`=================================\n`);
+// Інші маршрути
+app.get('/catalog', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/reviews', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/about', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/contacts', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/product/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Запуск сервера
+initData().then(() => {
+    app.listen(PORT, '0.0.0.0', () => {
+        console.log(`\n=================================`);
+        console.log(`🚀 Сервер запущено: http://localhost:${PORT}`);
+        console.log(`📌 Адмін-панель: http://localhost:${PORT}/admin`);
+        console.log(`👤 Логін: admin, Пароль: admin`);
+        console.log(`📁 Поточна папка: ${__dirname}`);
+        console.log(`=================================\n`);
+    });
 });
