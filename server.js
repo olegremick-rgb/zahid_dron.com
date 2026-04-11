@@ -42,6 +42,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// Блокування ботів
+app.use((req, res, next) => {
+    const blocked = ['wp-login', 'wp-admin', 'wordpress', 'xmlrpc', '.env', 'phpmyadmin'];
+    if (blocked.some(path => req.url.toLowerCase().includes(path))) {
+        return res.status(404).end();
+    }
+    next();
+});
+
 // Middleware для перевірки адміна
 function isAdmin(req, res, next) {
     if (req.session && req.session.user && req.session.user.isAdmin) {
@@ -93,7 +102,10 @@ app.post('/api/admin/change-password', isAdmin, (req, res) => {
     if (user.password !== currentPassword) {
         return res.status(401).json({ error: 'Невірний поточний пароль' });
     }
-    if (newUsername) user.username = newUsername;
+    if (newUsername) {
+        user.username = newUsername;
+        req.session.user.username = newUsername;
+    }
     if (newPassword) user.password = newPassword;
     res.json({ success: true });
 });
@@ -132,7 +144,7 @@ app.get('/api/products', (req, res) => {
 
 app.post('/api/products', isAdmin, (req, res) => {
     try {
-        const { name, category, price, description, specs, variants, image } = req.body;
+        const { name, category, price, description, specs, variants, image, gallery } = req.body;
         
         if (!name || !category || !price) {
             return res.status(400).json({ error: 'Заповніть обов\'язкові поля' });
@@ -147,8 +159,8 @@ app.post('/api/products', isAdmin, (req, res) => {
             specs: specs || '',
             variants: variants || ['Стандарт'],
             image: image || null,
-            gallery: [],
-            images: [],
+            gallery: gallery || [],
+            images: gallery || [],
             createdAt: new Date().toISOString()
         };
         
@@ -168,17 +180,19 @@ app.put('/api/products/:id', isAdmin, (req, res) => {
             return res.status(404).json({ error: 'Товар не знайдено' });
         }
         
-        const { name, category, price, description, specs, variants, image } = req.body;
+        const { name, category, price, description, specs, variants, image, gallery } = req.body;
         
         db.products[idx] = {
             ...db.products[idx],
             name: name?.trim() || db.products[idx].name,
             category: category || db.products[idx].category,
             price: price ? parseFloat(price) : db.products[idx].price,
-            description: description || db.products[idx].description,
-            specs: specs || db.products[idx].specs,
+            description: description !== undefined ? description : db.products[idx].description,
+            specs: specs !== undefined ? specs : db.products[idx].specs,
             variants: variants || db.products[idx].variants,
             image: image !== undefined ? image : db.products[idx].image,
+            gallery: gallery !== undefined ? gallery : db.products[idx].gallery,
+            images: gallery !== undefined ? gallery : db.products[idx].images,
             updatedAt: new Date().toISOString()
         };
         
@@ -348,7 +362,7 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-    res.json({ status: 'ok' });
+    res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
 app.get('*', (req, res) => {
@@ -365,5 +379,6 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Сервер запущено: http://localhost:${PORT}`);
     console.log(`📌 Адмін-панель: http://localhost:${PORT}/admin`);
     console.log(`👤 Логін: admin / admin`);
+    console.log(`🖼️  Підтримка галереї: УВІМКНЕНО`);
     console.log(`=================================\n`);
 });
