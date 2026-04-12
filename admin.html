@@ -36,6 +36,7 @@
         .btn { background:#2a2a2a; color:#fff; border:none; padding:0.6rem 1.2rem; border-radius:40px; cursor:pointer; margin-right:0.5rem; margin-bottom:0.5rem; }
         .btn:hover { background:#3a3a3a; }
         .btn-danger { background:#7a2e2e; }
+        .btn-ai { background:#3a5a7a; }
         .variant-row { display:flex; gap:0.5rem; margin-bottom:0.5rem; align-items:center; }
         .variant-row input { flex:1; }
         .remove-btn { background:#7a2e2e; color:white; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; }
@@ -157,9 +158,12 @@
                     <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
                     <div class="form-group">
                         <label>Характеристики</label>
-                        <textarea id="productSpecs" rows="8" placeholder="## Літальний апарат&#10;Живлення: акумулятор&#10;Місткість батареї, мАгод: 5000"></textarea>
-                        <button type="button" class="btn" id="autoFormatSpecsBtn" style="margin-top:0.5rem;"><i class="fas fa-magic"></i> Автоформатувати</button>
-                        <small style="color:#777; display:block; margin-top:0.3rem;">## Секція, Назва: Значення</small>
+                        <textarea id="productSpecs" rows="10" placeholder="Вставте характеристики..."></textarea>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <button type="button" class="btn" id="autoFormatSpecsBtn"><i class="fas fa-magic"></i> Автоформат</button>
+                            <button type="button" class="btn btn-ai" id="smartFormatSpecsBtn"><i class="fas fa-robot"></i> ШІ форматування</button>
+                        </div>
+                        <small style="color:#777; display:block; margin-top:0.3rem;">Вставляйте текст і натискайте кнопку форматування</small>
                     </div>
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
@@ -193,21 +197,21 @@
                 <h2><i class="fas fa-info-circle"></i> Про нас</h2>
                 <div class="admin-form">
                     <h3>Основний текст</h3>
-                    <textarea id="aboutText" rows="10"></textarea>
+                    <textarea id="aboutText" rows="8"></textarea>
                     <button class="btn" id="saveAboutBtn">Зберегти текст</button>
                 </div>
                 
                 <div class="admin-form">
                     <h3>Статистика на сторінці "Про нас"</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                        <input type="text" id="aboutStat1Label" placeholder="Назва 1">
-                        <input type="text" id="aboutStat1Value" placeholder="Значення 1">
-                        <input type="text" id="aboutStat2Label" placeholder="Назва 2">
-                        <input type="text" id="aboutStat2Value" placeholder="Значення 2">
-                        <input type="text" id="aboutStat3Label" placeholder="Назва 3">
-                        <input type="text" id="aboutStat3Value" placeholder="Значення 3">
-                        <input type="text" id="aboutStat4Label" placeholder="Назва 4">
-                        <input type="text" id="aboutStat4Value" placeholder="Значення 4">
+                        <input type="text" id="aboutStat1Label" placeholder="Назва 1" value="Проданих дронів">
+                        <input type="text" id="aboutStat1Value" placeholder="Значення 1" value="500+">
+                        <input type="text" id="aboutStat2Label" placeholder="Назва 2" value="Середня оцінка">
+                        <input type="text" id="aboutStat2Value" placeholder="Значення 2" value="4.9">
+                        <input type="text" id="aboutStat3Label" placeholder="Назва 3" value="Підтримка">
+                        <input type="text" id="aboutStat3Value" placeholder="Значення 3" value="24/7">
+                        <input type="text" id="aboutStat4Label" placeholder="Назва 4" value="Оригінал">
+                        <input type="text" id="aboutStat4Value" placeholder="Значення 4" value="100%">
                     </div>
                     <button class="btn" id="saveAboutStatsBtn" style="margin-top:1rem;">Зберегти статистику</button>
                 </div>
@@ -215,14 +219,14 @@
                 <div class="admin-form">
                     <h3>Переваги</h3>
                     <div id="aboutFeaturesContainer"></div>
-                    <button class="btn" id="addAboutFeatureBtn"><i class="fas fa-plus"></i> Додати</button>
+                    <button class="btn" id="addAboutFeatureBtn"><i class="fas fa-plus"></i> Додати перевагу</button>
                     <button class="btn" id="saveAboutFeaturesBtn" style="margin-top:1rem;">Зберегти переваги</button>
                 </div>
                 
                 <div class="admin-form">
                     <h3>Партнери (через кому)</h3>
-                    <input type="text" id="aboutPartnersInput" placeholder="DJI, AUTEL, HUBSAN" style="width:100%;">
-                    <button class="btn" id="saveAboutPartnersBtn" style="margin-top:1rem;">Зберегти</button>
+                    <input type="text" id="aboutPartnersInput" placeholder="DJI, AUTEL, HUBSAN" style="width:100%;" value="DJI, AUTEL, HUBSAN, EACHINE">
+                    <button class="btn" id="saveAboutPartnersBtn" style="margin-top:1rem;">Зберегти партнерів</button>
                 </div>
             </div>
             <!-- Контакти -->
@@ -232,10 +236,10 @@
                 
                 <div class="admin-form">
                     <h3>Робочі години</h3>
-                    <input type="text" id="hoursMonFri" placeholder="Пн-Пт">
-                    <input type="text" id="hoursSat" placeholder="Сб">
-                    <input type="text" id="hoursSun" placeholder="Нд">
-                    <button class="btn" id="saveHoursBtn" style="margin-top:1rem;">Зберегти</button>
+                    <input type="text" id="hoursMonFri" placeholder="Пн-Пт" value="10:00 - 19:00">
+                    <input type="text" id="hoursSat" placeholder="Сб" value="11:00 - 17:00">
+                    <input type="text" id="hoursSun" placeholder="Нд" value="Вихідний">
+                    <button class="btn" id="saveHoursBtn" style="margin-top:1rem;">Зберегти години</button>
                 </div>
             </div>
             <!-- Соцмережі -->
@@ -270,25 +274,25 @@
                 <div class="admin-form">
                     <h3>Статистика на головній</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                        <input type="text" id="statDrones" placeholder="Продано дронів">
-                        <input type="text" id="statRating" placeholder="Рейтинг">
-                        <input type="text" id="statSupport" placeholder="Підтримка">
-                        <input type="text" id="statOriginal" placeholder="Оригінал">
+                        <input type="text" id="statDrones" placeholder="Продано дронів" value="500+">
+                        <input type="text" id="statRating" placeholder="Рейтинг" value="4.9">
+                        <input type="text" id="statSupport" placeholder="Підтримка" value="24/7">
+                        <input type="text" id="statOriginal" placeholder="Оригінал" value="100%">
                     </div>
-                    <button class="btn" id="saveStatsBtn">Зберегти</button>
+                    <button class="btn" id="saveStatsBtn">Зберегти статистику</button>
                 </div>
                 
                 <div class="admin-form">
                     <h3>Партнери (через кому)</h3>
-                    <input type="text" id="homePartnersInput" placeholder="DJI, AUTEL, HUBSAN, EACHINE" style="width:100%;">
-                    <button class="btn" id="saveHomePartnersBtn" style="margin-top:1rem;">Зберегти</button>
+                    <input type="text" id="homePartnersInput" placeholder="DJI, AUTEL, HUBSAN, EACHINE" style="width:100%;" value="DJI, AUTEL, HUBSAN, EACHINE">
+                    <button class="btn" id="saveHomePartnersBtn" style="margin-top:1rem;">Зберегти партнерів</button>
                 </div>
                 
                 <div class="admin-form">
                     <h3>Переваги на головній</h3>
                     <div id="homeFeaturesContainer"></div>
-                    <button class="btn" id="addHomeFeatureBtn"><i class="fas fa-plus"></i> Додати</button>
-                    <button class="btn" id="saveHomeFeaturesBtn" style="margin-top:1rem;">Зберегти</button>
+                    <button class="btn" id="addHomeFeatureBtn"><i class="fas fa-plus"></i> Додати перевагу</button>
+                    <button class="btn" id="saveHomeFeaturesBtn" style="margin-top:1rem;">Зберегти переваги</button>
                 </div>
             </div>
         </div>
@@ -323,6 +327,8 @@
         function showSection(id) { 
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); 
+            if (id === 'about') loadAboutPageData();
+            if (id === 'home-page') loadHomePageData();
         }
 
         function initEventListeners() {
@@ -345,6 +351,7 @@
             document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
             document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
             document.getElementById('autoFormatSpecsBtn')?.addEventListener('click', autoFormatSpecs);
+            document.getElementById('smartFormatSpecsBtn')?.addEventListener('click', smartFormatSpecs);
             
             // Головна сторінка
             document.getElementById('saveStatsBtn')?.addEventListener('click', saveHomeStats);
@@ -360,6 +367,7 @@
             document.getElementById('saveHoursBtn')?.addEventListener('click', saveWorkHours);
         }
 
+        // Просте автоформатування
         function autoFormatSpecs() {
             let text = document.getElementById('productSpecs').value;
             let lines = text.split('\n');
@@ -369,37 +377,93 @@
                 line = line.trim();
                 if (!line) continue;
                 
-                if (line.startsWith('##')) {
-                    formatted.push(line);
-                    continue;
-                }
-                
-                if (/^[А-ЯІЇЄҐA-Z\s]+$/.test(line) && line.length > 3 && line.length < 50) {
-                    formatted.push('## ' + line);
-                    continue;
-                }
-                
-                if (line.includes(':')) {
-                    formatted.push(line);
-                    continue;
-                }
-                
-                let parts = line.split(/\s+/);
-                if (parts.length === 2) {
-                    formatted.push(parts[0] + ': ' + parts[1]);
-                    continue;
-                }
-                
-                if (parts.length > 2) {
-                    formatted.push(line);
-                    continue;
-                }
+                if (line.startsWith('##')) { formatted.push(line); continue; }
+                if (/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length > 2 && line.length < 50) { formatted.push('## ' + line); continue; }
+                if (line.includes(':')) { formatted.push(line); continue; }
                 
                 formatted.push(line + ': ');
             }
             
             document.getElementById('productSpecs').value = formatted.join('\n');
-            alert('Характеристики відформатовано!');
+            alert('✅ Характеристики відформатовано!');
+        }
+
+        // ШІ форматування
+        function smartFormatSpecs() {
+            let text = document.getElementById('productSpecs').value;
+            let lines = text.split('\n');
+            let formatted = [];
+            
+            const knownSpecs = {
+                'живлення': 'Живлення', 'місткість': 'Місткість батареї, мАгод', 'ємність': 'Місткість батареї, мАгод',
+                'двигун': 'Тип двигуна', 'корпус': 'Складаний корпус', 'захист': 'Ступінь захисту',
+                'лопаті': 'Захист лопатей', 'карта': 'Підтримка карт пам\'яті', 'gps': 'GPS-навігація',
+                'гіроскоп': 'Гіроскоп', 'акселерометр': 'Акселерометр', 'барометр': 'Барометр',
+                'тепловізор': 'Тепловізор', 'магнетометр': 'Магнетометр', 'камера': 'Камера',
+                'матриця': 'Матриця камери', 'об\'єктив': 'Об\'єктив', 'стабілізація': 'Стабілізація',
+                'iso': 'Чутливість, ISO', 'кейс': 'Кейс', 'акумулятор': 'Акумулятори, шт',
+                'окуляри': 'FPV окуляри', 'зарядний': 'Док-станція / зарядний пристрій',
+                'температура': 'Температура навколишнього середовища, град', 'час': 'Час польоту, хв',
+                'дальність': 'Максимальна дальність польоту, км', 'швидкість': 'Швидкість підйому, км/год',
+                'висота': 'Максимальна висота, м', 'вітер': 'Макс. допустима швидкість вітру, км/год',
+                'вантаж': 'Вантажопідйомність, кг', 'пульт': 'Пульт керування', 'частота': 'Частота пульта, ГГц',
+                'радіус': 'Максимальний радіус дії, м', 'дисплей': 'Вбудований дисплей (діагональ), дюйм',
+                'вага': 'Вага, кг', 'довжина': 'Довжина, см', 'ширина': 'Ширина, см', 'висота': 'Висота, см',
+                'тип': 'Тип', 'бренд': 'Бренд', 'колір': 'Колір', 'клас': 'Клас', 'fpv': 'FPV (вид від першої особи)'
+            };
+            
+            const sections = ['Літальний апарат', 'Камера', 'Комплектація', 'Основні характеристики', 'Пульт керування', 'Розміри і маса'];
+            
+            let i = 0;
+            let seenSections = new Set();
+            
+            while (i < lines.length) {
+                let line = lines[i].trim();
+                if (!line) { i++; continue; }
+                
+                let foundSection = sections.find(s => line.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(line.toLowerCase()));
+                if (foundSection && !line.includes(':') && line.length < 40) {
+                    if (!seenSections.has(foundSection)) {
+                        formatted.push('## ' + foundSection);
+                        seenSections.add(foundSection);
+                    }
+                    i++; continue;
+                }
+                
+                if (/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length > 2 && line.length < 50 && !line.includes(':')) {
+                    if (!line.startsWith('##')) line = '## ' + line;
+                    formatted.push(line); i++; continue;
+                }
+                
+                if (line.includes(':')) { formatted.push(line); i++; continue; }
+                
+                let matchedKey = null;
+                for (let key in knownSpecs) {
+                    if (line.toLowerCase().includes(key)) { matchedKey = knownSpecs[key]; break; }
+                }
+                
+                let nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+                
+                if (matchedKey) {
+                    if (nextLine && !nextLine.includes(':') && !nextLine.match(/^[А-ЯІЇЄҐA-Z\s\-]+$/)) {
+                        formatted.push(matchedKey + ': ' + nextLine); i += 2;
+                    } else {
+                        formatted.push(matchedKey + ': '); i++;
+                    }
+                    continue;
+                }
+                
+                if (nextLine && !nextLine.includes(':') && !nextLine.match(/^[А-ЯІЇЄҐA-Z\s\-]+$/) && !nextLine.startsWith('##')) {
+                    formatted.push(line + ': ' + nextLine); i += 2; continue;
+                }
+                
+                if (line.split(/\s+/).length <= 3) { formatted.push(line + ': '); }
+                else { formatted.push(line); }
+                i++;
+            }
+            
+            document.getElementById('productSpecs').value = formatted.join('\n');
+            alert('✅ Характеристики відформатовано за допомогою ШІ!');
         }
 
         function fileToBase64(file) {
@@ -435,17 +499,15 @@
                 document.getElementById('aboutText').value = await about.text();
                 parseContactInfo(await cont.text());
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
-                await loadHomePageData();
-                await loadAboutPageData();
             } catch(e) { console.error(e); }
         }
 
         async function loadHomePageData() {
             try {
                 const [stats, partners, features] = await Promise.all([
-                    fetch('/api/home-stats').then(r => r.json()),
-                    fetch('/api/partners').then(r => r.json()),
-                    fetch('/api/features').then(r => r.json())
+                    fetch('/api/home-stats').then(r => r.json()).catch(() => ({})),
+                    fetch('/api/partners').then(r => r.json()).catch(() => []),
+                    fetch('/api/features').then(r => r.json()).catch(() => [])
                 ]);
                 document.getElementById('statDrones').value = stats.dronesSold || '500+';
                 document.getElementById('statRating').value = stats.rating || '4.9';
@@ -453,40 +515,42 @@
                 document.getElementById('statOriginal').value = stats.original || '100%';
                 document.getElementById('homePartnersInput').value = (partners || []).join(', ');
                 renderHomeFeaturesList(features || []);
-            } catch(e) {}
+            } catch(e) { console.error('Помилка завантаження головної:', e); }
         }
 
         async function loadAboutPageData() {
             try {
                 const [stats, features, partners, hours] = await Promise.all([
-                    fetch('/api/home-stats').then(r => r.json()),
-                    fetch('/api/features').then(r => r.json()),
-                    fetch('/api/partners').then(r => r.json()),
-                    fetch('/api/work-hours').then(r => r.json())
+                    fetch('/api/home-stats').then(r => r.json()).catch(() => ({})),
+                    fetch('/api/features').then(r => r.json()).catch(() => []),
+                    fetch('/api/partners').then(r => r.json()).catch(() => []),
+                    fetch('/api/work-hours').then(r => r.json()).catch(() => ({}))
                 ]);
-                document.getElementById('aboutStat1Label').value = 'Проданих дронів';
+                
                 document.getElementById('aboutStat1Value').value = stats.dronesSold || '500+';
-                document.getElementById('aboutStat2Label').value = 'Середня оцінка';
                 document.getElementById('aboutStat2Value').value = stats.rating || '4.9';
-                document.getElementById('aboutStat3Label').value = 'Підтримка';
                 document.getElementById('aboutStat3Value').value = stats.support || '24/7';
-                document.getElementById('aboutStat4Label').value = 'Оригінал';
                 document.getElementById('aboutStat4Value').value = stats.original || '100%';
                 document.getElementById('aboutPartnersInput').value = (partners || []).join(', ');
                 renderAboutFeaturesList(features || []);
                 document.getElementById('hoursMonFri').value = hours.monFri || '10:00 - 19:00';
                 document.getElementById('hoursSat').value = hours.sat || '11:00 - 17:00';
                 document.getElementById('hoursSun').value = hours.sun || 'Вихідний';
-            } catch(e) {}
+            } catch(e) { console.error('Помилка завантаження "Про нас":', e); }
         }
 
         function renderHomeFeaturesList(features) {
             const c = document.getElementById('homeFeaturesContainer');
+            if (!c) return;
+            if (!features || features.length === 0) {
+                c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг. Додайте нову!</p>';
+                return;
+            }
             c.innerHTML = features.map((f, i) => `
                 <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
-                    <input type="text" value="${f.icon}" data-index="${i}" class="home-feature-icon">
-                    <input type="text" value="${f.title}" data-index="${i}" class="home-feature-title">
-                    <input type="text" value="${f.desc}" data-index="${i}" class="home-feature-desc">
+                    <input type="text" value="${f.icon || 'fa-star'}" class="home-feature-icon">
+                    <input type="text" value="${f.title || ''}" class="home-feature-title">
+                    <input type="text" value="${f.desc || ''}" class="home-feature-desc">
                     <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
             `).join('');
@@ -494,11 +558,16 @@
 
         function renderAboutFeaturesList(features) {
             const c = document.getElementById('aboutFeaturesContainer');
+            if (!c) return;
+            if (!features || features.length === 0) {
+                c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг. Додайте нову!</p>';
+                return;
+            }
             c.innerHTML = features.map((f, i) => `
                 <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
-                    <input type="text" value="${f.icon}" data-index="${i}" class="about-feature-icon">
-                    <input type="text" value="${f.title}" data-index="${i}" class="about-feature-title">
-                    <input type="text" value="${f.desc}" data-index="${i}" class="about-feature-desc">
+                    <input type="text" value="${f.icon || 'fa-star'}" class="about-feature-icon">
+                    <input type="text" value="${f.title || ''}" class="about-feature-title">
+                    <input type="text" value="${f.desc || ''}" class="about-feature-desc">
                     <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
             `).join('');
@@ -508,7 +577,7 @@
             const c = document.getElementById('homeFeaturesContainer');
             const d = document.createElement('div');
             d.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
-            d.innerHTML = `<input type="text" value="fa-star" class="home-feature-icon"><input type="text" class="home-feature-title"><input type="text" class="home-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            d.innerHTML = `<input type="text" value="fa-star" class="home-feature-icon"><input type="text" placeholder="Заголовок" class="home-feature-title"><input type="text" placeholder="Опис" class="home-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
             c.appendChild(d);
         }
 
@@ -516,7 +585,7 @@
             const c = document.getElementById('aboutFeaturesContainer');
             const d = document.createElement('div');
             d.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
-            d.innerHTML = `<input type="text" value="fa-star" class="about-feature-icon"><input type="text" class="about-feature-title"><input type="text" class="about-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            d.innerHTML = `<input type="text" value="fa-star" class="about-feature-icon"><input type="text" placeholder="Заголовок" class="about-feature-title"><input type="text" placeholder="Опис" class="about-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
             c.appendChild(d);
         }
 
@@ -528,13 +597,13 @@
                 original: document.getElementById('statOriginal').value
             };
             await fetch('/api/home-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-            alert('Збережено!');
+            alert('✅ Статистику збережено!');
         }
 
         async function saveHomePartners() {
             const partners = document.getElementById('homePartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
             await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
-            alert('Збережено!');
+            alert('✅ Партнерів збережено!');
         }
 
         async function saveHomeFeatures() {
@@ -547,7 +616,7 @@
                 });
             });
             await fetch('/api/features', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(features) });
-            alert('Збережено!');
+            alert('✅ Переваги збережено!');
         }
 
         async function saveAboutStats() {
@@ -558,7 +627,7 @@
                 original: document.getElementById('aboutStat4Value').value
             };
             await fetch('/api/home-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-            alert('Збережено!');
+            alert('✅ Статистику збережено!');
         }
 
         async function saveAboutFeatures() {
@@ -571,13 +640,13 @@
                 });
             });
             await fetch('/api/features', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(features) });
-            alert('Збережено!');
+            alert('✅ Переваги збережено!');
         }
 
         async function saveAboutPartners() {
             const partners = document.getElementById('aboutPartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
             await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
-            alert('Збережено!');
+            alert('✅ Партнерів збережено!');
         }
 
         async function saveWorkHours() {
@@ -587,7 +656,7 @@
                 sun: document.getElementById('hoursSun').value
             };
             await fetch('/api/work-hours', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-            alert('Збережено!');
+            alert('✅ Робочі години збережено!');
         }
 
         async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = u; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
@@ -650,6 +719,7 @@
 
         function initGalleryUpload() {
             const area = document.getElementById('galleryUploadArea'), inp = document.getElementById('galleryInput');
+            if (!area) return;
             area.addEventListener('click', () => inp.click());
             area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = '#5a5a5a'; });
             area.addEventListener('dragleave', () => area.style.borderColor = '#333');
