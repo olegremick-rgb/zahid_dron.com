@@ -13,71 +13,119 @@
         .logo-img { height:40px; border-radius:8px; background:#fff; padding:2px; }
         .home-btn { background:#2a2a2a; border:none; color:#fff; padding:8px 20px; border-radius:30px; cursor:pointer; }
         .admin-container { display:flex; min-height:calc(100vh - 70px); }
-        .sidebar { width:260px; background:#111; padding:2rem 1rem; border-right:1px solid #222; position:fixed; height:100%; overflow-y:auto; }
+        
+        /* Сайдбар */
+        .sidebar { 
+            width:260px; 
+            background:#111; 
+            padding:2rem 1rem; 
+            border-right:1px solid #222; 
+            position:fixed; 
+            height:100%; 
+            overflow-y:auto; 
+            z-index:50;
+        }
         .sidebar h3 { color:#fff; margin-bottom:1.5rem; padding-left:1rem; border-left:3px solid #5a5a5a; }
         .sidebar-menu { list-style:none; }
         .sidebar-menu li { margin-bottom:0.5rem; }
         .sidebar-menu a { display:flex; align-items:center; gap:1rem; padding:0.8rem 1rem; color:#ddd; border-radius:12px; text-decoration:none; cursor:pointer; transition:0.2s; }
         .sidebar-menu a:hover, .sidebar-menu a.active { background:#2a2a2a; color:#fff; }
+        
         .admin-content { flex:1; margin-left:260px; padding:2rem; }
         .admin-section { display:none; animation:fadeIn 0.3s ease; }
         .admin-section.active { display:block; }
         .admin-section h2 { font-size:1.8rem; margin-bottom:1.5rem; border-bottom:2px solid #3a3a3a; padding-bottom:0.5rem; }
         @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-bottom:2rem; }
-        .stat-card { background:#111; border:1px solid #222; border-radius:16px; padding:1.5rem; text-align:center; transition:0.2s; }
-        .stat-card:hover { transform:translateY(-3px); border-color:#444; }
+        .stat-card { background:#111; border:1px solid #222; border-radius:16px; padding:1.5rem; text-align:center; }
         .stat-card i { font-size:2.5rem; color:#5a5a5a; margin-bottom:0.5rem; }
-        .stat-card h3 { font-size:1rem; color:#aaa; margin-bottom:0.5rem; }
+        .stat-card h3 { font-size:1rem; color:#aaa; }
         .stat-card p { font-size:1.8rem; font-weight:700; }
         .admin-form { background:#111; border:1px solid #222; border-radius:16px; padding:1.5rem; margin-bottom:2rem; }
-        .admin-form h3 { margin-bottom:1rem; color:#fff; }
         .form-group { margin-bottom:1rem; }
-        .form-group label { display:block; margin-bottom:0.3rem; font-weight:500; color:#aaa; }
-        .form-group input, .form-group textarea, .form-group select { width:100%; padding:0.7rem; background:#1a1a1a; border:1px solid #333; border-radius:10px; color:#fff; font-size:0.95rem; }
-        .btn { background:#2a2a2a; color:#fff; border:none; padding:0.6rem 1.2rem; border-radius:40px; cursor:pointer; margin-right:0.5rem; margin-bottom:0.5rem; transition:0.2s; font-size:0.9rem; }
-        .btn:hover { background:#3a3a3a; transform:translateY(-2px); }
+        .form-group label { display:block; margin-bottom:0.3rem; color:#aaa; }
+        .form-group input, .form-group textarea, .form-group select { width:100%; padding:0.7rem; background:#1a1a1a; border:1px solid #333; border-radius:10px; color:#fff; }
+        .btn { background:#2a2a2a; color:#fff; border:none; padding:0.6rem 1.2rem; border-radius:40px; cursor:pointer; margin-right:0.5rem; margin-bottom:0.5rem; }
+        .btn:hover { background:#3a3a3a; }
         .btn-danger { background:#7a2e2e; }
-        .btn-success { background:#2e7a5e; }
         .variant-row { display:flex; gap:0.5rem; margin-bottom:0.5rem; align-items:center; }
         .variant-row input { flex:1; }
         .remove-btn { background:#7a2e2e; color:white; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; }
-        .image-preview, .logo-preview { max-width:200px; max-height:150px; margin-top:0.5rem; border-radius:8px; display:none; border:1px solid #333; background:#1a1a1a; padding:0.3rem; }
+        .image-preview, .logo-preview { max-width:200px; max-height:150px; margin-top:0.5rem; border-radius:8px; display:none; }
         .table-container { overflow-x:auto; margin:1rem 0; border-radius:16px; background:#111; border:1px solid #222; }
         table { width:100%; border-collapse:collapse; }
         th { background:#1a1a1a; padding:1rem; text-align:left; color:#fff; }
         td { padding:1rem; border-bottom:1px solid #222; }
         .table-img { width:50px; height:50px; border-radius:8px; object-fit:cover; }
         .action-btns { display:flex; gap:0.5rem; }
-        .action-btns button { width:32px; height:32px; border-radius:8px; border:none; cursor:pointer; color:white; }
-        .edit-btn { background:#3b82f6; }
-        .delete-btn { background:#7a2e2e; }
+        .edit-btn { background:#3b82f6; width:32px; height:32px; border-radius:8px; border:none; cursor:pointer; color:white; }
+        .delete-btn { background:#7a2e2e; width:32px; height:32px; border-radius:8px; border:none; cursor:pointer; color:white; }
         .category-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; margin:1rem 0; }
-        .category-tab { background:#1a1a1a; border:1px solid #333; border-radius:30px; padding:0.4rem 1rem; cursor:pointer; transition:0.2s; }
-        .category-tab.active { background:#3a3a3a; color:#fff; border-color:#5a5a5a; }
-        .badge { background:#2e7a5e; color:white; padding:0.2rem 0.6rem; border-radius:20px; font-size:0.7rem; display:inline-block; }
-        .social-icon-preview { display:flex; align-items:center; gap:1rem; margin-top:1rem; padding:0.8rem; background:#1a1a1a; border-radius:12px; }
+        .category-tab { background:#1a1a1a; border:1px solid #333; border-radius:30px; padding:0.4rem 1rem; cursor:pointer; }
+        .category-tab.active { background:#3a3a3a; color:#fff; }
+        .badge { background:#2e7a5e; color:white; padding:0.2rem 0.6rem; border-radius:20px; font-size:0.7rem; }
         .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:center; justify-content:center; z-index:1000; }
         .modal.active { display:flex; }
         .modal-content { background:#111; padding:1.5rem; border-radius:24px; width:90%; max-width:500px; border:1px solid #333; }
-        .modal-content h2 { margin-bottom:1rem; color:#fff; border-bottom:1px solid #333; padding-bottom:0.5rem; }
         .modal-close { float:right; font-size:1.5rem; cursor:pointer; color:#aaa; }
-        
-        /* Галерея */
         .gallery-container { margin-top:1.5rem; padding-top:1rem; border-top:1px solid #333; }
-        .gallery-title { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
-        .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:0.8rem; margin-bottom:1rem; }
-        .gallery-item { position:relative; border-radius:8px; overflow:hidden; border:1px solid #333; background:#1a1a1a; aspect-ratio:1; }
+        .gallery-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(100px, 1fr)); gap:0.8rem; margin-bottom:1rem; }
+        .gallery-item { position:relative; border-radius:8px; overflow:hidden; border:1px solid #333; aspect-ratio:1; }
         .gallery-item img { width:100%; height:100%; object-fit:cover; }
-        .gallery-item-actions { position:absolute; top:5px; right:5px; display:flex; gap:5px; opacity:0; transition:0.2s; }
+        .gallery-item-actions { position:absolute; top:5px; right:5px; display:flex; gap:5px; opacity:0; }
         .gallery-item:hover .gallery-item-actions { opacity:1; }
-        .gallery-item-actions button { width:28px; height:28px; border-radius:6px; border:none; cursor:pointer; color:white; font-size:12px; }
-        .gallery-delete { background:#7a2e2e; }
-        .gallery-upload-area { border:2px dashed #333; border-radius:12px; padding:1.5rem; text-align:center; cursor:pointer; transition:0.2s; }
+        .gallery-delete { background:#7a2e2e; width:28px; height:28px; border-radius:6px; border:none; color:white; cursor:pointer; }
+        .gallery-upload-area { border:2px dashed #333; border-radius:12px; padding:1.5rem; text-align:center; cursor:pointer; }
         .gallery-upload-area:hover { border-color:#5a5a5a; background:#1a1a1a; }
-        .gallery-upload-area i { font-size:2rem; color:#5a5a5a; margin-bottom:0.5rem; }
-        
-        @media (max-width:768px) { .sidebar { display:none; } .admin-content { margin-left:0; padding:1rem; } .stats-grid { grid-template-columns:repeat(2,1fr); } }
+
+        /* Мобільна версія - меню стає сіткою */
+        @media (max-width: 768px) { 
+            .sidebar { 
+                display: block !important; 
+                position: fixed;
+                left: 0;
+                top: 70px;
+                width: 100%;
+                height: auto;
+                max-height: calc(100vh - 70px);
+                z-index: 99;
+                border-right: none;
+                border-bottom: 1px solid #222;
+                padding: 1rem;
+            }
+            .sidebar h3 { display: none; }
+            .admin-content { 
+                margin-left: 0 !important; 
+                padding: 1rem;
+                margin-top: 280px;
+            }
+            .sidebar-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+            }
+            .sidebar-menu li {
+                margin-bottom: 0;
+            }
+            .sidebar-menu a {
+                padding: 0.6rem 0.3rem;
+                font-size: 0.75rem;
+                justify-content: center;
+                text-align: center;
+                flex-direction: column;
+                gap: 0.3rem;
+                white-space: nowrap;
+            }
+            .sidebar-menu a i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar-menu { grid-template-columns: repeat(3, 1fr); }
+            .sidebar-menu a { font-size: 0.65rem; padding: 0.4rem 0.2rem; }
+            .admin-content { margin-top: 260px; }
+        }
     </style>
 </head>
 <body>
@@ -114,7 +162,7 @@
             <!-- Профіль -->
             <div id="profile" class="admin-section">
                 <h2><i class="fas fa-user-cog"></i> Профіль</h2>
-                <div class="admin-form"><h3>Зміна пароля</h3><div class="form-group"><label>Поточний логін</label><input type="text" id="currentUsername" readonly disabled></div><div class="form-group"><label>Новий логін</label><input type="text" id="newUsername" placeholder="Новий логін"></div><div class="form-group"><label>Поточний пароль</label><input type="password" id="currentPassword" placeholder="Поточний пароль"></div><div class="form-group"><label>Новий пароль</label><input type="password" id="newPassword" placeholder="Новий пароль"></div><div class="form-group"><label>Підтвердіть пароль</label><input type="password" id="confirmPassword" placeholder="Підтвердіть пароль"></div><button class="btn" id="changePasswordBtn">Зберегти</button></div>
+                <div class="admin-form"><h3>Зміна пароля</h3><div class="form-group"><label>Поточний логін</label><input type="text" id="currentUsername" readonly disabled></div><div class="form-group"><label>Новий логін</label><input type="text" id="newUsername"></div><div class="form-group"><label>Поточний пароль</label><input type="password" id="currentPassword"></div><div class="form-group"><label>Новий пароль</label><input type="password" id="newPassword"></div><div class="form-group"><label>Підтвердіть пароль</label><input type="password" id="confirmPassword"></div><button class="btn" id="changePasswordBtn">Зберегти</button></div>
             </div>
             <!-- Фон -->
             <div id="background" class="admin-section">
@@ -152,21 +200,46 @@
                     <div class="form-group"><input type="text" id="productName" placeholder="Назва товару"></div>
                     <div class="form-group"><input type="number" id="productPrice" placeholder="Ціна (грн)"></div>
                     <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
-                    <div class="form-group"><textarea id="productSpecs" rows="4" placeholder="Характеристики (кожен рядок - нова характеристика)"></textarea></div>
+                    
+                    <!-- Характеристики -->
+                    <div class="form-group">
+                        <label>Характеристики</label>
+                        <div style="background:#1a1a1a; border-radius:12px; padding:1rem;">
+                            <h4 style="margin:0 0 0.8rem; color:#fff;"><i class="fas fa-battery-full"></i> Батарея</h4>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1rem;">
+                                <input type="text" id="batteryCapacity" placeholder="Ємність (мАг)">
+                                <input type="text" id="batteryVoltage" placeholder="Напруга (S)">
+                                <input type="text" id="batteryConnector" placeholder="Роз'єм">
+                                <input type="text" id="batteryDischarge" placeholder="Розряд (C)">
+                            </div>
+                            <h4 style="margin:1rem 0 0.8rem; color:#fff;"><i class="fas fa-microchip"></i> Польотний стек</h4>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1rem;">
+                                <input type="text" id="stackFC" placeholder="Польотний контролер">
+                                <input type="text" id="stackESC" placeholder="ESC">
+                                <input type="text" id="stackVTX" placeholder="Відеопередавач">
+                                <input type="text" id="stackReceiver" placeholder="Приймач">
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin:1rem 0 0.5rem;">
+                                <h4 style="margin:0; color:#fff;"><i class="fas fa-list"></i> Інші характеристики</h4>
+                                <button type="button" class="btn" id="addSpecRowBtn" style="padding:0.2rem 1rem;"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div id="dynamicSpecsContainer"></div>
+                        </div>
+                    </div>
+                    
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
                     
                     <!-- Галерея -->
                     <div class="gallery-container">
-                        <div class="gallery-title">
-                            <label><i class="fas fa-images"></i> Галерея зображень</label>
+                        <div class="gallery-title" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                            <label><i class="fas fa-images"></i> Галерея</label>
                             <span class="badge" id="galleryCount">0 фото</span>
                         </div>
                         <div class="gallery-grid" id="galleryGrid"></div>
                         <div class="gallery-upload-area" id="galleryUploadArea">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Натисніть або перетягніть фото</p>
-                            <small>Можна додати до 10 зображень</small>
+                            <p>Натисніть або перетягніть фото (до 10)</p>
                             <input type="file" id="galleryInput" accept="image/*" multiple style="display:none;">
                         </div>
                     </div>
@@ -205,19 +278,13 @@
             </div>
         </div>
     </div>
+    
     <!-- Модальне вікно -->
     <div id="editSocialModal" class="modal"><div class="modal-content"><span class="modal-close" id="closeSocialModal">&times;</span><h2>Редагувати соцмережу</h2><div class="form-group"><input type="text" id="editSocialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="editSocialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="editSocialIcon" placeholder="Іконка"></div><div class="form-group"><label><input type="checkbox" id="editSocialActive"> Активна</label></div><button class="btn" id="updateSocialBtn">Зберегти</button></div></div>
 
     <script>
-        let currentUser = null;
-        let categories = [];
-        let products = [];
-        let orders = [];
-        let social = [];
+        let currentUser = null, categories = [], products = [], orders = [], social = [], currentCategory = 'all', editProductId = null, galleryImages = [];
         let currentEditPlatform = null;
-        let currentCategory = 'all';
-        let editProductId = null;
-        let galleryImages = []; // Поточні зображення галереї
 
         document.addEventListener('DOMContentLoaded', function() {
             initNavigation();
@@ -231,17 +298,16 @@
             document.querySelectorAll('.sidebar-menu a').forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const sectionId = this.getAttribute('data-section');
-                    showSection(sectionId);
+                    showSection(this.getAttribute('data-section'));
                     document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
                     this.classList.add('active');
                 });
             });
         }
 
-        function showSection(sectionId) {
-            document.querySelectorAll('.admin-section').forEach(section => section.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+        function showSection(id) { 
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active')); 
+            document.getElementById(id).classList.add('active'); 
         }
 
         function initEventListeners() {
@@ -263,84 +329,8 @@
             document.getElementById('addSocialBtn')?.addEventListener('click', addSocial);
             document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
             document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
+            document.getElementById('addSpecRowBtn')?.addEventListener('click', () => addSpecRow());
         }
-
-        function initGalleryUpload() {
-            const uploadArea = document.getElementById('galleryUploadArea');
-            const fileInput = document.getElementById('galleryInput');
-            
-            uploadArea.addEventListener('click', () => fileInput.click());
-            
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#5a5a5a';
-                uploadArea.style.background = '#1a1a1a';
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.style.borderColor = '#333';
-                uploadArea.style.background = 'transparent';
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.style.borderColor = '#333';
-                uploadArea.style.background = 'transparent';
-                const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
-                handleGalleryFiles(files);
-            });
-            
-            fileInput.addEventListener('change', (e) => {
-                const files = Array.from(e.target.files).filter(f => f.type.startsWith('image/'));
-                handleGalleryFiles(files);
-                fileInput.value = '';
-            });
-        }
-
-        async function handleGalleryFiles(files) {
-            if (galleryImages.length + files.length > 10) {
-                alert('Максимум 10 зображень');
-                return;
-            }
-            
-            for (const file of files) {
-                const base64 = await fileToBase64(file);
-                galleryImages.push({
-                    id: Date.now() + Math.random(),
-                    url: base64,
-                    isNew: true
-                });
-            }
-            
-            renderGallery();
-        }
-
-        function renderGallery() {
-            const grid = document.getElementById('galleryGrid');
-            const count = document.getElementById('galleryCount');
-            
-            if (galleryImages.length === 0) {
-                grid.innerHTML = '<p style="color:#777;text-align:center;grid-column:1/-1;padding:1rem;">Немає зображень</p>';
-                count.textContent = '0 фото';
-                return;
-            }
-            
-            grid.innerHTML = galleryImages.map((img, index) => `
-                <div class="gallery-item">
-                    <img src="${img.url}" alt="Gallery">
-                    <div class="gallery-item-actions">
-                        <button class="gallery-delete" onclick="removeGalleryImage(${index})" title="Видалити"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            `).join('');
-            
-            count.textContent = `${galleryImages.length} фото`;
-        }
-
-        window.removeGalleryImage = function(index) {
-            galleryImages.splice(index, 1);
-            renderGallery();
-        };
 
         function fileToBase64(file) {
             return new Promise((resolve, reject) => {
@@ -352,270 +342,231 @@
         }
 
         async function checkAuth() {
-            try {
-                const res = await fetch('/api/user');
-                if (!res.ok) { location.href = '/'; return false; }
-                const user = await res.json();
-                if (!user.isAdmin) { location.href = '/'; return false; }
-                currentUser = user;
-                document.getElementById('currentUsername').value = user.username;
-                return true;
+            try { 
+                const res = await fetch('/api/user'); 
+                if (!res.ok) { location.href = '/'; return false; } 
+                const u = await res.json(); 
+                if (!u.isAdmin) { location.href = '/'; return false; } 
+                currentUser = u; 
+                document.getElementById('currentUsername').value = u.username; 
+                return true; 
             } catch(e) { location.href = '/'; return false; }
         }
 
         async function loadData() {
             if (!await checkAuth()) return;
             try {
-                const [catRes, prodRes, orderRes, socialRes, aboutRes, contactRes] = await Promise.all([
-                    fetch('/api/categories'), fetch('/api/products'), fetch('/api/orders'),
+                const [cat, prod, ord, soc, about, cont] = await Promise.all([
+                    fetch('/api/categories'), fetch('/api/products'), fetch('/api/orders'), 
                     fetch('/api/social'), fetch('/api/about'), fetch('/api/contact')
                 ]);
-                categories = await catRes.json();
-                products = await prodRes.json();
-                orders = await orderRes.json();
-                social = await socialRes.json();
-                
-                const stats = {
-                    productsCount: products.length,
-                    categoriesCount: categories.length,
-                    ordersCount: orders.length,
-                    variantsCount: products.reduce((a,p) => a + (p.variants?.length || 0), 0)
-                };
-                
-                updateDashboard(stats);
-                updateCategoriesList();
-                updateProductsList();
-                updateOrdersList();
-                updateSocialList();
-                updateCategorySelect();
+                categories = await cat.json(); 
+                products = await prod.json(); 
+                orders = await ord.json(); 
+                social = await soc.json();
+                updateDashboard(); 
+                updateCategoriesList(); 
+                updateProductsList(); 
+                updateOrdersList(); 
+                updateSocialList(); 
+                updateCategorySelect(); 
                 updateCategoryTabs();
-                
-                document.getElementById('aboutText').value = await aboutRes.text();
-                parseContactInfo(await contactRes.text());
-                
-                await loadLogo();
-                await loadBanner();
-                await loadBrandLogo();
-                await loadBackground();
-                await loadReviews();
+                document.getElementById('aboutText').value = await about.text();
+                parseContactInfo(await cont.text());
+                await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
             } catch(e) { console.error(e); alert('Помилка завантаження даних'); }
         }
 
-        async function loadLogo() {
-            try {
-                const res = await fetch('/api/logo');
-                if(res.ok) {
-                    const url = await res.text();
-                    if(url) {
-                        document.getElementById('headerLogo').src = url;
-                        document.getElementById('headerLogo').style.display = 'block';
-                        document.getElementById('currentLogo').src = url;
-                        document.getElementById('currentLogo').style.display = 'block';
-                        document.getElementById('noLogoText').style.display = 'none';
-                    }
-                }
-            } catch(e) {}
+        async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = u; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
+        async function loadBanner() { try { const r = await fetch('/api/banner'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('currentBanner').src = u; document.getElementById('currentBanner').style.display = 'block'; document.getElementById('noBannerText').style.display = 'none'; } } } catch(e){} }
+        async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('currentBrandLogo').src = u; document.getElementById('currentBrandLogo').style.display = 'block'; document.getElementById('noBrandLogoText').style.display = 'none'; } } } catch(e){} }
+        async function loadBackground() { try { const r = await fetch('/api/background'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('currentBg').src = u; document.getElementById('currentBg').style.display = 'block'; document.getElementById('noBgText').style.display = 'none'; } } } catch(e){} }
+        async function loadReviews() { try { const r = await fetch('/api/reviews'); const rev = await r.json(); document.getElementById('reviewsListAdmin').innerHTML = rev.map(r => `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}</td><td>${escapeHtml(r.text.substring(0,50))}</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`).join(''); document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(b => b.addEventListener('click', () => deleteReview(b.getAttribute('data-id')))); } catch(e){} }
+
+        function parseContactInfo(t) { 
+            const l = t.split('\n'); 
+            document.getElementById('contactPhone').value = l.find(x => x.includes('Телефон'))?.replace('Телефон:','').trim()||''; 
+            document.getElementById('contactEmail').value = l.find(x => x.includes('Email'))?.replace('Email:','').trim()||''; 
+            document.getElementById('contactSchedule').value = l.find(x => x.includes('Графік'))?.replace('Графік:','').trim()||''; 
+            document.getElementById('contactAddress').value = l.find(x => x.includes('Адреса'))?.replace('Адреса:','').trim()||''; 
         }
 
-        async function loadBanner() {
-            try {
-                const res = await fetch('/api/banner');
-                if(res.ok) {
-                    const url = await res.text();
-                    if(url) {
-                        document.getElementById('currentBanner').src = url;
-                        document.getElementById('currentBanner').style.display = 'block';
-                        document.getElementById('noBannerText').style.display = 'none';
-                    }
-                }
-            } catch(e) {}
-        }
+        function escapeHtml(s) { return s ? s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
 
-        async function loadBrandLogo() {
-            try {
-                const res = await fetch('/api/brand-logo');
-                if(res.ok) {
-                    const url = await res.text();
-                    if(url) {
-                        document.getElementById('currentBrandLogo').src = url;
-                        document.getElementById('currentBrandLogo').style.display = 'block';
-                        document.getElementById('noBrandLogoText').style.display = 'none';
-                    }
-                }
-            } catch(e) {}
-        }
-
-        async function loadBackground() {
-            try {
-                const res = await fetch('/api/background');
-                if(res.ok) {
-                    const url = await res.text();
-                    if(url) {
-                        document.getElementById('currentBg').src = url;
-                        document.getElementById('currentBg').style.display = 'block';
-                        document.getElementById('noBgText').style.display = 'none';
-                    }
-                }
-            } catch(e) {}
-        }
-
-        async function loadReviews() {
-            try {
-                const res = await fetch('/api/reviews');
-                const reviews = await res.json();
-                document.getElementById('reviewsListAdmin').innerHTML = reviews.map(r => 
-                    `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td><td>${escapeHtml(r.text.substring(0,80))}...</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`
-                ).join('');
-                document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(btn => {
-                    btn.addEventListener('click', () => deleteReview(btn.getAttribute('data-id')));
-                });
-            } catch(e) {}
-        }
-
-        function parseContactInfo(text) {
-            const lines = text.split('\n');
-            document.getElementById('contactPhone').value = lines.find(l => l.includes('Телефон'))?.replace('Телефон:', '').trim() || '';
-            document.getElementById('contactEmail').value = lines.find(l => l.includes('Email'))?.replace('Email:', '').trim() || '';
-            document.getElementById('contactSchedule').value = lines.find(l => l.includes('Графік'))?.replace('Графік:', '').trim() || '';
-            document.getElementById('contactAddress').value = lines.find(l => l.includes('Адреса'))?.replace('Адреса:', '').trim() || '';
-        }
-
-        function escapeHtml(str) { 
-            if (!str) return ''; 
-            return str.replace(/[&<>]/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;' })[m]); 
-        }
-
-        function updateDashboard(stats) {
+        function updateDashboard() {
             document.getElementById('stats').innerHTML = `
-                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${stats.productsCount}</p></div>
-                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${stats.categoriesCount}</p></div>
-                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${stats.ordersCount}</p></div>
-                <div class="stat-card"><i class="fas fa-cubes"></i><h3>Варіантів</h3><p>${stats.variantsCount}</p></div>
+                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${products.length}</p></div>
+                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${categories.length}</p></div>
+                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${orders.length}</p></div>
             `;
-            const recent = orders.slice(-5).reverse();
-            document.getElementById('recentOrders').innerHTML = recent.map(o => {
-                const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${p?.price?.toLocaleString() || 0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`;
+            document.getElementById('recentOrders').innerHTML = orders.slice(-5).reverse().map(o => { 
+                const p = products.find(p => p.id == o.productId); 
+                return `<tr><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${p?.price||0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`; 
             }).join('');
         }
 
         function updateCategoriesList() {
-            document.getElementById('categoriesList').innerHTML = categories.map(cat => {
-                const cnt = products.filter(p => p.category === cat).length;
-                return `<tr><td>${cat}</td><td>${cnt}</td><td><button class="delete-btn" data-cat="${cat}" ${cnt > 0 ? 'disabled' : ''}><i class="fas fa-trash"></i></button></td></tr>`;
-            }).join('');
-            document.querySelectorAll('#categoriesList .delete-btn').forEach(btn => {
-                if (!btn.disabled) btn.addEventListener('click', () => deleteCategory(btn.getAttribute('data-cat')));
-            });
+            document.getElementById('categoriesList').innerHTML = categories.map(c => `<tr><td>${c}</td><td>${products.filter(p => p.category === c).length}</td><td><button class="delete-btn" data-cat="${c}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.querySelectorAll('#categoriesList .delete-btn').forEach(b => b.addEventListener('click', () => deleteCategory(b.getAttribute('data-cat'))));
         }
 
-        async function addCategory() {
-            const cat = document.getElementById('newCategory').value.trim();
-            if (!cat) { alert('Введіть назву'); return; }
-            try {
-                const res = await fetch('/api/categories', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ category: cat })
-                });
-                if (res.ok) { alert('Додано!'); document.getElementById('newCategory').value = ''; loadData(); }
-                else { const err = await res.json(); alert(err.error || 'Помилка'); }
-            } catch(e) { alert('Помилка'); }
+        async function addCategory() { 
+            const c = document.getElementById('newCategory').value.trim(); 
+            if(!c) return alert('Введіть назву'); 
+            await fetch('/api/categories',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:c})}); 
+            document.getElementById('newCategory').value = ''; 
+            loadData(); 
         }
 
-        async function deleteCategory(cat) {
-            if (!confirm(`Видалити "${cat}"?`)) return;
-            try {
-                const res = await fetch(`/api/categories/${encodeURIComponent(cat)}`, { method: 'DELETE' });
-                if (res.ok) { alert('Видалено!'); loadData(); }
-                else { const err = await res.json(); alert(err.error || 'Помилка'); }
-            } catch(e) { alert('Помилка'); }
+        async function deleteCategory(c) { 
+            if(!confirm('Видалити?')) return; 
+            await fetch(`/api/categories/${encodeURIComponent(c)}`,{method:'DELETE'}); 
+            loadData(); 
         }
 
-        function updateCategorySelect() {
-            document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
-        }
+        function updateCategorySelect() { document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join(''); }
 
         function updateCategoryTabs() {
-            let html = `<button class="category-tab ${currentCategory === 'all' ? 'active' : ''}" data-cat="all">Всі</button>`;
-            categories.forEach(c => html += `<button class="category-tab ${currentCategory === c ? 'active' : ''}" data-cat="${c}">${c}</button>`);
-            document.getElementById('categoryTabs').innerHTML = html;
-            document.querySelectorAll('#categoryTabs .category-tab').forEach(tab => {
-                tab.addEventListener('click', () => { currentCategory = tab.getAttribute('data-cat'); updateCategoryTabs(); updateProductsList(); });
-            });
+            let h = `<button class="category-tab ${currentCategory==='all'?'active':''}" data-cat="all">Всі</button>`;
+            categories.forEach(c => h += `<button class="category-tab ${currentCategory===c?'active':''}" data-cat="${c}">${c}</button>`);
+            document.getElementById('categoryTabs').innerHTML = h;
+            document.querySelectorAll('#categoryTabs .category-tab').forEach(t => t.addEventListener('click', () => { currentCategory = t.getAttribute('data-cat'); updateCategoryTabs(); updateProductsList(); }));
         }
 
         function updateProductsList() {
-            let filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
-            document.getElementById('productsList').innerHTML = filtered.map(p => `
-                <tr>
-                    <td><img src="${p.image || 'https://via.placeholder.com/50'}" class="table-img" onerror="this.src='https://via.placeholder.com/50'"></td>
-                    <td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td><td>${p.price.toLocaleString()} грн</td>
-                    <td>${p.gallery?.length || 0} фото</td>
-                    <td class="action-btns">
-                        <button class="edit-btn" data-id="${p.id}"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn" data-id="${p.id}"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-            document.querySelectorAll('#productsList .edit-btn').forEach(btn => btn.addEventListener('click', () => editProduct(btn.getAttribute('data-id'))));
-            document.querySelectorAll('#productsList .delete-btn').forEach(btn => btn.addEventListener('click', () => deleteProduct(btn.getAttribute('data-id'))));
+            const f = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+            document.getElementById('productsList').innerHTML = f.map(p => `<tr><td><img src="${p.image||'https://via.placeholder.com/50'}" class="table-img"></td><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td><td>${p.price} грн</td><td>${p.gallery?.length||0} фото</td><td class="action-btns"><button class="edit-btn" data-id="${p.id}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-id="${p.id}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.querySelectorAll('#productsList .edit-btn').forEach(b => b.addEventListener('click', () => editProduct(b.getAttribute('data-id'))));
+            document.querySelectorAll('#productsList .delete-btn').forEach(b => b.addEventListener('click', () => deleteProduct(b.getAttribute('data-id'))));
         }
 
         function addVariantField() {
-            const div = document.createElement('div');
-            div.className = 'variant-row';
-            div.innerHTML = '<input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
-            document.getElementById('variantsContainer').appendChild(div);
+            const d = document.createElement('div'); d.className = 'variant-row';
+            d.innerHTML = '<input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+            document.getElementById('variantsContainer').appendChild(d);
         }
 
+        // Характеристики
+        function addSpecRow(key='', val='') {
+            const c = document.getElementById('dynamicSpecsContainer');
+            const r = document.createElement('div');
+            r.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
+            r.innerHTML = `<input type="text" placeholder="Назва" value="${escapeHtml(key)}" class="spec-key"><input type="text" placeholder="Значення" value="${escapeHtml(val)}" class="spec-value"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            c.appendChild(r);
+        }
+
+        function clearSpecRows() { document.getElementById('dynamicSpecsContainer').innerHTML = ''; }
+
+        function collectSpecsToString() {
+            const lines = [];
+            const bat = []; 
+            const cap = document.getElementById('batteryCapacity')?.value.trim(); 
+            const volt = document.getElementById('batteryVoltage')?.value.trim(); 
+            const conn = document.getElementById('batteryConnector')?.value.trim(); 
+            const disc = document.getElementById('batteryDischarge')?.value.trim();
+            if(cap) bat.push(cap+'mAh'); if(volt) bat.push(volt+'S'); if(conn) bat.push(conn); if(disc) bat.push(disc+'C');
+            if(bat.length) lines.push('Батарея: '+bat.join(' / '));
+            
+            const stack = []; 
+            const fc = document.getElementById('stackFC')?.value.trim(); 
+            const esc = document.getElementById('stackESC')?.value.trim(); 
+            const vtx = document.getElementById('stackVTX')?.value.trim(); 
+            const rx = document.getElementById('stackReceiver')?.value.trim();
+            if(fc) stack.push('FC: '+fc); if(esc) stack.push('ESC: '+esc); if(vtx) stack.push('VTX: '+vtx); if(rx) stack.push('RX: '+rx);
+            if(stack.length) lines.push('Польотний стек: '+stack.join(' / '));
+            
+            document.querySelectorAll('#dynamicSpecsContainer .spec-row').forEach(r => { 
+                const k = r.querySelector('.spec-key')?.value.trim(); 
+                const v = r.querySelector('.spec-value')?.value.trim(); 
+                if(k&&v) lines.push(`${k}: ${v}`); 
+            });
+            return lines.join('\n');
+        }
+
+        function populateSpecsFromString(s) {
+            clearSpecRows(); 
+            ['batteryCapacity','batteryVoltage','batteryConnector','batteryDischarge','stackFC','stackESC','stackVTX','stackReceiver'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+            if(!s) return;
+            const lines = s.split('\n');
+            const batLine = lines.find(l => l.toLowerCase().startsWith('батарея'));
+            if(batLine) { 
+                const parts = batLine.split(':')[1]?.split('/').map(x => x.trim())||[]; 
+                parts.forEach(p => { 
+                    if(p.includes('mAh')) document.getElementById('batteryCapacity').value = p.replace('mAh',''); 
+                    else if(p.includes('S')) document.getElementById('batteryVoltage').value = p.replace('S',''); 
+                    else if(p.includes('C')) document.getElementById('batteryDischarge').value = p.replace('C',''); 
+                    else if(!p.match(/\d/)) document.getElementById('batteryConnector').value = p; 
+                }); 
+            }
+            const stackLine = lines.find(l => l.toLowerCase().startsWith('польотний стек'));
+            if(stackLine) { 
+                const parts = stackLine.split(':')[1]?.split('/').map(x => x.trim())||[]; 
+                parts.forEach(p => { 
+                    if(p.includes('FC:')) document.getElementById('stackFC').value = p.replace('FC:',''); 
+                    else if(p.includes('ESC:')) document.getElementById('stackESC').value = p.replace('ESC:',''); 
+                    else if(p.includes('VTX:')) document.getElementById('stackVTX').value = p.replace('VTX:',''); 
+                    else if(p.includes('RX:')) document.getElementById('stackReceiver').value = p.replace('RX:',''); 
+                }); 
+            }
+            lines.forEach(l => { 
+                if(l.includes(':') && !l.toLowerCase().startsWith('батарея') && !l.toLowerCase().startsWith('польотний стек')) { 
+                    const [k, v] = l.split(':').map(x => x.trim()); 
+                    if(k&&v) addSpecRow(k, v); 
+                } 
+            });
+        }
+
+        // Галерея
+        function initGalleryUpload() {
+            const area = document.getElementById('galleryUploadArea'), inp = document.getElementById('galleryInput');
+            area.addEventListener('click', () => inp.click());
+            area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = '#5a5a5a'; });
+            area.addEventListener('dragleave', () => area.style.borderColor = '#333');
+            area.addEventListener('drop', e => { e.preventDefault(); area.style.borderColor = '#333'; handleGalleryFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))); });
+            inp.addEventListener('change', e => { handleGalleryFiles(Array.from(e.target.files).filter(f => f.type.startsWith('image/'))); inp.value = ''; });
+        }
+
+        async function handleGalleryFiles(files) {
+            if(galleryImages.length + files.length > 10) { alert('Максимум 10 фото'); return; }
+            for(const f of files) { const b64 = await fileToBase64(f); galleryImages.push({ id: Date.now()+Math.random(), url: b64 }); }
+            renderGallery();
+        }
+
+        function renderGallery() {
+            const g = document.getElementById('galleryGrid');
+            if(!galleryImages.length) { g.innerHTML = '<p style="color:#777;text-align:center;grid-column:1/-1;">Немає фото</p>'; document.getElementById('galleryCount').textContent = '0 фото'; return; }
+            g.innerHTML = galleryImages.map((img, i) => `<div class="gallery-item"><img src="${img.url}"><div class="gallery-item-actions"><button class="gallery-delete" onclick="removeGalleryImage(${i})"><i class="fas fa-trash"></i></button></div></div>`).join('');
+            document.getElementById('galleryCount').textContent = `${galleryImages.length} фото`;
+        }
+
+        window.removeGalleryImage = function(i) { galleryImages.splice(i, 1); renderGallery(); };
+
         function editProduct(id) {
-            const p = products.find(p => p.id == id);
-            if (!p) return;
+            const p = products.find(p => p.id == id); if(!p) return;
             editProductId = id;
             document.getElementById('productCategory').value = p.category;
             document.getElementById('productName').value = p.name;
             document.getElementById('productPrice').value = p.price;
             document.getElementById('productDescription').value = p.description || '';
-            document.getElementById('productSpecs').value = p.specs || '';
-            
-            const container = document.getElementById('variantsContainer');
-            container.innerHTML = '';
-            (p.variants || ['Стандарт']).forEach(v => {
-                const div = document.createElement('div');
-                div.className = 'variant-row';
-                div.innerHTML = `<input type="text" value="${v}"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-                container.appendChild(div);
-            });
-            
-            // Завантажуємо галерею
-            galleryImages = (p.gallery || []).map(img => ({
-                id: Date.now() + Math.random(),
-                url: img,
-                isNew: false
-            }));
+            const vc = document.getElementById('variantsContainer'); vc.innerHTML = '';
+            (p.variants||['Стандарт']).forEach(v => { const d = document.createElement('div'); d.className = 'variant-row'; d.innerHTML = `<input type="text" value="${v}"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`; vc.appendChild(d); });
+            populateSpecsFromString(p.specs || '');
+            galleryImages = (p.gallery || []).map(url => ({ id: Date.now()+Math.random(), url }));
             renderGallery();
-            
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-edit"></i> Редагувати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Оновити товар';
             document.getElementById('cancelEditBtn').style.display = 'inline-block';
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('productImage').value = '';
         }
 
         function cancelEdit() {
-            editProductId = null;
-            galleryImages = [];
+            editProductId = null; galleryImages = [];
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-plus"></i> Додати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Додати товар';
             document.getElementById('cancelEditBtn').style.display = 'none';
-            document.getElementById('productName').value = '';
-            document.getElementById('productPrice').value = '';
-            document.getElementById('productDescription').value = '';
-            document.getElementById('productSpecs').value = '';
+            document.getElementById('productName').value = document.getElementById('productPrice').value = document.getElementById('productDescription').value = '';
             document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
-            document.getElementById('productImage').value = '';
-            document.getElementById('imagePreview').style.display = 'none';
+            clearSpecRows(); 
+            ['batteryCapacity','batteryVoltage','batteryConnector','batteryDischarge','stackFC','stackESC','stackVTX','stackReceiver'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
             renderGallery();
         }
 
@@ -623,235 +574,124 @@
             const url = editProductId ? `/api/products/${editProductId}` : '/api/products';
             const method = editProductId ? 'PUT' : 'POST';
             try {
-                const variants = [];
-                document.querySelectorAll('#variantsContainer input').forEach(i => { if (i.value.trim()) variants.push(i.value.trim()); });
-                
-                let image = null;
-                const imgFile = document.getElementById('productImage').files[0];
-                if (imgFile) image = await fileToBase64(imgFile);
-                
-                // Збираємо URL зображень галереї
-                const galleryUrls = galleryImages.map(img => img.url);
-                
+                const variants = []; 
+                document.querySelectorAll('#variantsContainer input').forEach(i => { if(i.value.trim()) variants.push(i.value.trim()); });
+                let img = null; 
+                const f = document.getElementById('productImage').files[0]; 
+                if(f) img = await fileToBase64(f);
                 const data = {
                     category: document.getElementById('productCategory').value,
                     name: document.getElementById('productName').value.trim(),
                     price: parseFloat(document.getElementById('productPrice').value),
                     description: document.getElementById('productDescription').value,
-                    specs: document.getElementById('productSpecs').value,
+                    specs: collectSpecsToString(),
                     variants: variants.length ? variants : ['Стандарт'],
-                    image: image,
-                    gallery: galleryUrls
+                    image: img,
+                    gallery: galleryImages.map(g => g.url)
                 };
-                
-                if (!data.name || !data.category || !data.price) { alert('Заповніть обов\'язкові поля'); return; }
-                
-                const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-                if (res.ok) { 
-                    alert(editProductId ? 'Оновлено!' : 'Додано!'); 
-                    cancelEdit(); 
-                    loadData(); 
-                } else { 
-                    const err = await res.json(); 
-                    alert(err.error || 'Помилка'); 
-                }
-            } catch(e) { 
-                console.error(e);
-                alert('Помилка: ' + e.message); 
-            }
-        }
-
-        async function deleteProduct(id) {
-            if (!confirm('Видалити товар?')) return;
-            try {
-                const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
-                if (res.ok) { alert('Видалено!'); loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-
-        function updateOrdersList() {
-            document.getElementById('ordersList').innerHTML = orders.sort((a,b) => new Date(b.date) - new Date(a.date)).map(o => {
-                const p = products.find(p => p.id == o.productId);
-                return `<tr><td>#${o.id}</td><td>${p?.name || '?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant || '—'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`;
-            }).join('');
-        }
-
-        function updateSocialList() {
-            document.getElementById('socialList').innerHTML = social.map(s => `
-                <tr>
-                    <td><i class="${s.icon}"></i></td><td>${s.platform}</td><td>${s.name}</td>
-                    <td><a href="${s.url}" target="_blank">${s.url.substring(0,30)}...</a></td>
-                    <td>${s.active ? 'Активна' : 'Неактивна'}</td>
-                    <td class="action-btns">
-                        <button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-            document.querySelectorAll('#socialList .edit-btn').forEach(btn => btn.addEventListener('click', () => openEditSocial(btn.getAttribute('data-platform'))));
-            document.querySelectorAll('#socialList .delete-btn').forEach(btn => btn.addEventListener('click', () => deleteSocial(btn.getAttribute('data-platform'))));
-        }
-
-        async function addSocial() {
-            const platform = document.getElementById('socialPlatform').value;
-            const name = document.getElementById('socialName').value.trim();
-            const url = document.getElementById('socialUrl').value.trim();
-            let icon = document.getElementById('socialIcon').value.trim();
-            const active = document.getElementById('socialActive').checked;
-            if (!name || !url) { alert('Заповніть поля'); return; }
-            const icons = { telegram: 'fa-brands fa-telegram', instagram: 'fa-brands fa-instagram', facebook: 'fa-brands fa-facebook', viber: 'fa-brands fa-viber', whatsapp: 'fa-brands fa-whatsapp', tiktok: 'fa-brands fa-tiktok', youtube: 'fa-brands fa-youtube' };
-            if (!icon) icon = icons[platform] || 'fa-solid fa-link';
-            try {
-                const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify([...social, { platform, name, url, icon, active }]) });
-                if (res.ok) { alert('Додано!'); document.getElementById('socialName').value = ''; document.getElementById('socialUrl').value = ''; loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-
-        function openEditSocial(platform) {
-            const item = social.find(s => s.platform === platform);
-            if (item) {
-                currentEditPlatform = platform;
-                document.getElementById('editSocialName').value = item.name;
-                document.getElementById('editSocialUrl').value = item.url;
-                document.getElementById('editSocialIcon').value = item.icon;
-                document.getElementById('editSocialActive').checked = item.active;
-                document.getElementById('editSocialModal').classList.add('active');
-            }
-        }
-
-        async function updateSocial() {
-            if (!currentEditPlatform) return;
-            const name = document.getElementById('editSocialName').value;
-            const url = document.getElementById('editSocialUrl').value;
-            const icon = document.getElementById('editSocialIcon').value;
-            const active = document.getElementById('editSocialActive').checked;
-            try {
-                const updated = social.map(s => s.platform === currentEditPlatform ? { ...s, name, url, icon, active } : s);
-                const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updated) });
-                if (res.ok) { alert('Оновлено!'); closeModal('editSocialModal'); loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-
-        async function deleteSocial(platform) {
-            if (!confirm('Видалити?')) return;
-            try {
-                const updated = social.filter(s => s.platform !== platform);
-                const res = await fetch('/api/social', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updated) });
-                if (res.ok) { alert('Видалено!'); loadData(); }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-
-        async function saveAbout() {
-            try {
-                await fetch('/api/about', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: document.getElementById('aboutText').value }) });
-                alert('Збережено!');
-            } catch(e) { alert('Помилка'); }
-        }
-
-        async function saveContact() {
-            const parts = [];
-            const phone = document.getElementById('contactPhone').value;
-            const email = document.getElementById('contactEmail').value;
-            const schedule = document.getElementById('contactSchedule').value;
-            const address = document.getElementById('contactAddress').value;
-            if (phone) parts.push(`Телефон: ${phone}`);
-            if (email) parts.push(`Email: ${email}`);
-            if (schedule) parts.push(`Графік: ${schedule}`);
-            if (address) parts.push(`Адреса: ${address}`);
-            try {
-                await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: parts.join('\n') }) });
-                alert('Збережено!');
-            } catch(e) { alert('Помилка'); }
-        }
-
-        async function uploadBackground() { 
-            const f = document.getElementById('bgFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; }
-            try {
-                const base64 = await fileToBase64(f);
-                const res = await fetch('/api/background', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
-                if (res.ok) { alert('Збережено!'); loadBackground(); document.getElementById('bgPreview').style.display = 'none'; document.getElementById('bgFile').value = ''; }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-        async function deleteBackground() { if (!confirm('Видалити?')) return; await fetch('/api/background', { method: 'DELETE' }); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; alert('Видалено!'); }
-
-        async function uploadBanner() { 
-            const f = document.getElementById('bannerFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; }
-            try {
-                const base64 = await fileToBase64(f);
-                const res = await fetch('/api/banner', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
-                if (res.ok) { alert('Збережено!'); loadBanner(); document.getElementById('bannerPreview').style.display = 'none'; document.getElementById('bannerFile').value = ''; }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-        async function deleteBanner() { if (!confirm('Видалити?')) return; await fetch('/api/banner', { method: 'DELETE' }); document.getElementById('currentBanner').style.display = 'none'; document.getElementById('noBannerText').style.display = 'block'; alert('Видалено!'); }
-
-        async function uploadBrandLogo() { 
-            const f = document.getElementById('brandLogoFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; }
-            try {
-                const base64 = await fileToBase64(f);
-                const res = await fetch('/api/brand-logo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
-                if (res.ok) { alert('Збережено!'); loadBrandLogo(); document.getElementById('brandLogoPreview').style.display = 'none'; document.getElementById('brandLogoFile').value = ''; }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-        async function deleteBrandLogo() { if (!confirm('Видалити?')) return; await fetch('/api/brand-logo', { method: 'DELETE' }); document.getElementById('currentBrandLogo').style.display = 'none'; document.getElementById('noBrandLogoText').style.display = 'block'; alert('Видалено!'); }
-
-        async function uploadLogo() { 
-            const f = document.getElementById('logoFile').files[0]; 
-            if (!f) { alert('Виберіть файл'); return; }
-            try {
-                const base64 = await fileToBase64(f);
-                const res = await fetch('/api/logo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ image: base64 }) });
-                if (res.ok) { alert('Збережено!'); loadLogo(); document.getElementById('logoPreview').style.display = 'none'; document.getElementById('logoFile').value = ''; }
-                else alert('Помилка');
-            } catch(e) { alert('Помилка'); }
-        }
-        async function deleteLogo() { if (!confirm('Видалити?')) return; await fetch('/api/logo', { method: 'DELETE' }); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; alert('Видалено!'); }
-
-        async function changePassword() {
-            const cur = document.getElementById('currentPassword').value;
-            const newU = document.getElementById('newUsername').value;
-            const newP = document.getElementById('newPassword').value;
-            const conf = document.getElementById('confirmPassword').value;
-            if (!cur) { alert('Введіть поточний пароль'); return; }
-            if (newP && newP !== conf) { alert('Паролі не співпадають'); return; }
-            try {
-                const res = await fetch('/api/admin/change-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword: cur, newUsername: newU, newPassword: newP }) });
-                if (res.ok) { alert('Оновлено!'); document.getElementById('currentPassword').value = document.getElementById('newPassword').value = document.getElementById('confirmPassword').value = ''; }
+                if(!data.name || !data.category || !data.price) return alert('Заповніть обов\'язкові поля');
+                const res = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+                if(res.ok) { alert(editProductId?'Оновлено':'Додано'); cancelEdit(); loadData(); }
                 else { const e = await res.json(); alert(e.error || 'Помилка'); }
             } catch(e) { alert('Помилка'); }
         }
 
-        async function deleteReview(id) {
-            if (!confirm('Видалити?')) return;
-            await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
-            loadReviews();
+        async function deleteProduct(id) { if(!confirm('Видалити?')) return; await fetch(`/api/products/${id}`,{method:'DELETE'}); loadData(); }
+
+        function updateOrdersList() { 
+            document.getElementById('ordersList').innerHTML = orders.sort((a,b) => new Date(b.date) - new Date(a.date)).map(o => { 
+                const p = products.find(p => p.id == o.productId); 
+                return `<tr><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant||'-'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`; 
+            }).join(''); 
         }
 
+        function updateSocialList() {
+            document.getElementById('socialList').innerHTML = social.map(s => `<tr><td><i class="${s.icon}"></i></td><td>${s.platform}</td><td>${s.name}</td><td><a href="${s.url}" target="_blank">${s.url.substring(0,20)}</a></td><td>${s.active?'Так':'Ні'}</td><td class="action-btns"><button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.querySelectorAll('#socialList .edit-btn').forEach(b => b.addEventListener('click', () => openEditSocial(b.getAttribute('data-platform'))));
+            document.querySelectorAll('#socialList .delete-btn').forEach(b => b.addEventListener('click', () => deleteSocial(b.getAttribute('data-platform'))));
+        }
+
+        async function addSocial() {
+            const p = document.getElementById('socialPlatform').value, n = document.getElementById('socialName').value.trim(), u = document.getElementById('socialUrl').value.trim();
+            let i = document.getElementById('socialIcon').value.trim(); const a = document.getElementById('socialActive').checked;
+            if(!n||!u) return alert('Заповніть поля');
+            const icons = {telegram:'fa-brands fa-telegram',instagram:'fa-brands fa-instagram',facebook:'fa-brands fa-facebook',viber:'fa-brands fa-viber',whatsapp:'fa-brands fa-whatsapp',tiktok:'fa-brands fa-tiktok',youtube:'fa-brands fa-youtube'};
+            if(!i) i = icons[p]||'fa-solid fa-link';
+            await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify([...social,{platform:p,name:n,url:u,icon:i,active:a}])});
+            document.getElementById('socialName').value = document.getElementById('socialUrl').value = ''; 
+            loadData(); 
+            alert('Додано!');
+        }
+
+        function openEditSocial(p) { 
+            const s = social.find(x => x.platform === p); 
+            if(s) { 
+                document.getElementById('editSocialName').value = s.name; 
+                document.getElementById('editSocialUrl').value = s.url; 
+                document.getElementById('editSocialIcon').value = s.icon; 
+                document.getElementById('editSocialActive').checked = s.active; 
+                currentEditPlatform = p; 
+                document.getElementById('editSocialModal').classList.add('active'); 
+            } 
+        }
+
+        async function updateSocial() {
+            if(!currentEditPlatform) return;
+            const n = document.getElementById('editSocialName').value, u = document.getElementById('editSocialUrl').value, i = document.getElementById('editSocialIcon').value, a = document.getElementById('editSocialActive').checked;
+            const upd = social.map(s => s.platform === currentEditPlatform ? {...s, name:n, url:u, icon:i, active:a} : s);
+            await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(upd)});
+            closeModal('editSocialModal'); loadData(); alert('Оновлено!');
+        }
+
+        async function deleteSocial(p) { 
+            if(!confirm('Видалити?')) return; 
+            await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(social.filter(s => s.platform !== p))}); 
+            loadData(); 
+        }
+
+        async function saveAbout() { 
+            await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutText').value})}); 
+            alert('Збережено'); 
+        }
+
+        async function saveContact() {
+            const parts = []; 
+            const ph = document.getElementById('contactPhone').value, em = document.getElementById('contactEmail').value, sc = document.getElementById('contactSchedule').value, ad = document.getElementById('contactAddress').value;
+            if(ph) parts.push(`Телефон: ${ph}`); if(em) parts.push(`Email: ${em}`); if(sc) parts.push(`Графік: ${sc}`); if(ad) parts.push(`Адреса: ${ad}`);
+            await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:parts.join('\n')})}); 
+            alert('Збережено');
+        }
+
+        async function uploadBackground() { const f = document.getElementById('bgFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/background',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBackground(); alert('Збережено!'); }
+        async function deleteBackground() { await fetch('/api/background',{method:'DELETE'}); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; alert('Видалено!'); }
+        async function uploadBanner() { const f = document.getElementById('bannerFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/banner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBanner(); alert('Збережено!'); }
+        async function deleteBanner() { await fetch('/api/banner',{method:'DELETE'}); document.getElementById('currentBanner').style.display = 'none'; document.getElementById('noBannerText').style.display = 'block'; alert('Видалено!'); }
+        async function uploadBrandLogo() { const f = document.getElementById('brandLogoFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/brand-logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBrandLogo(); alert('Збережено!'); }
+        async function deleteBrandLogo() { await fetch('/api/brand-logo',{method:'DELETE'}); document.getElementById('currentBrandLogo').style.display = 'none'; document.getElementById('noBrandLogoText').style.display = 'block'; alert('Видалено!'); }
+        async function uploadLogo() { const f = document.getElementById('logoFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadLogo(); alert('Збережено!'); }
+        async function deleteLogo() { await fetch('/api/logo',{method:'DELETE'}); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; alert('Видалено!'); }
+
+        async function changePassword() {
+            const cur = document.getElementById('currentPassword').value, newU = document.getElementById('newUsername').value, newP = document.getElementById('newPassword').value, conf = document.getElementById('confirmPassword').value;
+            if(!cur) return alert('Введіть поточний пароль'); 
+            if(newP && newP !== conf) return alert('Паролі не співпадають');
+            const res = await fetch('/api/admin/change-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({currentPassword:cur,newUsername:newU,newPassword:newP})});
+            if(res.ok) { alert('Оновлено!'); document.getElementById('currentPassword').value = document.getElementById('newPassword').value = document.getElementById('confirmPassword').value = ''; }
+            else { const e = await res.json(); alert(e.error); }
+        }
+
+        async function deleteReview(id) { await fetch(`/api/reviews/${id}`,{method:'DELETE'}); loadReviews(); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         function initPreviewImages() {
-            ['productImage', 'logoFile', 'bannerFile', 'brandLogoFile', 'bgFile'].forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('change', function(e) {
-                        const reader = new FileReader();
-                        const previewId = id === 'productImage' ? 'imagePreview' : id.replace('File', 'Preview');
-                        reader.onload = function() { 
-                            const preview = document.getElementById(previewId);
-                            if (preview) { preview.src = reader.result; preview.style.display = 'block'; }
-                        };
-                        if (e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
-                    });
-                }
+            ['productImage','logoFile','bannerFile','brandLogoFile','bgFile'].forEach(id => {
+                const inp = document.getElementById(id); if(!inp) return;
+                inp.addEventListener('change', function(e) {
+                    const reader = new FileReader(); 
+                    const prevId = id === 'productImage' ? 'imagePreview' : id.replace('File','Preview');
+                    reader.onload = function() { const prev = document.getElementById(prevId); if(prev) { prev.src = reader.result; prev.style.display = 'block'; } };
+                    if(e.target.files[0]) reader.readAsDataURL(e.target.files[0]);
+                });
             });
         }
     </script>
