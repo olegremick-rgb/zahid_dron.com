@@ -104,6 +104,7 @@
                 <li><a data-section="contacts"><i class="fas fa-address-book"></i> Контакти</a></li>
                 <li><a data-section="social"><i class="fas fa-share-alt"></i> Соцмережі</a></li>
                 <li><a data-section="reviews"><i class="fas fa-star"></i> Відгуки</a></li>
+                <li><a data-section="home-page"><i class="fas fa-home"></i> Головна</a></li>
             </ul>
         </div>
         <div class="admin-content">
@@ -158,12 +159,11 @@
                         <label>Характеристики</label>
                         <textarea id="productSpecs" rows="8" placeholder="## Літальний апарат&#10;Живлення: акумулятор&#10;Місткість батареї, мАгод: 5000"></textarea>
                         <button type="button" class="btn" id="autoFormatSpecsBtn" style="margin-top:0.5rem;"><i class="fas fa-magic"></i> Автоформатувати</button>
-                        <small style="color:#777; display:block; margin-top:0.3rem;">Використовуйте ## для секцій, Назва: Значення для характеристик</small>
+                        <small style="color:#777; display:block; margin-top:0.3rem;">## Секція, Назва: Значення</small>
                     </div>
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
                     
-                    <!-- Галерея -->
                     <div class="gallery-container">
                         <div class="gallery-title" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
                             <label><i class="fas fa-images"></i> Галерея</label>
@@ -191,12 +191,52 @@
             <!-- Про нас -->
             <div id="about" class="admin-section">
                 <h2><i class="fas fa-info-circle"></i> Про нас</h2>
-                <div class="admin-form"><textarea id="aboutText" rows="10"></textarea><button class="btn" id="saveAboutBtn">Зберегти</button></div>
+                <div class="admin-form">
+                    <h3>Основний текст</h3>
+                    <textarea id="aboutText" rows="10"></textarea>
+                    <button class="btn" id="saveAboutBtn">Зберегти текст</button>
+                </div>
+                
+                <div class="admin-form">
+                    <h3>Статистика на сторінці "Про нас"</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <input type="text" id="aboutStat1Label" placeholder="Назва 1">
+                        <input type="text" id="aboutStat1Value" placeholder="Значення 1">
+                        <input type="text" id="aboutStat2Label" placeholder="Назва 2">
+                        <input type="text" id="aboutStat2Value" placeholder="Значення 2">
+                        <input type="text" id="aboutStat3Label" placeholder="Назва 3">
+                        <input type="text" id="aboutStat3Value" placeholder="Значення 3">
+                        <input type="text" id="aboutStat4Label" placeholder="Назва 4">
+                        <input type="text" id="aboutStat4Value" placeholder="Значення 4">
+                    </div>
+                    <button class="btn" id="saveAboutStatsBtn" style="margin-top:1rem;">Зберегти статистику</button>
+                </div>
+                
+                <div class="admin-form">
+                    <h3>Переваги</h3>
+                    <div id="aboutFeaturesContainer"></div>
+                    <button class="btn" id="addAboutFeatureBtn"><i class="fas fa-plus"></i> Додати</button>
+                    <button class="btn" id="saveAboutFeaturesBtn" style="margin-top:1rem;">Зберегти переваги</button>
+                </div>
+                
+                <div class="admin-form">
+                    <h3>Партнери (через кому)</h3>
+                    <input type="text" id="aboutPartnersInput" placeholder="DJI, AUTEL, HUBSAN" style="width:100%;">
+                    <button class="btn" id="saveAboutPartnersBtn" style="margin-top:1rem;">Зберегти</button>
+                </div>
             </div>
             <!-- Контакти -->
             <div id="contacts" class="admin-section">
                 <h2><i class="fas fa-address-book"></i> Контакти</h2>
                 <div class="admin-form"><div class="form-group"><input type="text" id="contactPhone" placeholder="Телефон"></div><div class="form-group"><input type="email" id="contactEmail" placeholder="Email"></div><div class="form-group"><input type="text" id="contactSchedule" placeholder="Графік роботи"></div><div class="form-group"><input type="text" id="contactAddress" placeholder="Адреса"></div><button class="btn" id="saveContactBtn">Зберегти</button></div>
+                
+                <div class="admin-form">
+                    <h3>Робочі години</h3>
+                    <input type="text" id="hoursMonFri" placeholder="Пн-Пт">
+                    <input type="text" id="hoursSat" placeholder="Сб">
+                    <input type="text" id="hoursSun" placeholder="Нд">
+                    <button class="btn" id="saveHoursBtn" style="margin-top:1rem;">Зберегти</button>
+                </div>
             </div>
             <!-- Соцмережі -->
             <div id="social" class="admin-section">
@@ -204,23 +244,15 @@
                 <div class="admin-form"><h3>Додати соцмережу</h3>
                     <div class="form-group">
                         <select id="socialPlatform">
-                            <option value="telegram">Telegram</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="facebook">Facebook</option>
-                            <option value="viber">Viber</option>
-                            <option value="whatsapp">WhatsApp</option>
-                            <option value="signal">Signal</option>
-                            <option value="tiktok">TikTok</option>
-                            <option value="youtube">YouTube</option>
-                            <option value="x">X (Twitter)</option>
-                            <option value="discord">Discord</option>
-                            <option value="github">GitHub</option>
-                            <option value="linkedin">LinkedIn</option>
+                            <option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option>
+                            <option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="signal">Signal</option>
+                            <option value="tiktok">TikTok</option><option value="youtube">YouTube</option><option value="x">X (Twitter)</option>
+                            <option value="discord">Discord</option><option value="github">GitHub</option><option value="linkedin">LinkedIn</option>
                         </select>
                     </div>
                     <div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div>
                     <div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div>
-                    <div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div>
+                    <div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка"></div>
                     <div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div>
                     <button class="btn" id="addSocialBtn">Додати</button>
                 </div>
@@ -230,6 +262,34 @@
             <div id="reviews" class="admin-section">
                 <h2><i class="fas fa-star"></i> Відгуки</h2>
                 <div class="table-container"><table><thead><tr><th>Автор</th><th>Рейтинг</th><th>Текст</th><th>Дата</th><th>Дії</th></tr></thead><tbody id="reviewsListAdmin"></tbody></table></div>
+            </div>
+            <!-- Головна сторінка -->
+            <div id="home-page" class="admin-section">
+                <h2><i class="fas fa-home"></i> Налаштування головної</h2>
+                
+                <div class="admin-form">
+                    <h3>Статистика на головній</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <input type="text" id="statDrones" placeholder="Продано дронів">
+                        <input type="text" id="statRating" placeholder="Рейтинг">
+                        <input type="text" id="statSupport" placeholder="Підтримка">
+                        <input type="text" id="statOriginal" placeholder="Оригінал">
+                    </div>
+                    <button class="btn" id="saveStatsBtn">Зберегти</button>
+                </div>
+                
+                <div class="admin-form">
+                    <h3>Партнери (через кому)</h3>
+                    <input type="text" id="homePartnersInput" placeholder="DJI, AUTEL, HUBSAN, EACHINE" style="width:100%;">
+                    <button class="btn" id="saveHomePartnersBtn" style="margin-top:1rem;">Зберегти</button>
+                </div>
+                
+                <div class="admin-form">
+                    <h3>Переваги на головній</h3>
+                    <div id="homeFeaturesContainer"></div>
+                    <button class="btn" id="addHomeFeatureBtn"><i class="fas fa-plus"></i> Додати</button>
+                    <button class="btn" id="saveHomeFeaturesBtn" style="margin-top:1rem;">Зберегти</button>
+                </div>
             </div>
         </div>
     </div>
@@ -285,36 +345,54 @@
             document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
             document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
             document.getElementById('autoFormatSpecsBtn')?.addEventListener('click', autoFormatSpecs);
+            
+            // Головна сторінка
+            document.getElementById('saveStatsBtn')?.addEventListener('click', saveHomeStats);
+            document.getElementById('saveHomePartnersBtn')?.addEventListener('click', saveHomePartners);
+            document.getElementById('addHomeFeatureBtn')?.addEventListener('click', addHomeFeatureField);
+            document.getElementById('saveHomeFeaturesBtn')?.addEventListener('click', saveHomeFeatures);
+            
+            // Про нас
+            document.getElementById('saveAboutStatsBtn')?.addEventListener('click', saveAboutStats);
+            document.getElementById('addAboutFeatureBtn')?.addEventListener('click', addAboutFeatureField);
+            document.getElementById('saveAboutFeaturesBtn')?.addEventListener('click', saveAboutFeatures);
+            document.getElementById('saveAboutPartnersBtn')?.addEventListener('click', saveAboutPartners);
+            document.getElementById('saveHoursBtn')?.addEventListener('click', saveWorkHours);
         }
 
         function autoFormatSpecs() {
             let text = document.getElementById('productSpecs').value;
             let lines = text.split('\n');
             let formatted = [];
+            let i = 0;
             
-            lines.forEach(line => {
-                line = line.trim();
-                if (!line) return;
+            while (i < lines.length) {
+                let line = lines[i].trim();
+                if (!line) { i++; continue; }
                 
-                if (line.startsWith('##') || /^[А-ЯІЇЄҐA-Z\s]+$/.test(line) && line.length < 50) {
+                if (line.startsWith('##') || /^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length < 50 && !line.includes(':')) {
                     if (!line.startsWith('##')) line = '## ' + line;
                     formatted.push(line);
-                } else if (line.includes(':')) {
-                    formatted.push(line);
-                } else if (line.split(/\s+/).length === 2) {
-                    let parts = line.split(/\s+/);
-                    formatted.push(parts[0] + ': ' + parts[1]);
-                } else if (line.split(/\s+/).length === 1 && formatted.length > 0) {
-                    let last = formatted[formatted.length - 1];
-                    if (!last.includes(':') && !last.startsWith('##')) {
-                        formatted[formatted.length - 1] = last + ': ' + line;
-                    } else {
-                        formatted.push(line);
-                    }
-                } else {
-                    formatted.push(line);
+                    i++;
+                    continue;
                 }
-            });
+                
+                if (line.includes(':')) {
+                    formatted.push(line);
+                    i++;
+                    continue;
+                }
+                
+                let nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
+                
+                if (nextLine && !nextLine.startsWith('##') && !/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(nextLine)) {
+                    formatted.push(line + ': ' + nextLine);
+                    i += 2;
+                } else {
+                    formatted.push(line + ': ');
+                    i++;
+                }
+            }
             
             document.getElementById('productSpecs').value = formatted.join('\n');
             alert('Характеристики відформатовано!');
@@ -353,7 +431,159 @@
                 document.getElementById('aboutText').value = await about.text();
                 parseContactInfo(await cont.text());
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
+                await loadHomePageData();
+                await loadAboutPageData();
             } catch(e) { console.error(e); }
+        }
+
+        async function loadHomePageData() {
+            try {
+                const [stats, partners, features] = await Promise.all([
+                    fetch('/api/home-stats').then(r => r.json()),
+                    fetch('/api/partners').then(r => r.json()),
+                    fetch('/api/features').then(r => r.json())
+                ]);
+                document.getElementById('statDrones').value = stats.dronesSold || '500+';
+                document.getElementById('statRating').value = stats.rating || '4.9';
+                document.getElementById('statSupport').value = stats.support || '24/7';
+                document.getElementById('statOriginal').value = stats.original || '100%';
+                document.getElementById('homePartnersInput').value = (partners || []).join(', ');
+                renderHomeFeaturesList(features || []);
+            } catch(e) {}
+        }
+
+        async function loadAboutPageData() {
+            try {
+                const [stats, features, partners, hours] = await Promise.all([
+                    fetch('/api/home-stats').then(r => r.json()),
+                    fetch('/api/features').then(r => r.json()),
+                    fetch('/api/partners').then(r => r.json()),
+                    fetch('/api/work-hours').then(r => r.json())
+                ]);
+                document.getElementById('aboutStat1Label').value = 'Проданих дронів';
+                document.getElementById('aboutStat1Value').value = stats.dronesSold || '500+';
+                document.getElementById('aboutStat2Label').value = 'Середня оцінка';
+                document.getElementById('aboutStat2Value').value = stats.rating || '4.9';
+                document.getElementById('aboutStat3Label').value = 'Підтримка';
+                document.getElementById('aboutStat3Value').value = stats.support || '24/7';
+                document.getElementById('aboutStat4Label').value = 'Оригінал';
+                document.getElementById('aboutStat4Value').value = stats.original || '100%';
+                document.getElementById('aboutPartnersInput').value = (partners || []).join(', ');
+                renderAboutFeaturesList(features || []);
+                document.getElementById('hoursMonFri').value = hours.monFri || '10:00 - 19:00';
+                document.getElementById('hoursSat').value = hours.sat || '11:00 - 17:00';
+                document.getElementById('hoursSun').value = hours.sun || 'Вихідний';
+            } catch(e) {}
+        }
+
+        function renderHomeFeaturesList(features) {
+            const c = document.getElementById('homeFeaturesContainer');
+            c.innerHTML = features.map((f, i) => `
+                <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
+                    <input type="text" value="${f.icon}" data-index="${i}" class="home-feature-icon">
+                    <input type="text" value="${f.title}" data-index="${i}" class="home-feature-title">
+                    <input type="text" value="${f.desc}" data-index="${i}" class="home-feature-desc">
+                    <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function renderAboutFeaturesList(features) {
+            const c = document.getElementById('aboutFeaturesContainer');
+            c.innerHTML = features.map((f, i) => `
+                <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
+                    <input type="text" value="${f.icon}" data-index="${i}" class="about-feature-icon">
+                    <input type="text" value="${f.title}" data-index="${i}" class="about-feature-title">
+                    <input type="text" value="${f.desc}" data-index="${i}" class="about-feature-desc">
+                    <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+        }
+
+        function addHomeFeatureField() {
+            const c = document.getElementById('homeFeaturesContainer');
+            const d = document.createElement('div');
+            d.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
+            d.innerHTML = `<input type="text" value="fa-star" class="home-feature-icon"><input type="text" class="home-feature-title"><input type="text" class="home-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            c.appendChild(d);
+        }
+
+        function addAboutFeatureField() {
+            const c = document.getElementById('aboutFeaturesContainer');
+            const d = document.createElement('div');
+            d.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
+            d.innerHTML = `<input type="text" value="fa-star" class="about-feature-icon"><input type="text" class="about-feature-title"><input type="text" class="about-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            c.appendChild(d);
+        }
+
+        async function saveHomeStats() {
+            const data = {
+                dronesSold: document.getElementById('statDrones').value,
+                rating: document.getElementById('statRating').value,
+                support: document.getElementById('statSupport').value,
+                original: document.getElementById('statOriginal').value
+            };
+            await fetch('/api/home-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+            alert('Збережено!');
+        }
+
+        async function saveHomePartners() {
+            const partners = document.getElementById('homePartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
+            await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
+            alert('Збережено!');
+        }
+
+        async function saveHomeFeatures() {
+            const features = [];
+            document.querySelectorAll('#homeFeaturesContainer > div').forEach(row => {
+                features.push({
+                    icon: row.querySelector('.home-feature-icon')?.value || 'fa-star',
+                    title: row.querySelector('.home-feature-title')?.value || '',
+                    desc: row.querySelector('.home-feature-desc')?.value || ''
+                });
+            });
+            await fetch('/api/features', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(features) });
+            alert('Збережено!');
+        }
+
+        async function saveAboutStats() {
+            const data = {
+                dronesSold: document.getElementById('aboutStat1Value').value,
+                rating: document.getElementById('aboutStat2Value').value,
+                support: document.getElementById('aboutStat3Value').value,
+                original: document.getElementById('aboutStat4Value').value
+            };
+            await fetch('/api/home-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+            alert('Збережено!');
+        }
+
+        async function saveAboutFeatures() {
+            const features = [];
+            document.querySelectorAll('#aboutFeaturesContainer > div').forEach(row => {
+                features.push({
+                    icon: row.querySelector('.about-feature-icon')?.value || 'fa-star',
+                    title: row.querySelector('.about-feature-title')?.value || '',
+                    desc: row.querySelector('.about-feature-desc')?.value || ''
+                });
+            });
+            await fetch('/api/features', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(features) });
+            alert('Збережено!');
+        }
+
+        async function saveAboutPartners() {
+            const partners = document.getElementById('aboutPartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
+            await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
+            alert('Збережено!');
+        }
+
+        async function saveWorkHours() {
+            const data = {
+                monFri: document.getElementById('hoursMonFri').value,
+                sat: document.getElementById('hoursSat').value,
+                sun: document.getElementById('hoursSun').value
+            };
+            await fetch('/api/work-hours', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+            alert('Збережено!');
         }
 
         async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = u; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
