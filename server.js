@@ -7,9 +7,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // ============ НАЛАШТУВАННЯ ФАЙЛОВОГО СХОВИЩА ============
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 
-// Функція безпечного читання JSON
 async function readJSON(filename, defaultValue = []) {
     try {
         const data = await fs.readFile(path.join(DATA_DIR, filename), 'utf8');
@@ -19,13 +18,11 @@ async function readJSON(filename, defaultValue = []) {
     }
 }
 
-// Функція безпечного запису JSON
 async function writeJSON(filename, data) {
     await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(path.join(DATA_DIR, filename), JSON.stringify(data, null, 2));
 }
 
-// Завантаження бази даних при старті
 let db = {
     users: [],
     categories: [],
@@ -56,7 +53,7 @@ async function loadDatabase() {
             brandLogo: await readText('brand-logo.txt', ''),
             background: await readText('background.txt', '')
         };
-        console.log('✅ Базу даних завантажено');
+        console.log('✅ Базу даних завантажено з:', DATA_DIR);
     } catch (err) {
         console.error('Помилка завантаження БД:', err);
     }
@@ -75,7 +72,6 @@ async function writeText(filename, data) {
     await fs.writeFile(path.join(DATA_DIR, filename), data);
 }
 
-// Збереження після змін
 async function saveUsers() { await writeJSON('users.json', db.users); }
 async function saveCategories() { await writeJSON('categories.json', db.categories); }
 async function saveProducts() { await writeJSON('products.json', db.products); }
@@ -90,7 +86,7 @@ async function saveBanner() { await writeText('banner.txt', db.images.banner); }
 async function saveBrandLogo() { await writeText('brand-logo.txt', db.images.brandLogo); }
 async function saveBackground() { await writeText('background.txt', db.images.background); }
 
-// ============ EXPRESS НАЛАШТУВАННЯ ============
+// ============ EXPRESS ============
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(__dirname));
@@ -113,9 +109,7 @@ function isAdmin(req, res, next) {
 }
 
 // ============ АУТЕНТИФІКАЦІЯ ============
-app.get('/api/user', (req, res) => {
-    res.json(req.session.user || null);
-});
+app.get('/api/user', (req, res) => res.json(req.session.user || null));
 
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
@@ -321,8 +315,8 @@ app.get('*', (req, res) => {
 loadDatabase().then(() => {
     app.listen(PORT, '0.0.0.0', () => {
         console.log(`\n=================================`);
-        console.log(`🚀 Сервер запущено: http://localhost:${PORT}`);
-        console.log(`📁 Дані зберігаються в папці data`);
+        console.log(`🚀 Сервер: http://localhost:${PORT}`);
+        console.log(`📁 Дані: ${DATA_DIR}`);
         console.log(`=================================\n`);
     });
 });
