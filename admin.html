@@ -14,17 +14,7 @@
         .home-btn { background:#2a2a2a; border:none; color:#fff; padding:8px 20px; border-radius:30px; cursor:pointer; }
         .admin-container { display:flex; min-height:calc(100vh - 70px); }
         
-        /* Сайдбар */
-        .sidebar { 
-            width:260px; 
-            background:#111; 
-            padding:2rem 1rem; 
-            border-right:1px solid #222; 
-            position:fixed; 
-            height:100%; 
-            overflow-y:auto; 
-            z-index:50;
-        }
+        .sidebar { width:260px; background:#111; padding:2rem 1rem; border-right:1px solid #222; position:fixed; height:100%; overflow-y:auto; z-index:50; }
         .sidebar h3 { color:#fff; margin-bottom:1.5rem; padding-left:1rem; border-left:3px solid #5a5a5a; }
         .sidebar-menu { list-style:none; }
         .sidebar-menu li { margin-bottom:0.5rem; }
@@ -78,53 +68,19 @@
         .gallery-upload-area { border:2px dashed #333; border-radius:12px; padding:1.5rem; text-align:center; cursor:pointer; }
         .gallery-upload-area:hover { border-color:#5a5a5a; background:#1a1a1a; }
 
-        /* Мобільна версія - меню стає сіткою */
         @media (max-width: 768px) { 
-            .sidebar { 
-                display: block !important; 
-                position: fixed;
-                left: 0;
-                top: 70px;
-                width: 100%;
-                height: auto;
-                max-height: calc(100vh - 70px);
-                z-index: 99;
-                border-right: none;
-                border-bottom: 1px solid #222;
-                padding: 1rem;
-            }
-            .sidebar h3 { display: none; }
-            .admin-content { 
-                margin-left: 0 !important; 
-                padding: 1rem;
-                margin-top: 280px;
-            }
-            .sidebar-menu {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.5rem;
-            }
-            .sidebar-menu li {
-                margin-bottom: 0;
-            }
-            .sidebar-menu a {
-                padding: 0.6rem 0.3rem;
-                font-size: 0.75rem;
-                justify-content: center;
-                text-align: center;
-                flex-direction: column;
-                gap: 0.3rem;
-                white-space: nowrap;
-            }
-            .sidebar-menu a i {
-                font-size: 1.2rem;
-            }
+            .sidebar { display:block !important; position:fixed; left:0; top:70px; width:100%; height:auto; max-height:calc(100vh - 70px); z-index:99; border-right:none; border-bottom:1px solid #222; padding:1rem; }
+            .sidebar h3 { display:none; }
+            .admin-content { margin-left:0 !important; padding:1rem; margin-top:280px; }
+            .sidebar-menu { display:grid; grid-template-columns:repeat(3, 1fr); gap:0.5rem; }
+            .sidebar-menu li { margin-bottom:0; }
+            .sidebar-menu a { padding:0.6rem 0.3rem; font-size:0.75rem; justify-content:center; text-align:center; flex-direction:column; gap:0.3rem; white-space:nowrap; }
+            .sidebar-menu a i { font-size:1.2rem; }
         }
-
         @media (max-width: 480px) {
-            .sidebar-menu { grid-template-columns: repeat(3, 1fr); }
-            .sidebar-menu a { font-size: 0.65rem; padding: 0.4rem 0.2rem; }
-            .admin-content { margin-top: 260px; }
+            .sidebar-menu { grid-template-columns:repeat(3, 1fr); }
+            .sidebar-menu a { font-size:0.65rem; padding:0.4rem 0.2rem; }
+            .admin-content { margin-top:260px; }
         }
     </style>
 </head>
@@ -200,33 +156,11 @@
                     <div class="form-group"><input type="text" id="productName" placeholder="Назва товару"></div>
                     <div class="form-group"><input type="number" id="productPrice" placeholder="Ціна (грн)"></div>
                     <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
-                    
-                    <!-- Характеристики -->
                     <div class="form-group">
                         <label>Характеристики</label>
-                        <div style="background:#1a1a1a; border-radius:12px; padding:1rem;">
-                            <h4 style="margin:0 0 0.8rem; color:#fff;"><i class="fas fa-battery-full"></i> Батарея</h4>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1rem;">
-                                <input type="text" id="batteryCapacity" placeholder="Ємність (мАг)">
-                                <input type="text" id="batteryVoltage" placeholder="Напруга (S)">
-                                <input type="text" id="batteryConnector" placeholder="Роз'єм">
-                                <input type="text" id="batteryDischarge" placeholder="Розряд (C)">
-                            </div>
-                            <h4 style="margin:1rem 0 0.8rem; color:#fff;"><i class="fas fa-microchip"></i> Польотний стек</h4>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1rem;">
-                                <input type="text" id="stackFC" placeholder="Польотний контролер">
-                                <input type="text" id="stackESC" placeholder="ESC">
-                                <input type="text" id="stackVTX" placeholder="Відеопередавач">
-                                <input type="text" id="stackReceiver" placeholder="Приймач">
-                            </div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin:1rem 0 0.5rem;">
-                                <h4 style="margin:0; color:#fff;"><i class="fas fa-list"></i> Інші характеристики</h4>
-                                <button type="button" class="btn" id="addSpecRowBtn" style="padding:0.2rem 1rem;"><i class="fas fa-plus"></i></button>
-                            </div>
-                            <div id="dynamicSpecsContainer"></div>
-                        </div>
+                        <textarea id="productSpecs" rows="6" placeholder="Вага: 250г&#10;Розмір: 5 дюймів&#10;Матеріал: Карбон&#10;Батарея: 6S 1300mAh&#10;Польотний стек: FC F7 / ESC 60A"></textarea>
+                        <small style="color:#777; display:block; margin-top:0.3rem;"><i class="fas fa-info-circle"></i> Кожен рядок - окрема характеристика</small>
                     </div>
-                    
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
                     
@@ -268,7 +202,7 @@
             <!-- Соцмережі -->
             <div id="social" class="admin-section">
                 <h2><i class="fas fa-share-alt"></i> Соціальні мережі</h2>
-                <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><button class="btn" id="addSocialBtn">Додати</button></div>
+                <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><button class="btn" id="addSocialBtn">Додати</button></div>
                 <div class="table-container"><table><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
             </div>
             <!-- Відгуки -->
@@ -329,7 +263,6 @@
             document.getElementById('addSocialBtn')?.addEventListener('click', addSocial);
             document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
             document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
-            document.getElementById('addSpecRowBtn')?.addEventListener('click', () => addSpecRow());
         }
 
         function fileToBase64(file) {
@@ -374,7 +307,7 @@
                 document.getElementById('aboutText').value = await about.text();
                 parseContactInfo(await cont.text());
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
-            } catch(e) { console.error(e); alert('Помилка завантаження даних'); }
+            } catch(e) { console.error(e); }
         }
 
         async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = u; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
@@ -446,76 +379,6 @@
             document.getElementById('variantsContainer').appendChild(d);
         }
 
-        // Характеристики
-        function addSpecRow(key='', val='') {
-            const c = document.getElementById('dynamicSpecsContainer');
-            const r = document.createElement('div');
-            r.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
-            r.innerHTML = `<input type="text" placeholder="Назва" value="${escapeHtml(key)}" class="spec-key"><input type="text" placeholder="Значення" value="${escapeHtml(val)}" class="spec-value"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-            c.appendChild(r);
-        }
-
-        function clearSpecRows() { document.getElementById('dynamicSpecsContainer').innerHTML = ''; }
-
-        function collectSpecsToString() {
-            const lines = [];
-            const bat = []; 
-            const cap = document.getElementById('batteryCapacity')?.value.trim(); 
-            const volt = document.getElementById('batteryVoltage')?.value.trim(); 
-            const conn = document.getElementById('batteryConnector')?.value.trim(); 
-            const disc = document.getElementById('batteryDischarge')?.value.trim();
-            if(cap) bat.push(cap+'mAh'); if(volt) bat.push(volt+'S'); if(conn) bat.push(conn); if(disc) bat.push(disc+'C');
-            if(bat.length) lines.push('Батарея: '+bat.join(' / '));
-            
-            const stack = []; 
-            const fc = document.getElementById('stackFC')?.value.trim(); 
-            const esc = document.getElementById('stackESC')?.value.trim(); 
-            const vtx = document.getElementById('stackVTX')?.value.trim(); 
-            const rx = document.getElementById('stackReceiver')?.value.trim();
-            if(fc) stack.push('FC: '+fc); if(esc) stack.push('ESC: '+esc); if(vtx) stack.push('VTX: '+vtx); if(rx) stack.push('RX: '+rx);
-            if(stack.length) lines.push('Польотний стек: '+stack.join(' / '));
-            
-            document.querySelectorAll('#dynamicSpecsContainer .spec-row').forEach(r => { 
-                const k = r.querySelector('.spec-key')?.value.trim(); 
-                const v = r.querySelector('.spec-value')?.value.trim(); 
-                if(k&&v) lines.push(`${k}: ${v}`); 
-            });
-            return lines.join('\n');
-        }
-
-        function populateSpecsFromString(s) {
-            clearSpecRows(); 
-            ['batteryCapacity','batteryVoltage','batteryConnector','batteryDischarge','stackFC','stackESC','stackVTX','stackReceiver'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
-            if(!s) return;
-            const lines = s.split('\n');
-            const batLine = lines.find(l => l.toLowerCase().startsWith('батарея'));
-            if(batLine) { 
-                const parts = batLine.split(':')[1]?.split('/').map(x => x.trim())||[]; 
-                parts.forEach(p => { 
-                    if(p.includes('mAh')) document.getElementById('batteryCapacity').value = p.replace('mAh',''); 
-                    else if(p.includes('S')) document.getElementById('batteryVoltage').value = p.replace('S',''); 
-                    else if(p.includes('C')) document.getElementById('batteryDischarge').value = p.replace('C',''); 
-                    else if(!p.match(/\d/)) document.getElementById('batteryConnector').value = p; 
-                }); 
-            }
-            const stackLine = lines.find(l => l.toLowerCase().startsWith('польотний стек'));
-            if(stackLine) { 
-                const parts = stackLine.split(':')[1]?.split('/').map(x => x.trim())||[]; 
-                parts.forEach(p => { 
-                    if(p.includes('FC:')) document.getElementById('stackFC').value = p.replace('FC:',''); 
-                    else if(p.includes('ESC:')) document.getElementById('stackESC').value = p.replace('ESC:',''); 
-                    else if(p.includes('VTX:')) document.getElementById('stackVTX').value = p.replace('VTX:',''); 
-                    else if(p.includes('RX:')) document.getElementById('stackReceiver').value = p.replace('RX:',''); 
-                }); 
-            }
-            lines.forEach(l => { 
-                if(l.includes(':') && !l.toLowerCase().startsWith('батарея') && !l.toLowerCase().startsWith('польотний стек')) { 
-                    const [k, v] = l.split(':').map(x => x.trim()); 
-                    if(k&&v) addSpecRow(k, v); 
-                } 
-            });
-        }
-
         // Галерея
         function initGalleryUpload() {
             const area = document.getElementById('galleryUploadArea'), inp = document.getElementById('galleryInput');
@@ -548,9 +411,9 @@
             document.getElementById('productName').value = p.name;
             document.getElementById('productPrice').value = p.price;
             document.getElementById('productDescription').value = p.description || '';
+            document.getElementById('productSpecs').value = p.specs || '';
             const vc = document.getElementById('variantsContainer'); vc.innerHTML = '';
             (p.variants||['Стандарт']).forEach(v => { const d = document.createElement('div'); d.className = 'variant-row'; d.innerHTML = `<input type="text" value="${v}"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`; vc.appendChild(d); });
-            populateSpecsFromString(p.specs || '');
             galleryImages = (p.gallery || []).map(url => ({ id: Date.now()+Math.random(), url }));
             renderGallery();
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-edit"></i> Редагувати товар';
@@ -563,10 +426,8 @@
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-plus"></i> Додати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Додати товар';
             document.getElementById('cancelEditBtn').style.display = 'none';
-            document.getElementById('productName').value = document.getElementById('productPrice').value = document.getElementById('productDescription').value = '';
+            document.getElementById('productName').value = document.getElementById('productPrice').value = document.getElementById('productDescription').value = document.getElementById('productSpecs').value = '';
             document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
-            clearSpecRows(); 
-            ['batteryCapacity','batteryVoltage','batteryConnector','batteryDischarge','stackFC','stackESC','stackVTX','stackReceiver'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
             renderGallery();
         }
 
@@ -584,7 +445,7 @@
                     name: document.getElementById('productName').value.trim(),
                     price: parseFloat(document.getElementById('productPrice').value),
                     description: document.getElementById('productDescription').value,
-                    specs: collectSpecsToString(),
+                    specs: document.getElementById('productSpecs').value,
                     variants: variants.length ? variants : ['Стандарт'],
                     image: img,
                     gallery: galleryImages.map(g => g.url)
