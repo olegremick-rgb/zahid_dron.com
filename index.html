@@ -59,7 +59,6 @@
         .review-form input, .review-form textarea, .review-form select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff; }
         .review-form button { background: #2a2a2a; padding: 0.8rem 1.5rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
 
-        /* Сторінка товару */
         .product-page { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; background: #111; border: 1px solid #222; border-radius: 28px; padding: 1.5rem; }
         .product-gallery { position: sticky; top: 80px; height: fit-content; }
         .main-image { background: #1a1a1a; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1; }
@@ -72,7 +71,6 @@
         .product-title { font-size: 1.8rem; font-weight: 700; color: #fff; }
         .product-price-compact { font-size: 1.6rem; font-weight: 700; color: #aaa; }
 
-        /* Характеристики - структуровані */
         .specs-block { background: #0a0a0a; border-radius: 16px; padding: 1rem; }
         .specs-title { display: flex; align-items: center; gap: 0.5rem; color: #fff; font-weight: 600; margin-bottom: 1rem; cursor: pointer; }
         .specs-title i { color: #5a5a5a; }
@@ -93,18 +91,27 @@
         .buy-btn-compact { background: #2a2a2a; width: 100%; padding: 0.8rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
         .desc-preview { color: #bbb; font-size: 0.9rem; line-height: 1.5; max-height: 100px; overflow-y: auto; }
 
-        .contact-content { background: #111; border: 1px solid #222; border-radius: 24px; padding: 1.5rem; }
-        .contact-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #0a0a0a; border-radius: 16px; margin-bottom: 0.5rem; }
-        .social-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-        .social-link { background: #1a1a1a; padding: 0.5rem 1.2rem; border-radius: 40px; text-decoration: none; color: #ddd; display: inline-flex; align-items: center; gap: 8px; }
-        footer { background: #0a0a0a; border-top: 1px solid #1a1a1a; text-align: center; padding: 1.5rem; font-size: 0.85rem; color: #777; margin-top: auto; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: flex-end; justify-content: center; z-index: 1000; }
-        .modal.active { display: flex; }
-        .modal-content { background: #111; padding: 2rem; border-radius: 30px 30px 0 0; width: 100%; max-width: 500px; animation: slideUp 0.3s; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-content input { width: 100%; padding: 0.9rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff; }
-        .modal-content button { background: #2a2a2a; width: 100%; padding: 0.9rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
-        .close { float: right; font-size: 1.8rem; cursor: pointer; color: #aaa; }
+        .about-hero { text-align:center; padding:3rem 2rem; background:linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border-radius:32px; margin-bottom:2rem; }
+        .feature-card { background:#111; border:1px solid #222; border-radius:20px; padding:1.5rem; text-align:center; transition:0.2s; }
+        .feature-card:hover { transform:translateY(-5px); border-color:#444; }
+        .feature-card i { font-size:2.5rem; color:#5a5a5a; margin-bottom:1rem; }
+        .feature-card h3 { margin-bottom:0.5rem; }
+        .feature-card p { color:#888; }
+        .stat-card { background:#111; border:1px solid #222; border-radius:16px; padding:1.5rem; text-align:center; transition:0.2s; }
+        .stat-card:hover { transform:translateY(-3px); border-color:#444; }
+        .contact-content { background:#111; border:1px solid #222; border-radius:24px; padding:1.5rem; }
+        .contact-item { display:flex; align-items:center; gap:1rem; padding:1rem; background:#0a0a0a; border-radius:16px; margin-bottom:0.5rem; }
+        .social-links { display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem; }
+        .social-link { background:#1a1a1a; padding:0.5rem 1.2rem; border-radius:40px; text-decoration:none; color:#ddd; display:inline-flex; align-items:center; gap:8px; transition:0.2s; }
+        .social-link:hover { background:#3a3a3a; color:#fff; transform:translateY(-2px); }
+        footer { background:#0a0a0a; border-top:1px solid #1a1a1a; text-align:center; padding:1.5rem; font-size:0.85rem; color:#777; margin-top:auto; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:flex-end; justify-content:center; z-index:1000; }
+        .modal.active { display:flex; }
+        .modal-content { background:#111; padding:2rem; border-radius:30px 30px 0 0; width:100%; max-width:500px; animation:slideUp 0.3s; }
+        @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
+        .modal-content input { width:100%; padding:0.9rem; margin-bottom:1rem; background:#1a1a1a; border:1px solid #333; border-radius:16px; color:#fff; }
+        .modal-content button { background:#2a2a2a; width:100%; padding:0.9rem; border:none; border-radius:40px; font-weight:600; color:#fff; cursor:pointer; }
+        .close { float:right; font-size:1.8rem; cursor:pointer; color:#aaa; }
 
         @media (max-width: 992px) {
             .product-page { grid-template-columns: 1fr; }
@@ -203,7 +210,71 @@
         }
 
         function renderAbout(main) {
-            main.innerHTML = `${bannerImage?`<div class="hero-banner"><img src="${bannerImage}"></div>`:''}${brandLogoImage?`<div class="brand-logo-container"><img src="${brandLogoImage}"></div>`:''}<div class="contact-content"><h1>Про нас</h1>${aboutText.replace(/\n/g,'<br>')}</div>`;
+            const features = [
+                { icon: 'fa-drone', title: 'Професійні дрони', desc: 'Сертифікована техніка від провідних виробників' },
+                { icon: 'fa-shield-hal', title: 'Гарантія якості', desc: 'Офіційна гарантія на всю продукцію до 24 місяців' },
+                { icon: 'fa-headset', title: 'Підтримка 24/7', desc: 'Технічна консультація в будь-який час доби' },
+                { icon: 'fa-truck-fast', title: 'Швидка доставка', desc: 'Нова Пошта, Укрпошта, кур\'єром по Львову' },
+                { icon: 'fa-rotate-left', title: '14 днів на повернення', desc: 'Легке повернення або обмін товару' },
+                { icon: 'fa-certificate', title: 'Офіційний дилер', desc: 'Прямі поставки від DJI, Autel, Hubsan' }
+            ];
+            const stats = [
+                { value: '500+', label: 'Проданих дронів' },
+                { value: '4.9', label: 'Середня оцінка' },
+                { value: '24/7', label: 'Підтримка' },
+                { value: '100%', label: 'Оригінал' }
+            ];
+            
+            main.innerHTML = `
+                ${bannerImage ? `<div class="hero-banner"><img src="${bannerImage}"></div>` : ''}
+                ${brandLogoImage ? `<div class="brand-logo-container"><img src="${brandLogoImage}"></div>` : ''}
+                
+                <div class="about-hero">
+                    <h1 style="font-size:2.5rem; margin-bottom:1rem;">Про нас</h1>
+                    <p style="color:#aaa; max-width:700px; margin:0 auto;">Ваш надійний партнер у світі професійних дронів та FPV обладнання. Працюємо з 2020 року.</p>
+                </div>
+                
+                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem;">
+                    ${stats.map(s => `<div class="stat-card"><p style="font-size:2.5rem;">${s.value}</p><h3>${s.label}</h3></div>`).join('')}
+                </div>
+                
+                <div style="background:#111; border-radius:24px; padding:2rem; margin-bottom:2rem;">
+                    <h2 style="margin-bottom:1.5rem;">Наша місія</h2>
+                    <div style="color:#bbb; line-height:1.8;">${aboutText.replace(/\n/g, '<br>')}</div>
+                </div>
+                
+                <h2 style="text-align:center; margin:2rem 0;">Чому обирають нас</h2>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-bottom:2rem;">
+                    ${features.map(f => `
+                        <div class="feature-card">
+                            <i class="fas ${f.icon}" style="font-size:2.5rem; color:#5a5a5a; margin-bottom:1rem;"></i>
+                            <h3 style="margin-bottom:0.5rem;">${f.title}</h3>
+                            <p style="color:#888;">${f.desc}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="background:#111; border-radius:24px; padding:2rem; margin:2rem 0;">
+                    <h2 style="text-align:center; margin-bottom:2rem;">Наші партнери</h2>
+                    <div style="display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;">
+                        <span style="color:#666; font-size:1.5rem; font-weight:700;">DJI</span>
+                        <span style="color:#666; font-size:1.5rem; font-weight:700;">AUTEL</span>
+                        <span style="color:#666; font-size:1.5rem; font-weight:700;">HUBSAN</span>
+                        <span style="color:#666; font-size:1.5rem; font-weight:700;">EACHINE</span>
+                    </div>
+                </div>
+                
+                <div style="text-align:center; margin:3rem 0;">
+                    <h2 style="margin-bottom:1.5rem;">Ми в соціальних мережах</h2>
+                    <div class="social-links" style="justify-content:center;">
+                        ${socialLinks.filter(s => s.active).map(s => `
+                            <a href="${s.url}" target="_blank" class="social-link" style="font-size:1.1rem; padding:0.8rem 1.5rem;">
+                                <i class="${s.icon}"></i> ${s.name}
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
         }
 
         function renderCatalog(main) {
@@ -234,7 +305,38 @@
 
         function renderContacts(main) {
             const lines = contactInfo.split('\n');
-            main.innerHTML = `<h1>Контакти</h1><div class="contact-content">${lines.map(l => { if(l.includes('@')) return `<div class="contact-item"><i class="fas fa-envelope"></i><div><h3>Email</h3><p>${l.replace('Email:','').trim()}</p></div></div>`; if(l.includes('+380')||l.includes('Телефон')) return `<div class="contact-item"><i class="fas fa-phone"></i><div><h3>Телефон</h3><p>${l.replace('Телефон:','').trim()}</p></div></div>`; if(l.includes('Графік')) return `<div class="contact-item"><i class="fas fa-clock"></i><div><h3>Графік</h3><p>${l.replace('Графік:','').trim()}</p></div></div>`; if(l.includes('Адреса')) return `<div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h3>Адреса</h3><p>${l.replace('Адреса:','').trim()}</p></div></div>`; return ''; }).join('')}<div class="social-links">${socialLinks.map(s => `<a href="${s.url}" target="_blank" class="social-link"><i class="${s.icon}"></i> ${s.name}</a>`).join('')}</div></div>`;
+            main.innerHTML = `
+                <h1>Контакти</h1>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        ${lines.map(l => {
+                            if(l.includes('@')) return `<div class="contact-item"><i class="fas fa-envelope"></i><div><h3>Email</h3><p>${l.replace('Email:','').trim()}</p></div></div>`;
+                            if(l.includes('+380')||l.includes('Телефон')) return `<div class="contact-item"><i class="fas fa-phone"></i><div><h3>Телефон</h3><p>${l.replace('Телефон:','').trim()}</p></div></div>`;
+                            if(l.includes('Графік')) return `<div class="contact-item"><i class="fas fa-clock"></i><div><h3>Графік роботи</h3><p>${l.replace('Графік:','').trim()}</p></div></div>`;
+                            if(l.includes('Адреса')) return `<div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h3>Адреса</h3><p>${l.replace('Адреса:','').trim()}</p></div></div>`;
+                            return '';
+                        }).join('')}
+                    </div>
+                    
+                    <div style="margin-top:2rem;">
+                        <h3 style="margin-bottom:1rem;"><i class="fas fa-hashtag"></i> Напишіть нам</h3>
+                        <div class="social-links">
+                            ${socialLinks.filter(s => s.active).map(s => `
+                                <a href="${s.url}" target="_blank" class="social-link">
+                                    <i class="${s.icon}"></i> ${s.name}
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top:2rem; padding:1.5rem; background:#0a0a0a; border-radius:16px;">
+                        <h3><i class="fas fa-clock"></i> Робочі години</h3>
+                        <p>Пн-Пт: 10:00 - 19:00</p>
+                        <p>Сб: 11:00 - 17:00</p>
+                        <p>Нд: Вихідний</p>
+                    </div>
+                </div>
+            `;
         }
 
         function parseSpecs(specsText) {
