@@ -364,34 +364,38 @@
             let text = document.getElementById('productSpecs').value;
             let lines = text.split('\n');
             let formatted = [];
-            let i = 0;
             
-            while (i < lines.length) {
-                let line = lines[i].trim();
-                if (!line) { i++; continue; }
+            for (let line of lines) {
+                line = line.trim();
+                if (!line) continue;
                 
-                if (line.startsWith('##') || /^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length < 50 && !line.includes(':')) {
-                    if (!line.startsWith('##')) line = '## ' + line;
+                if (line.startsWith('##')) {
                     formatted.push(line);
-                    i++;
+                    continue;
+                }
+                
+                if (/^[А-ЯІЇЄҐA-Z\s]+$/.test(line) && line.length > 3 && line.length < 50) {
+                    formatted.push('## ' + line);
                     continue;
                 }
                 
                 if (line.includes(':')) {
                     formatted.push(line);
-                    i++;
                     continue;
                 }
                 
-                let nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
-                
-                if (nextLine && !nextLine.startsWith('##') && !/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(nextLine)) {
-                    formatted.push(line + ': ' + nextLine);
-                    i += 2;
-                } else {
-                    formatted.push(line + ': ');
-                    i++;
+                let parts = line.split(/\s+/);
+                if (parts.length === 2) {
+                    formatted.push(parts[0] + ': ' + parts[1]);
+                    continue;
                 }
+                
+                if (parts.length > 2) {
+                    formatted.push(line);
+                    continue;
+                }
+                
+                formatted.push(line + ': ');
             }
             
             document.getElementById('productSpecs').value = formatted.join('\n');
