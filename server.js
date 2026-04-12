@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 8080;
 // ============ НАЛАШТУВАННЯ ФАЙЛОВОГО СХОВИЩА ============
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
 
-// Завантаження БД
 let db = {
     users: [],
     categories: [],
@@ -19,8 +18,19 @@ let db = {
     reviews: [],
     about: '',
     contact: '',
-    settings: {},
-    images: {}
+    settings: { product_display_style: 'classic' },
+    images: { logo: '', banner: '', brandLogo: '', background: '' },
+    homeStats: { dronesSold: '500+', rating: '4.9', support: '24/7', original: '100%' },
+    partners: ['DJI', 'AUTEL', 'HUBSAN', 'EACHINE'],
+    features: [
+        { icon: 'fa-drone', title: 'Професійні дрони', desc: 'Сертифікована техніка' },
+        { icon: 'fa-shield-hal', title: 'Гарантія якості', desc: 'Офіційна гарантія до 24 місяців' },
+        { icon: 'fa-headset', title: 'Підтримка 24/7', desc: 'Технічна консультація' },
+        { icon: 'fa-truck-fast', title: 'Швидка доставка', desc: 'Нова Пошта, Укрпошта' },
+        { icon: 'fa-rotate-left', title: '14 днів на повернення', desc: 'Легке повернення' },
+        { icon: 'fa-certificate', title: 'Офіційний дилер', desc: 'Прямі поставки' }
+    ],
+    workHours: { monFri: '10:00 - 19:00', sat: '11:00 - 17:00', sun: 'Вихідний' }
 };
 
 async function loadDatabase() {
@@ -42,7 +52,12 @@ async function loadDatabase() {
             brandLogo: await readText('brand-logo.txt', ''),
             background: await readText('background.txt', '')
         };
-        console.log('✅ Базу даних завантажено з:', DATA_DIR);
+        db.homeStats = await readJSON('homeStats.json', { dronesSold: '500+', rating: '4.9', support: '24/7', original: '100%' });
+        db.partners = await readJSON('partners.json', ['DJI', 'AUTEL', 'HUBSAN', 'EACHINE']);
+        db.features = await readJSON('features.json', db.features);
+        db.workHours = await readJSON('workHours.json', { monFri: '10:00 - 19:00', sat: '11:00 - 17:00', sun: 'Вихідний' });
+        
+        console.log('✅ Базу даних завантажено');
     } catch (err) {
         console.error('❌ Помилка завантаження:', err);
     }
@@ -81,7 +96,6 @@ async function writeText(filename, data) {
     }
 }
 
-// Функції збереження
 async function saveUsers() { await writeJSON('users.json', db.users); }
 async function saveCategories() { await writeJSON('categories.json', db.categories); }
 async function saveProducts() { await writeJSON('products.json', db.products); }
@@ -95,6 +109,10 @@ async function saveLogo() { await writeText('logo.txt', db.images.logo); }
 async function saveBanner() { await writeText('banner.txt', db.images.banner); }
 async function saveBrandLogo() { await writeText('brand-logo.txt', db.images.brandLogo); }
 async function saveBackground() { await writeText('background.txt', db.images.background); }
+async function saveHomeStats() { await writeJSON('homeStats.json', db.homeStats); }
+async function savePartners() { await writeJSON('partners.json', db.partners); }
+async function saveFeatures() { await writeJSON('features.json', db.features); }
+async function saveWorkHours() { await writeJSON('workHours.json', db.workHours); }
 
 // ============ EXPRESS ============
 app.use(express.json({ limit: '50mb' }));
@@ -120,7 +138,6 @@ function isAdmin(req, res, next) {
 
 // ============ АУТЕНТИФІКАЦІЯ ============
 app.get('/api/user', (req, res) => res.json(req.session.user || null));
-
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
     const user = db.users.find(u => u.username === username && u.password === password);
@@ -131,11 +148,7 @@ app.post('/api/login', (req, res) => {
         res.status(401).json({ error: 'Невірний логін або пароль' });
     }
 });
-
-app.post('/api/logout', (req, res) => {
-    req.session.destroy(() => res.json({ success: true }));
-});
-
+app.post('/api/logout', (req, res) => { req.session.destroy(() => res.json({ success: true })); });
 app.post('/api/register', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ error: 'Заповніть поля' });
@@ -144,7 +157,6 @@ app.post('/api/register', async (req, res) => {
     await saveUsers();
     res.status(201).json({ success: true });
 });
-
 app.post('/api/admin/change-password', isAdmin, async (req, res) => {
     const { currentPassword, newUsername, newPassword } = req.body;
     const user = db.users.find(u => u.username === req.session.user.username);
@@ -159,7 +171,6 @@ app.post('/api/admin/change-password', isAdmin, async (req, res) => {
 
 // ============ КАТЕГОРІЇ ============
 app.get('/api/categories', (req, res) => res.json(db.categories));
-
 app.post('/api/categories', isAdmin, async (req, res) => {
     const { category } = req.body;
     if (!category?.trim()) return res.status(400).json({ error: 'Назва обов\'язкова' });
@@ -168,7 +179,6 @@ app.post('/api/categories', isAdmin, async (req, res) => {
     await saveCategories();
     res.json({ success: true });
 });
-
 app.delete('/api/categories/:category', isAdmin, async (req, res) => {
     const cat = decodeURIComponent(req.params.category);
     const idx = db.categories.indexOf(cat);
@@ -179,7 +189,6 @@ app.delete('/api/categories/:category', isAdmin, async (req, res) => {
 
 // ============ ТОВАРИ ============
 app.get('/api/products', (req, res) => res.json(db.products));
-
 app.post('/api/products', isAdmin, async (req, res) => {
     try {
         const { name, category, price, description, specs, variants, image, gallery } = req.body;
@@ -201,11 +210,8 @@ app.post('/api/products', isAdmin, async (req, res) => {
         db.products.push(newProduct);
         await saveProducts();
         res.status(201).json(newProduct);
-    } catch(e) {
-        res.status(500).json({ error: e.message });
-    }
+    } catch(e) { res.status(500).json({ error: e.message }); }
 });
-
 app.put('/api/products/:id', isAdmin, async (req, res) => {
     try {
         const idx = db.products.findIndex(p => p.id == req.params.id);
@@ -225,11 +231,8 @@ app.put('/api/products/:id', isAdmin, async (req, res) => {
         };
         await saveProducts();
         res.json(db.products[idx]);
-    } catch(e) {
-        res.status(500).json({ error: e.message });
-    }
+    } catch(e) { res.status(500).json({ error: e.message }); }
 });
-
 app.delete('/api/products/:id', isAdmin, async (req, res) => {
     const idx = db.products.findIndex(p => p.id == req.params.id);
     if (idx > -1) db.products.splice(idx, 1);
@@ -239,7 +242,6 @@ app.delete('/api/products/:id', isAdmin, async (req, res) => {
 
 // ============ ЗАМОВЛЕННЯ ============
 app.get('/api/orders', isAdmin, (req, res) => res.json(db.orders));
-
 app.post('/api/orders', async (req, res) => {
     const order = { id: Date.now(), ...req.body, date: new Date().toISOString(), status: 'нове' };
     db.orders.push(order);
@@ -249,14 +251,12 @@ app.post('/api/orders', async (req, res) => {
 
 // ============ ВІДГУКИ ============
 app.get('/api/reviews', (req, res) => res.json(db.reviews));
-
 app.post('/api/reviews', async (req, res) => {
     const review = { id: Date.now(), ...req.body, date: new Date().toISOString() };
     db.reviews.push(review);
     await saveReviews();
     res.status(201).json(review);
 });
-
 app.delete('/api/reviews/:id', isAdmin, async (req, res) => {
     const idx = db.reviews.findIndex(r => r.id == req.params.id);
     if (idx > -1) db.reviews.splice(idx, 1);
@@ -267,13 +267,22 @@ app.delete('/api/reviews/:id', isAdmin, async (req, res) => {
 // ============ ПРО НАС / КОНТАКТИ ============
 app.get('/api/about', (req, res) => res.send(db.about));
 app.post('/api/about', isAdmin, async (req, res) => { db.about = req.body.text || ''; await saveAbout(); res.json({ success: true }); });
-
 app.get('/api/contact', (req, res) => res.send(db.contact));
 app.post('/api/contact', isAdmin, async (req, res) => { db.contact = req.body.text || ''; await saveContact(); res.json({ success: true }); });
 
 // ============ СОЦМЕРЕЖІ ============
 app.get('/api/social', (req, res) => res.json(db.social));
 app.post('/api/social', isAdmin, async (req, res) => { db.social = Array.isArray(req.body) ? req.body : []; await saveSocial(); res.json({ success: true }); });
+
+// ============ НАЛАШТУВАННЯ ГОЛОВНОЇ ============
+app.get('/api/home-stats', (req, res) => res.json(db.homeStats));
+app.post('/api/home-stats', isAdmin, async (req, res) => { db.homeStats = { ...db.homeStats, ...req.body }; await saveHomeStats(); res.json({ success: true }); });
+app.get('/api/partners', (req, res) => res.json(db.partners));
+app.post('/api/partners', isAdmin, async (req, res) => { db.partners = req.body; await savePartners(); res.json({ success: true }); });
+app.get('/api/features', (req, res) => res.json(db.features));
+app.post('/api/features', isAdmin, async (req, res) => { db.features = req.body; await saveFeatures(); res.json({ success: true }); });
+app.get('/api/work-hours', (req, res) => res.json(db.workHours));
+app.post('/api/work-hours', isAdmin, async (req, res) => { db.workHours = req.body; await saveWorkHours(); res.json({ success: true }); });
 
 // ============ НАЛАШТУВАННЯ ============
 app.get('/api/settings', (req, res) => res.json(db.settings));
@@ -314,10 +323,7 @@ app.get('/admin', (req, res) => {
     if (!req.session?.user?.isAdmin) return res.redirect('/');
     res.sendFile(path.join(__dirname, 'admin.html'));
 });
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 // ============ ЗАПУСК ============
 loadDatabase().then(() => {
