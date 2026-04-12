@@ -8,415 +8,128 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            background: #0a0a0a;
-            font-family: 'Inter', sans-serif;
-            color: #e0e0e0;
-            line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            position: relative;
-        }
-        .bg-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            background: #0a0a0a;
-        }
-        .bg-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.12;
-            transition: transform 0.1s linear;
-        }
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(10,10,10,0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-            padding: 0.8rem 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
+        body { background: #0a0a0a; font-family: 'Inter', sans-serif; color: #e0e0e0; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; }
+        .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: #0a0a0a; }
+        .bg-image { width: 100%; height: 100%; object-fit: cover; opacity: 0.12; }
+        header { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
         .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; }
         .logo-img { height: 36px; width: auto; border-radius: 8px; background: #fff; padding: 2px; }
-        .logo-text .top { font-size: 0.7rem; font-weight: 600; color: #aaa; letter-spacing: 0.5px; }
-        .logo-text .bottom { font-size: 1.2rem; font-weight: 800; color: #fff; letter-spacing: 1px; }
-        .logo-text .ua { font-size: 0.6rem; color: #777; }
-        .desktop-nav { display: flex; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
-        .desktop-nav a {
-            color: #e0e0e0;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: 0.2s;
-            position: relative;
-        }
+        .logo-text .top { font-size: 0.7rem; font-weight: 600; color: #aaa; }
+        .logo-text .bottom { font-size: 1.2rem; font-weight: 800; color: #fff; }
+        .desktop-nav { display: flex; gap: 1.2rem; align-items: center; }
+        .desktop-nav a { color: #e0e0e0; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
         .desktop-nav a:hover, .desktop-nav a.active { color: #fff; }
-        .desktop-nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #fff;
-            transition: width 0.2s;
-        }
-        .desktop-nav a:hover::after, .desktop-nav a.active::after { width: 100%; }
-        .auth-buttons {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
-        .auth-buttons button, .user-menu {
-            background: transparent;
-            border: 1px solid #3a3a3a;
-            color: #ccc;
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-weight: 500;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
-        }
+        .auth-buttons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+        .auth-buttons button, .user-menu { background: transparent; border: 1px solid #3a3a3a; color: #ccc; padding: 6px 12px; border-radius: 30px; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
         .auth-buttons button:hover { background: #3a3a3a; color: #fff; }
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .user-name {
-            color: #fff;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-        .logout-btn, .admin-link {
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            background: #2a2a2a;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            text-decoration: none;
-        }
+        .user-menu { display: flex; align-items: center; gap: 8px; }
+        .user-name { color: #fff; font-weight: 600; font-size: 0.8rem; }
+        .logout-btn, .admin-link { padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; background: #2a2a2a; border: none; color: #fff; cursor: pointer; text-decoration: none; }
         .admin-link { background: #5a2e2e; }
-        .logout-btn:hover { background: #3a3a3a; }
         .mobile-menu-toggle { display: none; font-size: 1.6rem; color: #fff; cursor: pointer; }
-        .mobile-nav {
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
-            background: #0f0f0f; z-index: 200; padding: 2rem 1.5rem;
-            transition: left 0.3s ease; box-shadow: 2px 0 20px rgba(0,0,0,0.5);
-        }
+        .mobile-nav { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: #0f0f0f; z-index: 200; padding: 2rem 1.5rem; transition: left 0.3s; }
         .mobile-nav.active { left: 0; }
-        .mobile-nav-header {
-            display: flex; justify-content: space-between; margin-bottom: 2rem;
-            border-bottom: 1px solid #222; padding-bottom: 1rem;
-        }
-        .mobile-nav-close { font-size: 1.8rem; cursor: pointer; color: #fff; }
-        .mobile-nav a { display: block; padding: 1rem 0; color: #ddd; text-decoration: none; border-bottom: 1px solid #1a1a1a; }
-        .mobile-nav-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); z-index: 150; display: none; backdrop-filter: blur(4px);
-        }
+        .mobile-nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 150; display: none; }
         .mobile-nav-overlay.active { display: block; }
         main { flex: 1; padding: 2rem 1rem; max-width: 1400px; margin: 0 auto; width: 100%; }
         h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
         h2 { font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1rem; color: #fff; }
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .product-card {
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: all 0.25s ease;
-            cursor: pointer;
-        }
-        .product-card:hover {
-            transform: translateY(-6px);
-            border-color: #444;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.4);
-        }
-        .product-image {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            object-fit: cover;
-            background: #1a1a1a;
-        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .product-card { background: #111; border: 1px solid #222; border-radius: 20px; overflow: hidden; cursor: pointer; transition: 0.2s; }
+        .product-card:hover { transform: translateY(-6px); border-color: #444; }
+        .product-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #1a1a1a; }
         .product-info { padding: 1rem; }
         .product-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
-        .product-price { font-size: 1.2rem; font-weight: 700; color: #aaa; margin: 0.5rem 0; }
-        .product-category {
-            font-size: 0.7rem; color: #777; background: #1a1a1a;
-            display: inline-block; padding: 0.2rem 0.8rem; border-radius: 20px;
-        }
-        .order-btn-small {
-            background: #2a2a2a; border: none; color: #fff; width: 100%;
-            padding: 0.7rem; border-radius: 40px; font-weight: 600;
-            margin-top: 1rem; cursor: pointer; transition: 0.2s;
-        }
+        .product-price { font-size: 1.2rem; font-weight: 700; color: #aaa; }
+        .product-category { font-size: 0.7rem; color: #777; background: #1a1a1a; display: inline-block; padding: 0.2rem 0.8rem; border-radius: 20px; }
+        .order-btn-small { background: #2a2a2a; border: none; color: #fff; width: 100%; padding: 0.7rem; border-radius: 40px; font-weight: 600; margin-top: 1rem; cursor: pointer; }
         .hero-banner { width: 100%; border-radius: 24px; overflow: hidden; margin-bottom: 2rem; }
-        .hero-banner img { width: 100%; height: auto; max-height: 300px; object-fit: cover; }
+        .hero-banner img { width: 100%; max-height: 300px; object-fit: cover; }
         .brand-logo-container { text-align: center; margin: 2rem auto; }
-        .brand-logo-container img { max-width: 300px; width: 100%; border-radius: 16px; }
-        .reviews-section {
-            margin: 2rem 0;
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 24px;
-            padding: 1.5rem;
-        }
-        .reviews-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
-        .review-card {
-            background: #0a0a0a;
-            border: 1px solid #222;
-            border-radius: 20px;
-            padding: 1.2rem;
-        }
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
+        .brand-logo-container img { max-width: 300px; border-radius: 16px; }
+        .reviews-section { background: #111; border: 1px solid #222; border-radius: 24px; padding: 1.5rem; margin: 2rem 0; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .review-card { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 1.2rem; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
         .review-author { font-weight: 700; color: #fff; }
         .review-date { font-size: 0.7rem; color: #777; }
         .review-rating { color: #ffc107; margin-bottom: 0.8rem; }
         .review-text { color: #bbb; font-size: 0.9rem; }
-        .add-review {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #222;
-        }
-        .review-form input, .review-form textarea, .review-form select {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 16px;
-            color: #fff;
-        }
-        .review-form button {
-            background: #2a2a2a;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            color: #fff;
-            cursor: pointer;
-        }
-        .product-page {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 28px;
-            padding: 1.5rem;
-        }
-        .main-image {
-            background: #1a1a1a;
-            border-radius: 20px;
-            overflow: hidden;
-            aspect-ratio: 1 / 1;
-        }
+        .add-review { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #222; }
+        .review-form input, .review-form textarea, .review-form select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff; }
+        .review-form button { background: #2a2a2a; padding: 0.8rem 1.5rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
+
+        /* КОМПАКТНА СТОРІНКА ТОВАРУ */
+        .product-page { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; background: #111; border: 1px solid #222; border-radius: 28px; padding: 1.5rem; }
+        .product-gallery { position: sticky; top: 80px; height: fit-content; }
+        .main-image { background: #1a1a1a; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1; }
         .main-image img { width: 100%; height: 100%; object-fit: cover; }
-        .thumbnail-list {
-            display: flex;
-            gap: 0.8rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
-            margin-top: 1rem;
-        }
-        .thumbnail {
-            width: 70px;
-            height: 70px;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            border: 2px solid transparent;
-            opacity: 0.7;
-            flex-shrink: 0;
-        }
+        .thumbnail-list { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-top: 1rem; }
+        .thumbnail { width: 60px; height: 60px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; opacity: 0.7; flex-shrink: 0; }
         .thumbnail.active { border-color: #aaa; opacity: 1; }
         .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
-        .product-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #fff;
-            border-left: 4px solid #5a5a5a;
-            padding-left: 1rem;
-        }
-        .product-price-new { font-size: 1.6rem; font-weight: 700; color: #aaa; }
-        .specs-list {
-            background: #0a0a0a;
-            border-radius: 20px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        .spec-item {
-            display: flex;
-            gap: 1rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px dashed #222;
-            font-size: 0.9rem;
-        }
-        .spec-item strong { min-width: 120px; color: #aaa; }
-        .variant-buttons {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            margin: 1rem 0;
-        }
-        .variant-btn-new {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            color: #ddd;
-            cursor: pointer;
-        }
-        .variant-btn-new.active { background: #3a3a3a; color: #fff; }
-        .buy-section {
-            background: #0a0a0a;
-            border: 1px solid #222;
-            border-radius: 24px;
-            padding: 1.5rem;
-        }
-        .buy-price { font-size: 1.5rem; font-weight: 700; color: #aaa; margin-bottom: 1rem; }
-        .buy-form input {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 16px;
-            color: #fff;
-        }
-        .buy-btn {
-            background: #2a2a2a;
-            width: 100%;
-            padding: 0.9rem;
-            border: none;
-            border-radius: 40px;
-            font-weight: 600;
-            color: #fff;
-            cursor: pointer;
-        }
-        .product-tabs { margin-top: 1.5rem; }
-        .tabs-header {
-            display: flex;
-            gap: 1rem;
-            border-bottom: 1px solid #2a2a2a;
-            margin-bottom: 1rem;
-        }
-        .tab-btn {
-            background: none;
-            border: none;
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            color: #aaa;
-            cursor: pointer;
-        }
-        .tab-btn.active { color: #fff; border-bottom: 2px solid #aaa; }
-        .tab-content { display: none; color: #bbb; }
-        .tab-content.active { display: block; }
-        .about-hero {
-            text-align: center; padding: 2rem; background: #111;
-            border-radius: 28px; margin-bottom: 2rem;
-        }
-        .contact-content {
-            background: #111; border: 1px solid #222; border-radius: 24px; padding: 1.5rem;
-        }
-        .contact-item {
-            display: flex; align-items: center; gap: 1rem; padding: 1rem;
-            background: #0a0a0a; border-radius: 16px; margin-bottom: 0.5rem;
-        }
+        .product-info-compact { display: flex; flex-direction: column; gap: 1rem; }
+        .product-title { font-size: 1.8rem; font-weight: 700; color: #fff; }
+        .product-price-compact { font-size: 1.6rem; font-weight: 700; color: #aaa; }
+
+        /* Компактні характеристики - в одному блоці */
+        .specs-compact { background: #0a0a0a; border-radius: 16px; padding: 1rem; }
+        .specs-title { display: flex; align-items: center; gap: 0.5rem; color: #fff; font-weight: 600; margin-bottom: 0.8rem; cursor: pointer; }
+        .specs-title i { color: #5a5a5a; }
+        .specs-grid-compact { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; }
+        .spec-item-compact { display: flex; justify-content: space-between; border-bottom: 1px dashed #222; padding: 0.4rem 0; font-size: 0.85rem; }
+        .spec-item-compact .spec-key { color: #888; }
+        .spec-item-compact .spec-val { color: #ddd; font-weight: 500; text-align: right; }
+        .specs-collapsed .specs-content { display: none; }
+        .specs-collapsed .specs-title i { transform: rotate(-90deg); }
+
+        .variants-compact { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .variant-btn { background: #1a1a1a; border: 1px solid #333; padding: 0.5rem 1rem; border-radius: 40px; color: #ddd; cursor: pointer; font-size: 0.85rem; }
+        .variant-btn.active { background: #3a3a3a; color: #fff; border-color: #5a5a5a; }
+        .buy-section-compact { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 1.2rem; }
+        .buy-price-compact { font-size: 1.4rem; font-weight: 700; color: #aaa; margin-bottom: 1rem; }
+        .buy-form-compact input { width: 100%; padding: 0.7rem; margin-bottom: 0.8rem; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; color: #fff; }
+        .buy-btn-compact { background: #2a2a2a; width: 100%; padding: 0.8rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
+        .desc-preview { color: #bbb; font-size: 0.9rem; line-height: 1.5; max-height: 100px; overflow-y: auto; }
+
+        .contact-content { background: #111; border: 1px solid #222; border-radius: 24px; padding: 1.5rem; }
+        .contact-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #0a0a0a; border-radius: 16px; margin-bottom: 0.5rem; }
         .social-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
-        .social-link {
-            background: #1a1a1a; padding: 0.5rem 1.2rem; border-radius: 40px;
-            text-decoration: none; color: #ddd; display: inline-flex; align-items: center; gap: 8px;
-        }
-        footer {
-            background: #0a0a0a; border-top: 1px solid #1a1a1a;
-            text-align: center; padding: 1.5rem; font-size: 0.85rem; color: #777;
-        }
-        .modal {
-            display: none; position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.8);
-            align-items: flex-end; justify-content: center; z-index: 1000;
-        }
+        .social-link { background: #1a1a1a; padding: 0.5rem 1.2rem; border-radius: 40px; text-decoration: none; color: #ddd; display: inline-flex; align-items: center; gap: 8px; }
+        footer { background: #0a0a0a; border-top: 1px solid #1a1a1a; text-align: center; padding: 1.5rem; font-size: 0.85rem; color: #777; margin-top: auto; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: flex-end; justify-content: center; z-index: 1000; }
         .modal.active { display: flex; }
-        .modal-content {
-            background: #111; padding: 2rem; border-radius: 30px 30px 0 0;
-            width: 100%; max-width: 500px; animation: slideUp 0.3s;
-        }
+        .modal-content { background: #111; padding: 2rem; border-radius: 30px 30px 0 0; width: 100%; max-width: 500px; animation: slideUp 0.3s; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-content input {
-            width: 100%; padding: 0.9rem; margin-bottom: 1rem;
-            background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff;
-        }
-        .modal-content button {
-            background: #2a2a2a; width: 100%; padding: 0.9rem; border: none;
-            border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer;
-        }
+        .modal-content input { width: 100%; padding: 0.9rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff; }
+        .modal-content button { background: #2a2a2a; width: 100%; padding: 0.9rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
         .close { float: right; font-size: 1.8rem; cursor: pointer; color: #aaa; }
 
         @media (max-width: 992px) {
             .product-page { grid-template-columns: 1fr; }
+            .product-gallery { position: static; }
         }
         @media (max-width: 768px) {
             .desktop-nav { display: none; }
             .mobile-menu-toggle { display: block; }
             .logo-text .bottom { font-size: 1rem; }
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-            .product-title { font-size: 1.4rem; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .specs-grid-compact { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .auth-buttons button span { display: none; }
-            .auth-buttons button i { margin: 0; }
             .user-menu .user-name { display: none; }
             .products-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="bg-container" id="bgContainer">
-        <img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;">
-    </div>
+    <div class="bg-container"><img src="" alt="Фон" class="bg-image" id="bgImage" style="display: none;"></div>
     <header>
         <div class="mobile-menu-toggle" id="mobileMenuToggle"><i class="fas fa-bars"></i></div>
         <a href="/" class="logo">
             <img src="" alt="Логотип" class="logo-img" id="headerLogo" style="display: none;">
-            <div class="logo-text">
-                <span class="top">ЗАХІД</span>
-                <span class="bottom">ДРОН</span>
-                <span class="ua">UA</span>
-            </div>
+            <div class="logo-text"><span class="top">ЗАХІД</span><span class="bottom">ДРОН</span></div>
         </a>
         <nav class="desktop-nav">
             <a href="/">Головна</a>
@@ -429,15 +142,8 @@
     </header>
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
-        <div class="mobile-nav-header">
-            <img src="" alt="Логотип" class="logo-img" id="mobileLogo" style="display: none;">
-            <span class="mobile-nav-close" id="mobileNavClose">&times;</span>
-        </div>
-        <a href="/">Головна</a>
-        <a href="/catalog">Каталог</a>
-        <a href="/reviews">Відгуки</a>
-        <a href="/about">Про нас</a>
-        <a href="/contacts">Контакти</a>
+        <div class="mobile-nav-header"><span class="mobile-nav-close" id="mobileNavClose">&times;</span></div>
+        <a href="/">Головна</a><a href="/catalog">Каталог</a><a href="/reviews">Відгуки</a><a href="/about">Про нас</a><a href="/contacts">Контакти</a>
     </div>
     <main id="main-content"></main>
     <footer><p>© 2025 Захід Дрон. Всі права захищені.</p></footer>
@@ -449,24 +155,12 @@
         let currentUser = null, categories = [], products = [], aboutText = '', contactInfo = '', socialLinks = [], reviews = [], bannerImage = '', brandLogoImage = '', backgroundImage = '';
 
         function initMobileMenu() {
-            const toggle = document.getElementById('mobileMenuToggle');
-            const close = document.getElementById('mobileNavClose');
-            const nav = document.getElementById('mobileNav');
-            const overlay = document.getElementById('mobileNavOverlay');
-            if (!toggle || !close || !nav || !overlay) return;
-            function open() { nav.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
-            function closeMenu() { nav.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
-            toggle.addEventListener('click', e => { e.stopPropagation(); open(); });
-            close.addEventListener('click', closeMenu);
-            overlay.addEventListener('click', closeMenu);
-            document.querySelectorAll('.mobile-nav a').forEach(l => l.addEventListener('click', closeMenu));
+            const toggle = document.getElementById('mobileMenuToggle'), close = document.getElementById('mobileNavClose'), nav = document.getElementById('mobileNav'), overlay = document.getElementById('mobileNavOverlay');
+            if (!toggle) return;
+            toggle.addEventListener('click', () => { nav.classList.add('active'); overlay.classList.add('active'); });
+            close.addEventListener('click', () => { nav.classList.remove('active'); overlay.classList.remove('active'); });
+            overlay.addEventListener('click', () => { nav.classList.remove('active'); overlay.classList.remove('active'); });
         }
-
-        async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const url = await r.text(); if(url){ document.getElementById('headerLogo').src = url; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('mobileLogo').src = url; document.getElementById('mobileLogo').style.display = 'block'; } } } catch(e){} }
-        async function loadBanner() { try { const r = await fetch('/api/banner'); if(r.ok){ const url = await r.text(); if(url) bannerImage = url; } } catch(e){} }
-        async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ const url = await r.text(); if(url) brandLogoImage = url; } } catch(e){} }
-        async function loadBackground() { try { const r = await fetch('/api/background'); if(r.ok){ const url = await r.text(); if(url){ backgroundImage = url; document.getElementById('bgImage').src = url; document.getElementById('bgImage').style.display = 'block'; } } } catch(e){} }
-        async function loadReviews() { try { const r = await fetch('/api/reviews'); if(r.ok){ reviews = await r.json(); } } catch(e){ reviews = []; } }
 
         async function loadData() {
             try {
@@ -474,47 +168,33 @@
                     fetch('/api/categories'), fetch('/api/products'), fetch('/api/about'), fetch('/api/contact'),
                     fetch('/api/user').catch(()=>null), fetch('/api/social').catch(()=>({json:()=>[]}))
                 ]);
-                categories = await cRes.json();
-                products = await pRes.json();
-                aboutText = await aRes.text();
-                contactInfo = await coRes.text();
-                socialLinks = await sRes.json();
+                categories = await cRes.json(); products = await pRes.json(); aboutText = await aRes.text(); contactInfo = await coRes.text(); socialLinks = await sRes.json();
                 if(uRes && uRes.ok) currentUser = await uRes.json();
-                await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground();
-                await loadReviews();
+                await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
                 updateAuthUI();
-            } catch(e){ console.error(e); }
+            } catch(e){}
         }
 
+        async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; } } } catch(e){} }
+        async function loadBanner() { try { const r = await fetch('/api/banner'); if(r.ok){ bannerImage = await r.text(); } } catch(e){} }
+        async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ brandLogoImage = await r.text(); } } catch(e){} }
+        async function loadBackground() { try { const r = await fetch('/api/background'); if(r.ok){ backgroundImage = await r.text(); document.getElementById('bgImage').src = backgroundImage; document.getElementById('bgImage').style.display = 'block'; } } catch(e){} }
+        async function loadReviews() { try { const r = await fetch('/api/reviews'); reviews = await r.json(); } catch(e){ reviews = []; } }
+
         function updateAuthUI() {
-            const container = document.getElementById('authButtons');
-            if (!container) return;
+            const c = document.getElementById('authButtons');
             if (currentUser) {
-                container.innerHTML = `
-                    <div class="user-menu">
-                        <span class="user-name"><i class="fas fa-user-circle"></i> ${currentUser.username}</span>
-                        ${currentUser.isAdmin ? '<a href="/admin" class="admin-link">Admin</a>' : ''}
-                        <button class="logout-btn" onclick="logout()">Вийти</button>
-                    </div>
-                `;
+                c.innerHTML = `<div class="user-menu"><span class="user-name"><i class="fas fa-user-circle"></i> ${currentUser.username}</span>${currentUser.isAdmin?'<a href="/admin" class="admin-link">Admin</a>':''}<button class="logout-btn" onclick="logout()">Вийти</button></div>`;
             } else {
-                container.innerHTML = `
-                    <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span>Вхід</span></button>
-                    <button id="registerBtn"><i class="fas fa-user-plus"></i> <span>Реєстрація</span></button>
-                `;
-                document.getElementById('loginBtn')?.addEventListener('click', () => document.getElementById('loginModal').classList.add('active'));
-                document.getElementById('registerBtn')?.addEventListener('click', () => document.getElementById('registerModal').classList.add('active'));
+                c.innerHTML = `<button id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span>Вхід</span></button><button id="registerBtn"><i class="fas fa-user-plus"></i> <span>Реєстрація</span></button>`;
+                document.getElementById('loginBtn')?.addEventListener('click', ()=>document.getElementById('loginModal').classList.add('active'));
+                document.getElementById('registerBtn')?.addEventListener('click', ()=>document.getElementById('registerModal').classList.add('active'));
             }
         }
 
         async function renderPage() {
             await loadData();
-            const path = window.location.pathname;
-            const main = document.getElementById('main-content');
-            document.querySelectorAll('.desktop-nav a, .mobile-nav a').forEach(link => {
-                link.classList.remove('active');
-                if(link.getAttribute('href') === path || (path === '/' && link.getAttribute('href') === '/')) link.classList.add('active');
-            });
+            const path = window.location.pathname, main = document.getElementById('main-content');
             if(path === '/' || path === '/about') renderAbout(main);
             else if(path === '/catalog') renderCatalog(main);
             else if(path === '/reviews') renderReviews(main);
@@ -523,184 +203,141 @@
         }
 
         function renderAbout(main) {
-            const bannerHtml = bannerImage ? `<div class="hero-banner"><img src="${bannerImage}" alt="Банер"></div>` : '';
-            const brandHtml = brandLogoImage ? `<div class="brand-logo-container"><img src="${brandLogoImage}" alt="Бренд-лого"></div>` : '';
-            main.innerHTML = `
-                ${bannerHtml}
-                ${brandHtml}
-                <div class="about-hero"><h1>Про нас</h1><p>Ваш надійний партнер у світі дронів</p></div>
-                <div class="contact-content">${aboutText.replace(/\n/g, '<br>')}</div>
-                <div class="social-links">${socialLinks.map(s => `<a href="${s.url}" target="_blank" class="social-link"><i class="${s.icon}"></i> ${s.name}</a>`).join('')}</div>
-            `;
+            main.innerHTML = `${bannerImage?`<div class="hero-banner"><img src="${bannerImage}"></div>`:''}${brandLogoImage?`<div class="brand-logo-container"><img src="${brandLogoImage}"></div>`:''}<div class="contact-content"><h1>Про нас</h1>${aboutText.replace(/\n/g,'<br>')}</div>`;
         }
 
         function renderCatalog(main) {
-            let html = '<h1>Каталог товарів</h1>';
-            if (!products.length) { html += '<p style="text-align:center;padding:3rem;">Товари поки відсутні</p>'; main.innerHTML = html; return; }
+            let h = '<h1>Каталог</h1>';
             categories.forEach(cat => {
-                const catProds = products.filter(p => p.category === cat);
-                if (catProds.length) {
-                    html += `<h2>${cat}</h2><div class="products-grid">`;
-                    catProds.forEach(p => {
-                        html += `<div class="product-card" data-id="${p.id}"><img src="${p.image || 'https://via.placeholder.com/300'}" class="product-image"><div class="product-info"><h3>${p.name}</h3><div class="product-price">${p.price.toLocaleString()} грн</div><span class="product-category">${p.category}</span><button class="order-btn-small" onclick="event.stopPropagation(); location.href='/product/${p.id}'">Детальніше</button></div></div>`;
-                    });
-                    html += '</div>';
+                const prods = products.filter(p => p.category === cat);
+                if(prods.length) {
+                    h += `<h2>${cat}</h2><div class="products-grid">`;
+                    prods.forEach(p => h += `<div class="product-card" data-id="${p.id}"><img src="${p.image||'https://via.placeholder.com/300'}" class="product-image"><div class="product-info"><h3>${p.name}</h3><div class="product-price">${p.price.toLocaleString()} грн</div><span class="product-category">${p.category}</span><button class="order-btn-small" onclick="event.stopPropagation();location.href='/product/${p.id}'">Детальніше</button></div></div>`);
+                    h += '</div>';
                 }
             });
-            main.innerHTML = html;
+            main.innerHTML = h;
             document.querySelectorAll('.product-card').forEach(c => c.addEventListener('click', e => { const id = c.getAttribute('data-id'); if(id) location.href = `/product/${id}`; }));
         }
 
         function renderReviews(main) {
-            const stars = (rating) => '★'.repeat(rating) + '☆'.repeat(5-rating);
-            const reviewsHtml = reviews.length ? reviews.map(r => `
-                <div class="review-card">
-                    <div class="review-header"><span class="review-author">${r.author}</span><span class="review-date">${new Date(r.date).toLocaleDateString('uk-UA')}</span></div>
-                    <div class="review-rating">${stars(r.rating)}</div>
-                    <div class="review-text">${r.text}</div>
-                </div>
-            `).join('') : '<p>Ще немає відгуків.</p>';
-            main.innerHTML = `<h1>Відгуки</h1><div class="reviews-section"><div class="reviews-grid">${reviewsHtml}</div>${currentUser ? `
-                <div class="add-review"><h3>Залишити відгук</h3><form class="review-form" onsubmit="event.preventDefault(); addReview()">
-                    <input type="text" id="reviewAuthor" placeholder="Ваше ім'я" value="${currentUser.username}" required>
-                    <select id="reviewRating"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option></select>
-                    <textarea id="reviewText" rows="4" placeholder="Ваш відгук..." required></textarea>
-                    <button type="submit">Залишити відгук</button>
-                </form></div>
-            ` : '<p><a href="#" onclick="document.getElementById(\'loginModal\').classList.add(\'active\')">Увійдіть</a>, щоб залишити відгук</p>'}</div>`;
+            const stars = r => '★'.repeat(r)+'☆'.repeat(5-r);
+            main.innerHTML = `<h1>Відгуки</h1><div class="reviews-section"><div class="reviews-grid">${reviews.map(r => `<div class="review-card"><div class="review-header"><span class="review-author">${r.author}</span><span class="review-date">${new Date(r.date).toLocaleDateString()}</span></div><div class="review-rating">${stars(r.rating)}</div><div class="review-text">${r.text}</div></div>`).join('')}</div>${currentUser?`<div class="add-review"><h3>Залишити відгук</h3><form class="review-form" onsubmit="event.preventDefault();addReview()"><input type="text" id="reviewAuthor" value="${currentUser.username}" required><select id="reviewRating"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option></select><textarea id="reviewText" rows="4" required></textarea><button type="submit">Відправити</button></form></div>`:'<p><a href="#" onclick="document.getElementById(\'loginModal\').classList.add(\'active\')">Увійдіть</a>, щоб залишити відгук</p>'}</div>`;
         }
 
         window.addReview = async function() {
-            const author = document.getElementById('reviewAuthor').value;
-            const rating = parseInt(document.getElementById('reviewRating').value);
-            const text = document.getElementById('reviewText').value;
-            if(!author || !text) { alert('Заповніть всі поля'); return; }
-            const res = await fetch('/api/reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ author, rating, text }) });
-            if(res.ok) { alert('Дякуємо!'); renderPage(); } else alert('Помилка');
+            const a = document.getElementById('reviewAuthor').value, r = parseInt(document.getElementById('reviewRating').value), t = document.getElementById('reviewText').value;
+            if(!a||!t) return alert('Заповніть поля');
+            await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({author:a,rating:r,text:t})});
+            alert('Дякуємо!'); renderPage();
         };
 
         function renderContacts(main) {
             const lines = contactInfo.split('\n');
-            main.innerHTML = `<h1>Контакти</h1><div class="contact-content"><div class="contact-info">${lines.map(l => {
-                if(l.includes('@')) return `<div class="contact-item"><i class="fas fa-envelope"></i><div><h3>Email</h3><p>${l.replace('Email:','').trim()}</p></div></div>`;
-                if(l.includes('+380')||l.includes('Телефон')) return `<div class="contact-item"><i class="fas fa-phone"></i><div><h3>Телефон</h3><p>${l.replace('Телефон:','').trim()}</p></div></div>`;
-                if(l.includes('Графік')) return `<div class="contact-item"><i class="fas fa-clock"></i><div><h3>Графік</h3><p>${l.replace('Графік:','').trim()}</p></div></div>`;
-                if(l.includes('Адреса')) return `<div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h3>Адреса</h3><p>${l.replace('Адреса:','').trim()}</p></div></div>`;
-                return '';
-            }).join('')}</div><div class="social-links">${socialLinks.map(s => `<a href="${s.url}" target="_blank" class="social-link"><i class="${s.icon}"></i> ${s.name}</a>`).join('')}</div></div>`;
+            main.innerHTML = `<h1>Контакти</h1><div class="contact-content">${lines.map(l => { if(l.includes('@')) return `<div class="contact-item"><i class="fas fa-envelope"></i><div><h3>Email</h3><p>${l.replace('Email:','').trim()}</p></div></div>`; if(l.includes('+380')||l.includes('Телефон')) return `<div class="contact-item"><i class="fas fa-phone"></i><div><h3>Телефон</h3><p>${l.replace('Телефон:','').trim()}</p></div></div>`; if(l.includes('Графік')) return `<div class="contact-item"><i class="fas fa-clock"></i><div><h3>Графік</h3><p>${l.replace('Графік:','').trim()}</p></div></div>`; if(l.includes('Адреса')) return `<div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h3>Адреса</h3><p>${l.replace('Адреса:','').trim()}</p></div></div>`; return ''; }).join('')}<div class="social-links">${socialLinks.map(s => `<a href="${s.url}" target="_blank" class="social-link"><i class="${s.icon}"></i> ${s.name}</a>`).join('')}</div></div>`;
         }
 
         function renderProductPage(main, id) {
             const p = products.find(p => p.id == id);
             if(!p){ main.innerHTML = '<h1>Товар не знайдено</h1>'; return; }
             const defaultImage = p.image || 'https://via.placeholder.com/600';
-            const variantsHtml = (p.variants || []).map(v => `<button class="variant-btn-new" data-variant="${v}">${v}</button>`).join('');
+            
+            // Парсимо характеристики в компактний вигляд
             let specsHtml = '';
             if (p.specs) {
-                p.specs.split('\n').forEach(line => {
+                const lines = p.specs.split('\n').filter(l => l.trim());
+                lines.forEach(line => {
                     if (line.includes(':')) {
-                        const [key, val] = line.split(':');
-                        specsHtml += `<div class="spec-item"><strong>${key.trim()}</strong><span>${val.trim()}</span></div>`;
-                    } else if (line.trim()) {
-                        specsHtml += `<div class="spec-item"><strong>•</strong><span>${line.trim()}</span></div>`;
+                        const [key, val] = line.split(':').map(s => s.trim());
+                        specsHtml += `<div class="spec-item-compact"><span class="spec-key">${key}</span><span class="spec-val">${val}</span></div>`;
+                    } else {
+                        specsHtml += `<div class="spec-item-compact"><span class="spec-key">●</span><span class="spec-val">${line.trim()}</span></div>`;
                     }
                 });
             }
-            let thumbnailsHtml = `<div class="thumbnail active"><img src="${defaultImage}" alt="Головне"></div>`;
-            if (p.gallery && p.gallery.length) {
-                p.gallery.forEach(img => { thumbnailsHtml += `<div class="thumbnail"><img src="${img}" alt="Додаткове"></div>`; });
-            }
+            
+            let thumbs = `<div class="thumbnail active"><img src="${defaultImage}"></div>`;
+            if (p.gallery) p.gallery.forEach(img => thumbs += `<div class="thumbnail"><img src="${img}"></div>`);
+            
             main.innerHTML = `
                 <div class="product-page">
                     <div class="product-gallery">
-                        <div class="main-image"><img src="${defaultImage}" alt="${p.name}" id="mainProductImage"></div>
-                        <div class="thumbnail-list" id="thumbnailList">${thumbnailsHtml}</div>
+                        <div class="main-image"><img src="${defaultImage}" id="mainProductImage"></div>
+                        <div class="thumbnail-list" id="thumbnailList">${thumbs}</div>
                     </div>
-                    <div class="product-info-new">
+                    <div class="product-info-compact">
                         <h1 class="product-title">${p.name}</h1>
-                        <div class="product-price-new">${p.price.toLocaleString()} грн</div>
-                        <div class="specs-list">${specsHtml || '<div class="spec-item"><span>Характеристики не додані</span></div>'}</div>
-                        <div class="variants-section"><h3>Варіанти:</h3><div class="variant-buttons" id="variantButtons">${variantsHtml}</div></div>
-                        <div class="buy-section">
-                            <div class="buy-price">${p.price.toLocaleString()} грн</div>
-                            <div class="buy-form">
+                        <div class="product-price-compact">${p.price.toLocaleString()} грн</div>
+                        
+                        <div class="specs-compact" id="specsBlock">
+                            <div class="specs-title" onclick="this.parentElement.classList.toggle('specs-collapsed')">
+                                <i class="fas fa-chevron-down"></i> <span>Характеристики</span>
+                            </div>
+                            <div class="specs-content">
+                                <div class="specs-grid-compact">${specsHtml || '<div class="spec-item-compact"><span class="spec-key">—</span><span class="spec-val">Не вказано</span></div>'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="desc-preview">${p.description || 'Опис відсутній'}</div>
+                        
+                        ${p.variants?.length ? `
+                        <div class="variants-compact" id="variantButtons">
+                            ${p.variants.map(v => `<button class="variant-btn" data-variant="${v}">${v}</button>`).join('')}
+                        </div>
+                        ` : ''}
+                        
+                        <div class="buy-section-compact">
+                            <div class="buy-price-compact">${p.price.toLocaleString()} грн</div>
+                            <div class="buy-form-compact">
                                 <input type="text" id="orderNameProduct" placeholder="Ваше ім'я">
                                 <input type="tel" id="orderPhoneProduct" placeholder="Номер телефону">
                                 <input type="text" id="orderVariantProduct" placeholder="Оберіть варіант" readonly>
-                                <button class="buy-btn" onclick="placeOrderProduct(${p.id})">Купити</button>
+                                <button class="buy-btn-compact" onclick="placeOrderProduct(${p.id})">Купити</button>
                             </div>
-                        </div>
-                        <div class="product-tabs">
-                            <div class="tabs-header">
-                                <button class="tab-btn active" data-tab="desc">Опис</button>
-                                <button class="tab-btn" data-tab="specs">Характеристики</button>
-                                <button class="tab-btn" data-tab="delivery">Доставка</button>
-                            </div>
-                            <div class="tab-content active" id="tab-desc">${p.description || 'Опис відсутній'}</div>
-                            <div class="tab-content" id="tab-specs">${p.specs ? p.specs.replace(/\n/g, '<br>') : 'Не додано'}</div>
-                            <div class="tab-content" id="tab-delivery">Доставка по всій Україні протягом 1-3 днів.</div>
                         </div>
                     </div>
                 </div>
             `;
-            document.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
-                thumb.addEventListener('click', () => {
-                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-                    thumb.classList.add('active');
-                    document.getElementById('mainProductImage').src = thumb.querySelector('img').src;
-                });
-            });
-            document.querySelectorAll('.variant-btn-new').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.variant-btn-new').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    document.getElementById('orderVariantProduct').value = btn.getAttribute('data-variant');
-                });
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const tabId = btn.getAttribute('data-tab');
-                    document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                    document.getElementById(`tab-${tabId}`).classList.add('active');
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                });
-            });
+            
+            document.querySelectorAll('.thumbnail').forEach((t, i) => t.addEventListener('click', () => {
+                document.querySelectorAll('.thumbnail').forEach(th => th.classList.remove('active'));
+                t.classList.add('active');
+                document.getElementById('mainProductImage').src = t.querySelector('img').src;
+            }));
+            
+            document.querySelectorAll('.variant-btn').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('.variant-btn').forEach(v => v.classList.remove('active'));
+                b.classList.add('active');
+                document.getElementById('orderVariantProduct').value = b.getAttribute('data-variant');
+            }));
         }
 
         window.placeOrderProduct = async (id) => {
-            const name = document.getElementById('orderNameProduct').value;
-            const phone = document.getElementById('orderPhoneProduct').value;
-            const variant = document.getElementById('orderVariantProduct').value;
-            if(!name || !phone || !variant) { alert('Заповніть всі поля та оберіть варіант'); return; }
-            const res = await fetch('/api/orders', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ productId: id, name, phone, variant }) });
-            if(res.ok) { alert('Дякуємо! Замовлення прийнято.'); location.href = '/'; } else alert('Помилка');
+            const n = document.getElementById('orderNameProduct').value, p = document.getElementById('orderPhoneProduct').value, v = document.getElementById('orderVariantProduct').value;
+            if(!n||!p||!v) return alert('Заповніть всі поля та оберіть варіант');
+            await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({productId:id,name:n,phone:p,variant:v})});
+            alert('Замовлення прийнято!'); location.href = '/';
         };
 
         window.login = async () => {
             const u = document.getElementById('loginUsername').value, p = document.getElementById('loginPassword').value;
-            const res = await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
-            if(res.ok){ const user=await res.json(); currentUser=user; closeModal('loginModal'); updateAuthUI(); renderPage(); }
+            const r = await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+            if(r.ok){ currentUser = await r.json(); closeModal('loginModal'); updateAuthUI(); renderPage(); }
             else alert('Невірний логін або пароль');
         };
         window.register = async () => {
             const u = document.getElementById('regUsername').value, p = document.getElementById('regPassword').value;
-            if(!u||!p) return alert('Заповніть всі поля');
-            const res = await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
-            if(res.ok){ alert('Реєстрація успішна! Увійдіть.'); closeModal('registerModal'); }
+            if(!u||!p) return alert('Заповніть поля');
+            const r = await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+            if(r.ok){ alert('Реєстрація успішна!'); closeModal('registerModal'); }
             else alert('Користувач вже існує');
         };
-        window.logout = async () => {
-            await fetch('/api/logout', { method: 'POST' });
-            currentUser = null;
-            updateAuthUI();
-            window.location.href = '/';
-        };
+        window.logout = async () => { await fetch('/api/logout',{method:'POST'}); currentUser = null; updateAuthUI(); location.href = '/'; };
         window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+
         window.addEventListener('popstate', renderPage);
-        document.querySelectorAll('.desktop-nav a, .mobile-nav a').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); const href = link.getAttribute('href'); history.pushState({},'',href); renderPage(); }));
+        document.querySelectorAll('.desktop-nav a, .mobile-nav a').forEach(l => l.addEventListener('click', e => { e.preventDefault(); history.pushState({},'',l.getAttribute('href')); renderPage(); }));
         document.addEventListener('DOMContentLoaded', () => { initMobileMenu(); renderPage(); });
-        renderPage();
     </script>
 </body>
 </html>
