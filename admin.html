@@ -13,14 +13,12 @@
         .logo-img { height:40px; border-radius:8px; background:#fff; padding:2px; }
         .home-btn { background:#2a2a2a; border:none; color:#fff; padding:8px 20px; border-radius:30px; cursor:pointer; }
         .admin-container { display:flex; min-height:calc(100vh - 70px); }
-        
         .sidebar { width:260px; background:#111; padding:2rem 1rem; border-right:1px solid #222; position:fixed; height:100%; overflow-y:auto; z-index:50; }
         .sidebar h3 { color:#fff; margin-bottom:1.5rem; padding-left:1rem; border-left:3px solid #5a5a5a; }
         .sidebar-menu { list-style:none; }
         .sidebar-menu li { margin-bottom:0.5rem; }
         .sidebar-menu a { display:flex; align-items:center; gap:1rem; padding:0.8rem 1rem; color:#ddd; border-radius:12px; text-decoration:none; cursor:pointer; transition:0.2s; }
         .sidebar-menu a:hover, .sidebar-menu a.active { background:#2a2a2a; color:#fff; }
-        
         .admin-content { flex:1; margin-left:260px; padding:2rem; }
         .admin-section { display:none; animation:fadeIn 0.3s ease; }
         .admin-section.active { display:block; }
@@ -158,8 +156,9 @@
                     <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
                     <div class="form-group">
                         <label>Характеристики</label>
-                        <textarea id="productSpecs" rows="6" placeholder="Вага: 250г&#10;Розмір: 5 дюймів&#10;Матеріал: Карбон&#10;Батарея: 6S 1300mAh&#10;Польотний стек: FC F7 / ESC 60A"></textarea>
-                        <small style="color:#777; display:block; margin-top:0.3rem;"><i class="fas fa-info-circle"></i> Кожен рядок - окрема характеристика</small>
+                        <textarea id="productSpecs" rows="8" placeholder="## Літальний апарат&#10;Живлення: акумулятор&#10;Місткість батареї, мАгод: 5000"></textarea>
+                        <button type="button" class="btn" id="autoFormatSpecsBtn" style="margin-top:0.5rem;"><i class="fas fa-magic"></i> Автоформатувати</button>
+                        <small style="color:#777; display:block; margin-top:0.3rem;">Використовуйте ## для секцій, Назва: Значення для характеристик</small>
                     </div>
                     <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
@@ -202,7 +201,29 @@
             <!-- Соцмережі -->
             <div id="social" class="admin-section">
                 <h2><i class="fas fa-share-alt"></i> Соціальні мережі</h2>
-                <div class="admin-form"><h3>Додати соцмережу</h3><div class="form-group"><select id="socialPlatform"><option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option><option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="tiktok">TikTok</option><option value="youtube">YouTube</option></select></div><div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div><div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div><div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка"></div><div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div><button class="btn" id="addSocialBtn">Додати</button></div>
+                <div class="admin-form"><h3>Додати соцмережу</h3>
+                    <div class="form-group">
+                        <select id="socialPlatform">
+                            <option value="telegram">Telegram</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="viber">Viber</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="signal">Signal</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="x">X (Twitter)</option>
+                            <option value="discord">Discord</option>
+                            <option value="github">GitHub</option>
+                            <option value="linkedin">LinkedIn</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div>
+                    <div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div>
+                    <div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (fa-brands fa-telegram)"></div>
+                    <div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div>
+                    <button class="btn" id="addSocialBtn">Додати</button>
+                </div>
                 <div class="table-container"><table><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
             </div>
             <!-- Відгуки -->
@@ -263,6 +284,40 @@
             document.getElementById('addSocialBtn')?.addEventListener('click', addSocial);
             document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
             document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
+            document.getElementById('autoFormatSpecsBtn')?.addEventListener('click', autoFormatSpecs);
+        }
+
+        function autoFormatSpecs() {
+            let text = document.getElementById('productSpecs').value;
+            let lines = text.split('\n');
+            let formatted = [];
+            
+            lines.forEach(line => {
+                line = line.trim();
+                if (!line) return;
+                
+                if (line.startsWith('##') || /^[А-ЯІЇЄҐA-Z\s]+$/.test(line) && line.length < 50) {
+                    if (!line.startsWith('##')) line = '## ' + line;
+                    formatted.push(line);
+                } else if (line.includes(':')) {
+                    formatted.push(line);
+                } else if (line.split(/\s+/).length === 2) {
+                    let parts = line.split(/\s+/);
+                    formatted.push(parts[0] + ': ' + parts[1]);
+                } else if (line.split(/\s+/).length === 1 && formatted.length > 0) {
+                    let last = formatted[formatted.length - 1];
+                    if (!last.includes(':') && !last.startsWith('##')) {
+                        formatted[formatted.length - 1] = last + ': ' + line;
+                    } else {
+                        formatted.push(line);
+                    }
+                } else {
+                    formatted.push(line);
+                }
+            });
+            
+            document.getElementById('productSpecs').value = formatted.join('\n');
+            alert('Характеристики відформатовано!');
         }
 
         function fileToBase64(file) {
@@ -293,17 +348,8 @@
                     fetch('/api/categories'), fetch('/api/products'), fetch('/api/orders'), 
                     fetch('/api/social'), fetch('/api/about'), fetch('/api/contact')
                 ]);
-                categories = await cat.json(); 
-                products = await prod.json(); 
-                orders = await ord.json(); 
-                social = await soc.json();
-                updateDashboard(); 
-                updateCategoriesList(); 
-                updateProductsList(); 
-                updateOrdersList(); 
-                updateSocialList(); 
-                updateCategorySelect(); 
-                updateCategoryTabs();
+                categories = await cat.json(); products = await prod.json(); orders = await ord.json(); social = await soc.json();
+                updateDashboard(); updateCategoriesList(); updateProductsList(); updateOrdersList(); updateSocialList(); updateCategorySelect(); updateCategoryTabs();
                 document.getElementById('aboutText').value = await about.text();
                 parseContactInfo(await cont.text());
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
@@ -343,19 +389,8 @@
             document.querySelectorAll('#categoriesList .delete-btn').forEach(b => b.addEventListener('click', () => deleteCategory(b.getAttribute('data-cat'))));
         }
 
-        async function addCategory() { 
-            const c = document.getElementById('newCategory').value.trim(); 
-            if(!c) return alert('Введіть назву'); 
-            await fetch('/api/categories',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:c})}); 
-            document.getElementById('newCategory').value = ''; 
-            loadData(); 
-        }
-
-        async function deleteCategory(c) { 
-            if(!confirm('Видалити?')) return; 
-            await fetch(`/api/categories/${encodeURIComponent(c)}`,{method:'DELETE'}); 
-            loadData(); 
-        }
+        async function addCategory() { const c = document.getElementById('newCategory').value.trim(); if(!c) return alert('Введіть назву'); await fetch('/api/categories',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:c})}); document.getElementById('newCategory').value = ''; loadData(); }
+        async function deleteCategory(c) { if(!confirm('Видалити?')) return; await fetch(`/api/categories/${encodeURIComponent(c)}`,{method:'DELETE'}); loadData(); }
 
         function updateCategorySelect() { document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join(''); }
 
@@ -379,7 +414,6 @@
             document.getElementById('variantsContainer').appendChild(d);
         }
 
-        // Галерея
         function initGalleryUpload() {
             const area = document.getElementById('galleryUploadArea'), inp = document.getElementById('galleryInput');
             area.addEventListener('click', () => inp.click());
@@ -435,11 +469,8 @@
             const url = editProductId ? `/api/products/${editProductId}` : '/api/products';
             const method = editProductId ? 'PUT' : 'POST';
             try {
-                const variants = []; 
-                document.querySelectorAll('#variantsContainer input').forEach(i => { if(i.value.trim()) variants.push(i.value.trim()); });
-                let img = null; 
-                const f = document.getElementById('productImage').files[0]; 
-                if(f) img = await fileToBase64(f);
+                const variants = []; document.querySelectorAll('#variantsContainer input').forEach(i => { if(i.value.trim()) variants.push(i.value.trim()); });
+                let img = null; const f = document.getElementById('productImage').files[0]; if(f) img = await fileToBase64(f);
                 const data = {
                     category: document.getElementById('productCategory').value,
                     name: document.getElementById('productName').value.trim(),
@@ -476,12 +507,16 @@
             const p = document.getElementById('socialPlatform').value, n = document.getElementById('socialName').value.trim(), u = document.getElementById('socialUrl').value.trim();
             let i = document.getElementById('socialIcon').value.trim(); const a = document.getElementById('socialActive').checked;
             if(!n||!u) return alert('Заповніть поля');
-            const icons = {telegram:'fa-brands fa-telegram',instagram:'fa-brands fa-instagram',facebook:'fa-brands fa-facebook',viber:'fa-brands fa-viber',whatsapp:'fa-brands fa-whatsapp',tiktok:'fa-brands fa-tiktok',youtube:'fa-brands fa-youtube'};
-            if(!i) i = icons[p]||'fa-solid fa-link';
+            const icons = {
+                telegram: 'fa-brands fa-telegram', instagram: 'fa-brands fa-instagram', facebook: 'fa-brands fa-facebook',
+                viber: 'fa-brands fa-viber', whatsapp: 'fa-brands fa-whatsapp', signal: 'fa-brands fa-signal-messenger',
+                tiktok: 'fa-brands fa-tiktok', youtube: 'fa-brands fa-youtube', x: 'fa-brands fa-x-twitter',
+                discord: 'fa-brands fa-discord', github: 'fa-brands fa-github', linkedin: 'fa-brands fa-linkedin'
+            };
+            if(!i) i = icons[p] || 'fa-solid fa-link';
             await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify([...social,{platform:p,name:n,url:u,icon:i,active:a}])});
             document.getElementById('socialName').value = document.getElementById('socialUrl').value = ''; 
-            loadData(); 
-            alert('Додано!');
+            loadData(); alert('Додано!');
         }
 
         function openEditSocial(p) { 
@@ -504,23 +539,14 @@
             closeModal('editSocialModal'); loadData(); alert('Оновлено!');
         }
 
-        async function deleteSocial(p) { 
-            if(!confirm('Видалити?')) return; 
-            await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(social.filter(s => s.platform !== p))}); 
-            loadData(); 
-        }
+        async function deleteSocial(p) { if(!confirm('Видалити?')) return; await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(social.filter(s => s.platform !== p))}); loadData(); }
 
-        async function saveAbout() { 
-            await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutText').value})}); 
-            alert('Збережено'); 
-        }
-
+        async function saveAbout() { await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutText').value})}); alert('Збережено'); }
         async function saveContact() {
             const parts = []; 
             const ph = document.getElementById('contactPhone').value, em = document.getElementById('contactEmail').value, sc = document.getElementById('contactSchedule').value, ad = document.getElementById('contactAddress').value;
             if(ph) parts.push(`Телефон: ${ph}`); if(em) parts.push(`Email: ${em}`); if(sc) parts.push(`Графік: ${sc}`); if(ad) parts.push(`Адреса: ${ad}`);
-            await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:parts.join('\n')})}); 
-            alert('Збережено');
+            await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:parts.join('\n')})}); alert('Збережено');
         }
 
         async function uploadBackground() { const f = document.getElementById('bgFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/background',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBackground(); alert('Збережено!'); }
@@ -534,8 +560,7 @@
 
         async function changePassword() {
             const cur = document.getElementById('currentPassword').value, newU = document.getElementById('newUsername').value, newP = document.getElementById('newPassword').value, conf = document.getElementById('confirmPassword').value;
-            if(!cur) return alert('Введіть поточний пароль'); 
-            if(newP && newP !== conf) return alert('Паролі не співпадають');
+            if(!cur) return alert('Введіть поточний пароль'); if(newP && newP !== conf) return alert('Паролі не співпадають');
             const res = await fetch('/api/admin/change-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({currentPassword:cur,newUsername:newU,newPassword:newP})});
             if(res.ok) { alert('Оновлено!'); document.getElementById('currentPassword').value = document.getElementById('newPassword').value = document.getElementById('confirmPassword').value = ''; }
             else { const e = await res.json(); alert(e.error); }
