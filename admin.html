@@ -38,7 +38,9 @@
         .btn-danger { background:#7a2e2e; }
         .btn-ai { background:#3a5a7a; }
         .variant-row { display:flex; gap:0.5rem; margin-bottom:0.5rem; align-items:center; }
-        .variant-row input { flex:1; }
+        .variant-row input { padding:0.7rem; background:#1a1a1a; border:1px solid #333; border-radius:10px; color:#fff; }
+        .variant-name { flex:2; }
+        .variant-price { flex:1; }
         .remove-btn { background:#7a2e2e; color:white; border:none; width:36px; height:36px; border-radius:8px; cursor:pointer; }
         .image-preview, .logo-preview { max-width:200px; max-height:150px; margin-top:0.5rem; border-radius:8px; display:none; }
         .table-container { overflow-x:auto; margin:1rem 0; border-radius:16px; background:#111; border:1px solid #222; }
@@ -66,6 +68,7 @@
         .gallery-delete { background:#7a2e2e; width:28px; height:28px; border-radius:6px; border:none; color:white; cursor:pointer; }
         .gallery-upload-area { border:2px dashed #333; border-radius:12px; padding:1.5rem; text-align:center; cursor:pointer; }
         .gallery-upload-area:hover { border-color:#5a5a5a; background:#1a1a1a; }
+        .social-icon-preview { display:flex; align-items:center; gap:1rem; margin-top:1rem; padding:0.8rem; background:#1a1a1a; border-radius:12px; }
 
         @media (max-width: 768px) { 
             .sidebar { display:block !important; position:fixed; left:0; top:70px; width:100%; height:auto; max-height:calc(100vh - 70px); z-index:99; border-right:none; border-bottom:1px solid #222; padding:1rem; }
@@ -154,18 +157,31 @@
                     <input type="hidden" id="editProductId">
                     <div class="form-group"><label>Категорія</label><select id="productCategory"></select></div>
                     <div class="form-group"><input type="text" id="productName" placeholder="Назва товару"></div>
-                    <div class="form-group"><input type="number" id="productPrice" placeholder="Ціна (грн)"></div>
+                    <div class="form-group"><input type="number" id="productPrice" placeholder="Основна ціна (грн)"></div>
                     <div class="form-group"><textarea id="productDescription" rows="3" placeholder="Опис товару"></textarea></div>
                     <div class="form-group">
                         <label>Характеристики</label>
-                        <textarea id="productSpecs" rows="10" placeholder="Вставте характеристики..."></textarea>
+                        <textarea id="productSpecs" rows="8" placeholder="Вставте характеристики..."></textarea>
                         <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
                             <button type="button" class="btn" id="autoFormatSpecsBtn"><i class="fas fa-magic"></i> Автоформат</button>
                             <button type="button" class="btn btn-ai" id="smartFormatSpecsBtn"><i class="fas fa-robot"></i> ШІ форматування</button>
                         </div>
                         <small style="color:#777; display:block; margin-top:0.3rem;">Вставляйте текст і натискайте кнопку форматування</small>
                     </div>
-                    <div class="form-group"><label>Варіанти</label><div id="variantsContainer"><div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div></div><button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button></div>
+                    <div class="form-group">
+                        <label>Варіанти (назва та ціна)</label>
+                        <div id="variantsContainer">
+                            <div class="variant-row">
+                                <input type="text" placeholder="Назва варіанту" class="variant-name">
+                                <input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01">
+                                <button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button>
+                        <small style="color:#777; display:block; margin-top:0.3rem;">
+                            <i class="fas fa-info-circle"></i> Якщо ціна не вказана - використовується основна ціна товару
+                        </small>
+                    </div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
                     
                     <div class="gallery-container">
@@ -245,20 +261,36 @@
             <!-- Соцмережі -->
             <div id="social" class="admin-section">
                 <h2><i class="fas fa-share-alt"></i> Соціальні мережі</h2>
-                <div class="admin-form"><h3>Додати соцмережу</h3>
+                <div class="admin-form">
+                    <h3>Додати соцмережу</h3>
                     <div class="form-group">
                         <select id="socialPlatform">
-                            <option value="telegram">Telegram</option><option value="instagram">Instagram</option><option value="facebook">Facebook</option>
-                            <option value="viber">Viber</option><option value="whatsapp">WhatsApp</option><option value="signal">Signal</option>
-                            <option value="tiktok">TikTok</option><option value="youtube">YouTube</option><option value="x">X (Twitter)</option>
-                            <option value="discord">Discord</option><option value="github">GitHub</option><option value="linkedin">LinkedIn</option>
+                            <option value="telegram">Telegram</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="facebook">Facebook</option>
+                            <option value="viber">Viber</option>
+                            <option value="whatsapp">WhatsApp</option>
+                            <option value="signal">Signal</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="x">X (Twitter)</option>
+                            <option value="discord">Discord</option>
+                            <option value="github">GitHub</option>
+                            <option value="linkedin">LinkedIn</option>
+                            <option value="messenger">Messenger</option>
                         </select>
                     </div>
                     <div class="form-group"><input type="text" id="socialName" placeholder="Назва"></div>
                     <div class="form-group"><input type="url" id="socialUrl" placeholder="Посилання"></div>
-                    <div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка"></div>
+                    <div class="form-group"><input type="text" id="socialIcon" placeholder="Іконка (необов'язково)"></div>
                     <div class="form-group"><label><input type="checkbox" id="socialActive" checked> Активна</label></div>
-                    <button class="btn" id="addSocialBtn">Додати</button>
+                    
+                    <div class="social-icon-preview" id="socialPreview">
+                        <i class="fa-brands fa-telegram" id="previewIcon" style="font-size:1.5rem; color:#aaa;"></i>
+                        <span id="previewText">Telegram</span>
+                    </div>
+                    
+                    <button class="btn" id="addSocialBtn" style="margin-top:1rem;">Додати</button>
                 </div>
                 <div class="table-container"><table><thead><tr><th>Іконка</th><th>Платформа</th><th>Назва</th><th>Посилання</th><th>Статус</th><th>Дії</th></tr></thead><tbody id="socialList"></tbody></table></div>
             </div>
@@ -311,6 +343,7 @@
             initEventListeners();
             initPreviewImages();
             initGalleryUpload();
+            updateSocialPreview();
         });
 
         function initNavigation() {
@@ -353,6 +386,10 @@
             document.getElementById('autoFormatSpecsBtn')?.addEventListener('click', autoFormatSpecs);
             document.getElementById('smartFormatSpecsBtn')?.addEventListener('click', smartFormatSpecs);
             
+            // Попередній перегляд соцмереж
+            document.getElementById('socialPlatform')?.addEventListener('change', updateSocialPreview);
+            document.getElementById('socialIcon')?.addEventListener('input', updateSocialPreview);
+            
             // Головна сторінка
             document.getElementById('saveStatsBtn')?.addEventListener('click', saveHomeStats);
             document.getElementById('saveHomePartnersBtn')?.addEventListener('click', saveHomePartners);
@@ -367,7 +404,32 @@
             document.getElementById('saveHoursBtn')?.addEventListener('click', saveWorkHours);
         }
 
-        // Просте автоформатування
+        function updateSocialPreview() {
+            const platform = document.getElementById('socialPlatform')?.value;
+            const customIcon = document.getElementById('socialIcon')?.value.trim();
+            const previewIcon = document.getElementById('previewIcon');
+            const previewText = document.getElementById('previewText');
+            if (!previewIcon || !previewText) return;
+            
+            const icons = {
+                telegram: 'fa-brands fa-telegram', instagram: 'fa-brands fa-instagram', facebook: 'fa-brands fa-facebook',
+                viber: 'fa-brands fa-viber', whatsapp: 'fa-brands fa-whatsapp', signal: 'fa-brands fa-signal-messenger',
+                tiktok: 'fa-brands fa-tiktok', youtube: 'fa-brands fa-youtube', x: 'fa-brands fa-x-twitter',
+                discord: 'fa-brands fa-discord', github: 'fa-brands fa-github', linkedin: 'fa-brands fa-linkedin',
+                messenger: 'fa-brands fa-facebook-messenger'
+            };
+            
+            const iconClass = customIcon || icons[platform] || 'fa-solid fa-link';
+            previewIcon.className = iconClass;
+            
+            const platformNames = {
+                telegram: 'Telegram', instagram: 'Instagram', facebook: 'Facebook', viber: 'Viber',
+                whatsapp: 'WhatsApp', signal: 'Signal', tiktok: 'TikTok', youtube: 'YouTube',
+                x: 'X (Twitter)', discord: 'Discord', github: 'GitHub', linkedin: 'LinkedIn', messenger: 'Messenger'
+            };
+            previewText.textContent = platformNames[platform] || platform;
+        }
+
         function autoFormatSpecs() {
             let text = document.getElementById('productSpecs').value;
             let lines = text.split('\n');
@@ -376,11 +438,9 @@
             for (let line of lines) {
                 line = line.trim();
                 if (!line) continue;
-                
                 if (line.startsWith('##')) { formatted.push(line); continue; }
                 if (/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length > 2 && line.length < 50) { formatted.push('## ' + line); continue; }
                 if (line.includes(':')) { formatted.push(line); continue; }
-                
                 formatted.push(line + ': ');
             }
             
@@ -388,78 +448,49 @@
             alert('✅ Характеристики відформатовано!');
         }
 
-        // ШІ форматування
         function smartFormatSpecs() {
             let text = document.getElementById('productSpecs').value;
             let lines = text.split('\n');
             let formatted = [];
             
             const knownSpecs = {
-                'живлення': 'Живлення', 'місткість': 'Місткість батареї, мАгод', 'ємність': 'Місткість батареї, мАгод',
-                'двигун': 'Тип двигуна', 'корпус': 'Складаний корпус', 'захист': 'Ступінь захисту',
-                'лопаті': 'Захист лопатей', 'карта': 'Підтримка карт пам\'яті', 'gps': 'GPS-навігація',
-                'гіроскоп': 'Гіроскоп', 'акселерометр': 'Акселерометр', 'барометр': 'Барометр',
-                'тепловізор': 'Тепловізор', 'магнетометр': 'Магнетометр', 'камера': 'Камера',
-                'матриця': 'Матриця камери', 'об\'єктив': 'Об\'єктив', 'стабілізація': 'Стабілізація',
-                'iso': 'Чутливість, ISO', 'кейс': 'Кейс', 'акумулятор': 'Акумулятори, шт',
-                'окуляри': 'FPV окуляри', 'зарядний': 'Док-станція / зарядний пристрій',
-                'температура': 'Температура навколишнього середовища, град', 'час': 'Час польоту, хв',
-                'дальність': 'Максимальна дальність польоту, км', 'швидкість': 'Швидкість підйому, км/год',
-                'висота': 'Максимальна висота, м', 'вітер': 'Макс. допустима швидкість вітру, км/год',
-                'вантаж': 'Вантажопідйомність, кг', 'пульт': 'Пульт керування', 'частота': 'Частота пульта, ГГц',
-                'радіус': 'Максимальний радіус дії, м', 'дисплей': 'Вбудований дисплей (діагональ), дюйм',
-                'вага': 'Вага, кг', 'довжина': 'Довжина, см', 'ширина': 'Ширина, см', 'висота': 'Висота, см',
-                'тип': 'Тип', 'бренд': 'Бренд', 'колір': 'Колір', 'клас': 'Клас', 'fpv': 'FPV (вид від першої особи)'
+                'живлення': 'Живлення', 'місткість': 'Місткість батареї, мАгод', 'двигун': 'Тип двигуна',
+                'корпус': 'Складаний корпус', 'захист': 'Ступінь захисту', 'лопаті': 'Захист лопатей',
+                'gps': 'GPS-навігація', 'камера': 'Камера', 'вага': 'Вага, кг', 'бренд': 'Бренд'
             };
             
             const sections = ['Літальний апарат', 'Камера', 'Комплектація', 'Основні характеристики', 'Пульт керування', 'Розміри і маса'];
-            
-            let i = 0;
-            let seenSections = new Set();
+            let i = 0, seenSections = new Set();
             
             while (i < lines.length) {
                 let line = lines[i].trim();
                 if (!line) { i++; continue; }
                 
-                let foundSection = sections.find(s => line.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(line.toLowerCase()));
-                if (foundSection && !line.includes(':') && line.length < 40) {
-                    if (!seenSections.has(foundSection)) {
-                        formatted.push('## ' + foundSection);
-                        seenSections.add(foundSection);
-                    }
+                let foundSection = sections.find(s => line.toLowerCase().includes(s.toLowerCase()));
+                if (foundSection && !line.includes(':')) {
+                    if (!seenSections.has(foundSection)) { formatted.push('## ' + foundSection); seenSections.add(foundSection); }
                     i++; continue;
                 }
                 
-                if (/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length > 2 && line.length < 50 && !line.includes(':')) {
-                    if (!line.startsWith('##')) line = '## ' + line;
-                    formatted.push(line); i++; continue;
+                if (/^[А-ЯІЇЄҐA-Z\s\-]+$/.test(line) && line.length > 2 && !line.includes(':')) {
+                    formatted.push('## ' + line); i++; continue;
                 }
                 
                 if (line.includes(':')) { formatted.push(line); i++; continue; }
                 
                 let matchedKey = null;
-                for (let key in knownSpecs) {
-                    if (line.toLowerCase().includes(key)) { matchedKey = knownSpecs[key]; break; }
-                }
+                for (let key in knownSpecs) if (line.toLowerCase().includes(key)) { matchedKey = knownSpecs[key]; break; }
                 
                 let nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
                 
                 if (matchedKey) {
-                    if (nextLine && !nextLine.includes(':') && !nextLine.match(/^[А-ЯІЇЄҐA-Z\s\-]+$/)) {
-                        formatted.push(matchedKey + ': ' + nextLine); i += 2;
-                    } else {
-                        formatted.push(matchedKey + ': '); i++;
-                    }
+                    if (nextLine && !nextLine.includes(':')) { formatted.push(matchedKey + ': ' + nextLine); i += 2; }
+                    else { formatted.push(matchedKey + ': '); i++; }
                     continue;
                 }
                 
-                if (nextLine && !nextLine.includes(':') && !nextLine.match(/^[А-ЯІЇЄҐA-Z\s\-]+$/) && !nextLine.startsWith('##')) {
-                    formatted.push(line + ': ' + nextLine); i += 2; continue;
-                }
-                
-                if (line.split(/\s+/).length <= 3) { formatted.push(line + ': '); }
-                else { formatted.push(line); }
-                i++;
+                if (nextLine && !nextLine.includes(':')) { formatted.push(line + ': ' + nextLine); i += 2; }
+                else { formatted.push(line + ': '); i++; }
             }
             
             document.getElementById('productSpecs').value = formatted.join('\n');
@@ -495,7 +526,8 @@
                     fetch('/api/social'), fetch('/api/about'), fetch('/api/contact')
                 ]);
                 categories = await cat.json(); products = await prod.json(); orders = await ord.json(); social = await soc.json();
-                updateDashboard(); updateCategoriesList(); updateProductsList(); updateOrdersList(); updateSocialList(); updateCategorySelect(); updateCategoryTabs();
+                updateDashboard(); updateCategoriesList(); updateProductsList(); updateOrdersList(); updateSocialList(); 
+                updateCategorySelect(); updateCategoryTabs();
                 document.getElementById('aboutText').value = await about.text();
                 parseContactInfo(await cont.text());
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
@@ -515,7 +547,7 @@
                 document.getElementById('statOriginal').value = stats.original || '100%';
                 document.getElementById('homePartnersInput').value = (partners || []).join(', ');
                 renderHomeFeaturesList(features || []);
-            } catch(e) { console.error('Помилка завантаження головної:', e); }
+            } catch(e) {}
         }
 
         async function loadAboutPageData() {
@@ -526,7 +558,6 @@
                     fetch('/api/partners').then(r => r.json()).catch(() => []),
                     fetch('/api/work-hours').then(r => r.json()).catch(() => ({}))
                 ]);
-                
                 document.getElementById('aboutStat1Value').value = stats.dronesSold || '500+';
                 document.getElementById('aboutStat2Value').value = stats.rating || '4.9';
                 document.getElementById('aboutStat3Value').value = stats.support || '24/7';
@@ -536,17 +567,14 @@
                 document.getElementById('hoursMonFri').value = hours.monFri || '10:00 - 19:00';
                 document.getElementById('hoursSat').value = hours.sat || '11:00 - 17:00';
                 document.getElementById('hoursSun').value = hours.sun || 'Вихідний';
-            } catch(e) { console.error('Помилка завантаження "Про нас":', e); }
+            } catch(e) {}
         }
 
         function renderHomeFeaturesList(features) {
             const c = document.getElementById('homeFeaturesContainer');
             if (!c) return;
-            if (!features || features.length === 0) {
-                c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг. Додайте нову!</p>';
-                return;
-            }
-            c.innerHTML = features.map((f, i) => `
+            if (!features || !features.length) { c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг</p>'; return; }
+            c.innerHTML = features.map(f => `
                 <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
                     <input type="text" value="${f.icon || 'fa-star'}" class="home-feature-icon">
                     <input type="text" value="${f.title || ''}" class="home-feature-title">
@@ -559,11 +587,8 @@
         function renderAboutFeaturesList(features) {
             const c = document.getElementById('aboutFeaturesContainer');
             if (!c) return;
-            if (!features || features.length === 0) {
-                c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг. Додайте нову!</p>';
-                return;
-            }
-            c.innerHTML = features.map((f, i) => `
+            if (!features || !features.length) { c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг</p>'; return; }
+            c.innerHTML = features.map(f => `
                 <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
                     <input type="text" value="${f.icon || 'fa-star'}" class="about-feature-icon">
                     <input type="text" value="${f.title || ''}" class="about-feature-title">
@@ -597,13 +622,13 @@
                 original: document.getElementById('statOriginal').value
             };
             await fetch('/api/home-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-            alert('✅ Статистику збережено!');
+            alert('✅ Збережено!');
         }
 
         async function saveHomePartners() {
             const partners = document.getElementById('homePartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
             await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
-            alert('✅ Партнерів збережено!');
+            alert('✅ Збережено!');
         }
 
         async function saveHomeFeatures() {
@@ -616,7 +641,7 @@
                 });
             });
             await fetch('/api/features', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(features) });
-            alert('✅ Переваги збережено!');
+            alert('✅ Збережено!');
         }
 
         async function saveAboutStats() {
@@ -627,7 +652,7 @@
                 original: document.getElementById('aboutStat4Value').value
             };
             await fetch('/api/home-stats', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-            alert('✅ Статистику збережено!');
+            alert('✅ Збережено!');
         }
 
         async function saveAboutFeatures() {
@@ -640,13 +665,13 @@
                 });
             });
             await fetch('/api/features', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(features) });
-            alert('✅ Переваги збережено!');
+            alert('✅ Збережено!');
         }
 
         async function saveAboutPartners() {
             const partners = document.getElementById('aboutPartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
             await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
-            alert('✅ Партнерів збережено!');
+            alert('✅ Збережено!');
         }
 
         async function saveWorkHours() {
@@ -656,7 +681,7 @@
                 sun: document.getElementById('hoursSun').value
             };
             await fetch('/api/work-hours', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
-            alert('✅ Робочі години збережено!');
+            alert('✅ Збережено!');
         }
 
         async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; document.getElementById('currentLogo').src = u; document.getElementById('currentLogo').style.display = 'block'; document.getElementById('noLogoText').style.display = 'none'; } } } catch(e){} }
@@ -713,7 +738,7 @@
 
         function addVariantField() {
             const d = document.createElement('div'); d.className = 'variant-row';
-            d.innerHTML = '<input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
+            d.innerHTML = `<input type="text" placeholder="Назва варіанту" class="variant-name"><input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
             document.getElementById('variantsContainer').appendChild(d);
         }
 
@@ -750,8 +775,24 @@
             document.getElementById('productPrice').value = p.price;
             document.getElementById('productDescription').value = p.description || '';
             document.getElementById('productSpecs').value = p.specs || '';
+            
             const vc = document.getElementById('variantsContainer'); vc.innerHTML = '';
-            (p.variants||['Стандарт']).forEach(v => { const d = document.createElement('div'); d.className = 'variant-row'; d.innerHTML = `<input type="text" value="${v}"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`; vc.appendChild(d); });
+            if (p.variants && p.variants.length) {
+                p.variants.forEach(v => {
+                    const d = document.createElement('div'); d.className = 'variant-row';
+                    if (typeof v === 'object' && v.name) {
+                        d.innerHTML = `<input type="text" value="${v.name}" class="variant-name"><input type="number" value="${v.price || ''}" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                    } else {
+                        d.innerHTML = `<input type="text" value="${v}" class="variant-name"><input type="number" placeholder="Ціна" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                    }
+                    vc.appendChild(d);
+                });
+            } else {
+                const d = document.createElement('div'); d.className = 'variant-row';
+                d.innerHTML = `<input type="text" value="Стандарт" class="variant-name"><input type="number" placeholder="Ціна" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                vc.appendChild(d);
+            }
+            
             galleryImages = (p.gallery || []).map(url => ({ id: Date.now()+Math.random(), url }));
             renderGallery();
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-edit"></i> Редагувати товар';
@@ -765,7 +806,7 @@
             document.getElementById('submitProductBtn').innerHTML = 'Додати товар';
             document.getElementById('cancelEditBtn').style.display = 'none';
             document.getElementById('productName').value = document.getElementById('productPrice').value = document.getElementById('productDescription').value = document.getElementById('productSpecs').value = '';
-            document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Варіант"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
+            document.getElementById('variantsContainer').innerHTML = `<div class="variant-row"><input type="text" placeholder="Назва варіанту" class="variant-name"><input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>`;
             renderGallery();
         }
 
@@ -773,7 +814,13 @@
             const url = editProductId ? `/api/products/${editProductId}` : '/api/products';
             const method = editProductId ? 'PUT' : 'POST';
             try {
-                const variants = []; document.querySelectorAll('#variantsContainer input').forEach(i => { if(i.value.trim()) variants.push(i.value.trim()); });
+                const variants = []; 
+                document.querySelectorAll('#variantsContainer .variant-row').forEach(row => {
+                    const name = row.querySelector('.variant-name')?.value.trim();
+                    const price = row.querySelector('.variant-price')?.value.trim();
+                    if (name) variants.push({ name, price: price ? parseFloat(price) : null });
+                });
+                
                 let img = null; const f = document.getElementById('productImage').files[0]; if(f) img = await fileToBase64(f);
                 const data = {
                     category: document.getElementById('productCategory').value,
@@ -781,7 +828,7 @@
                     price: parseFloat(document.getElementById('productPrice').value),
                     description: document.getElementById('productDescription').value,
                     specs: document.getElementById('productSpecs').value,
-                    variants: variants.length ? variants : ['Стандарт'],
+                    variants: variants.length ? variants : [{ name: 'Стандарт', price: null }],
                     image: img,
                     gallery: galleryImages.map(g => g.url)
                 };
@@ -802,7 +849,19 @@
         }
 
         function updateSocialList() {
-            document.getElementById('socialList').innerHTML = social.map(s => `<tr><td><i class="${s.icon}"></i></td><td>${s.platform}</td><td>${s.name}</td><td><a href="${s.url}" target="_blank">${s.url.substring(0,20)}</a></td><td>${s.active?'Так':'Ні'}</td><td class="action-btns"><button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
+            document.getElementById('socialList').innerHTML = social.map(s => `
+                <tr>
+                    <td><i class="${s.icon}" style="font-size:1.5rem;"></i></td>
+                    <td>${s.platform}</td>
+                    <td>${s.name}</td>
+                    <td><a href="${s.url}" target="_blank">${s.url.substring(0,25)}...</a></td>
+                    <td>${s.active ? '<span class="badge" style="background:#2e7a5e;">Активна</span>' : '<span class="badge" style="background:#7a2e2e;">Неактивна</span>'}</td>
+                    <td class="action-btns">
+                        <button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button>
+                        <button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>
+            `).join('');
             document.querySelectorAll('#socialList .edit-btn').forEach(b => b.addEventListener('click', () => openEditSocial(b.getAttribute('data-platform'))));
             document.querySelectorAll('#socialList .delete-btn').forEach(b => b.addEventListener('click', () => deleteSocial(b.getAttribute('data-platform'))));
         }
@@ -815,12 +874,13 @@
                 telegram: 'fa-brands fa-telegram', instagram: 'fa-brands fa-instagram', facebook: 'fa-brands fa-facebook',
                 viber: 'fa-brands fa-viber', whatsapp: 'fa-brands fa-whatsapp', signal: 'fa-brands fa-signal-messenger',
                 tiktok: 'fa-brands fa-tiktok', youtube: 'fa-brands fa-youtube', x: 'fa-brands fa-x-twitter',
-                discord: 'fa-brands fa-discord', github: 'fa-brands fa-github', linkedin: 'fa-brands fa-linkedin'
+                discord: 'fa-brands fa-discord', github: 'fa-brands fa-github', linkedin: 'fa-brands fa-linkedin',
+                messenger: 'fa-brands fa-facebook-messenger'
             };
             if(!i) i = icons[p] || 'fa-solid fa-link';
             await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify([...social,{platform:p,name:n,url:u,icon:i,active:a}])});
             document.getElementById('socialName').value = document.getElementById('socialUrl').value = ''; 
-            loadData(); alert('Додано!');
+            loadData(); alert('✅ Додано!');
         }
 
         function openEditSocial(p) { 
@@ -840,33 +900,33 @@
             const n = document.getElementById('editSocialName').value, u = document.getElementById('editSocialUrl').value, i = document.getElementById('editSocialIcon').value, a = document.getElementById('editSocialActive').checked;
             const upd = social.map(s => s.platform === currentEditPlatform ? {...s, name:n, url:u, icon:i, active:a} : s);
             await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(upd)});
-            closeModal('editSocialModal'); loadData(); alert('Оновлено!');
+            closeModal('editSocialModal'); loadData(); alert('✅ Оновлено!');
         }
 
         async function deleteSocial(p) { if(!confirm('Видалити?')) return; await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(social.filter(s => s.platform !== p))}); loadData(); }
 
-        async function saveAbout() { await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutText').value})}); alert('Збережено'); }
+        async function saveAbout() { await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutText').value})}); alert('✅ Збережено'); }
         async function saveContact() {
             const parts = []; 
             const ph = document.getElementById('contactPhone').value, em = document.getElementById('contactEmail').value, sc = document.getElementById('contactSchedule').value, ad = document.getElementById('contactAddress').value;
             if(ph) parts.push(`Телефон: ${ph}`); if(em) parts.push(`Email: ${em}`); if(sc) parts.push(`Графік: ${sc}`); if(ad) parts.push(`Адреса: ${ad}`);
-            await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:parts.join('\n')})}); alert('Збережено');
+            await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:parts.join('\n')})}); alert('✅ Збережено');
         }
 
-        async function uploadBackground() { const f = document.getElementById('bgFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/background',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBackground(); alert('Збережено!'); }
-        async function deleteBackground() { await fetch('/api/background',{method:'DELETE'}); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; alert('Видалено!'); }
-        async function uploadBanner() { const f = document.getElementById('bannerFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/banner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBanner(); alert('Збережено!'); }
-        async function deleteBanner() { await fetch('/api/banner',{method:'DELETE'}); document.getElementById('currentBanner').style.display = 'none'; document.getElementById('noBannerText').style.display = 'block'; alert('Видалено!'); }
-        async function uploadBrandLogo() { const f = document.getElementById('brandLogoFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/brand-logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBrandLogo(); alert('Збережено!'); }
-        async function deleteBrandLogo() { await fetch('/api/brand-logo',{method:'DELETE'}); document.getElementById('currentBrandLogo').style.display = 'none'; document.getElementById('noBrandLogoText').style.display = 'block'; alert('Видалено!'); }
-        async function uploadLogo() { const f = document.getElementById('logoFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadLogo(); alert('Збережено!'); }
-        async function deleteLogo() { await fetch('/api/logo',{method:'DELETE'}); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; alert('Видалено!'); }
+        async function uploadBackground() { const f = document.getElementById('bgFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/background',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBackground(); alert('✅ Збережено!'); }
+        async function deleteBackground() { await fetch('/api/background',{method:'DELETE'}); document.getElementById('currentBg').style.display = 'none'; document.getElementById('noBgText').style.display = 'block'; alert('✅ Видалено!'); }
+        async function uploadBanner() { const f = document.getElementById('bannerFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/banner',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBanner(); alert('✅ Збережено!'); }
+        async function deleteBanner() { await fetch('/api/banner',{method:'DELETE'}); document.getElementById('currentBanner').style.display = 'none'; document.getElementById('noBannerText').style.display = 'block'; alert('✅ Видалено!'); }
+        async function uploadBrandLogo() { const f = document.getElementById('brandLogoFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/brand-logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadBrandLogo(); alert('✅ Збережено!'); }
+        async function deleteBrandLogo() { await fetch('/api/brand-logo',{method:'DELETE'}); document.getElementById('currentBrandLogo').style.display = 'none'; document.getElementById('noBrandLogoText').style.display = 'block'; alert('✅ Видалено!'); }
+        async function uploadLogo() { const f = document.getElementById('logoFile').files[0]; if(!f) return; const b = await fileToBase64(f); await fetch('/api/logo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({image:b})}); loadLogo(); alert('✅ Збережено!'); }
+        async function deleteLogo() { await fetch('/api/logo',{method:'DELETE'}); document.getElementById('headerLogo').style.display = 'none'; document.getElementById('currentLogo').style.display = 'none'; document.getElementById('noLogoText').style.display = 'block'; alert('✅ Видалено!'); }
 
         async function changePassword() {
             const cur = document.getElementById('currentPassword').value, newU = document.getElementById('newUsername').value, newP = document.getElementById('newPassword').value, conf = document.getElementById('confirmPassword').value;
             if(!cur) return alert('Введіть поточний пароль'); if(newP && newP !== conf) return alert('Паролі не співпадають');
             const res = await fetch('/api/admin/change-password',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({currentPassword:cur,newUsername:newU,newPassword:newP})});
-            if(res.ok) { alert('Оновлено!'); document.getElementById('currentPassword').value = document.getElementById('newPassword').value = document.getElementById('confirmPassword').value = ''; }
+            if(res.ok) { alert('✅ Оновлено!'); document.getElementById('currentPassword').value = document.getElementById('newPassword').value = document.getElementById('confirmPassword').value = ''; }
             else { const e = await res.json(); alert(e.error); }
         }
 
