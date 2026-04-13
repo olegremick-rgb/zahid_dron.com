@@ -11,106 +11,136 @@
         body { background: #0a0a0a; font-family: 'Inter', sans-serif; color: #e0e0e0; line-height: 1.5; display: flex; flex-direction: column; min-height: 100vh; }
         .bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: #0a0a0a; }
         .bg-image { width: 100%; height: 100%; object-fit: cover; opacity: 0.12; }
-        header { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.8rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+        header { position: sticky; top: 0; z-index: 100; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
         .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; }
         .logo-img { height: 36px; width: auto; border-radius: 8px; background: #fff; padding: 2px; }
         .logo-text .top { font-size: 0.7rem; font-weight: 600; color: #aaa; }
         .logo-text .bottom { font-size: 1.2rem; font-weight: 800; color: #fff; }
-        .desktop-nav { display: flex; gap: 1.2rem; align-items: center; }
-        .desktop-nav a { color: #e0e0e0; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
+        .desktop-nav { display: flex; gap: 2rem; align-items: center; }
+        .desktop-nav a { color: #e0e0e0; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: 0.2s; }
         .desktop-nav a:hover, .desktop-nav a.active { color: #fff; }
-        .auth-buttons { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-        .auth-buttons button, .user-menu { background: transparent; border: 1px solid #3a3a3a; color: #ccc; padding: 6px 12px; border-radius: 30px; font-size: 0.8rem; cursor: pointer; white-space: nowrap; }
+        .auth-buttons { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .auth-buttons button, .user-menu { background: transparent; border: 1px solid #3a3a3a; color: #ccc; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; cursor: pointer; white-space: nowrap; }
         .auth-buttons button:hover { background: #3a3a3a; color: #fff; }
-        .user-menu { display: flex; align-items: center; gap: 8px; }
-        .user-name { color: #fff; font-weight: 600; font-size: 0.8rem; }
-        .logout-btn, .admin-link { padding: 4px 10px; border-radius: 30px; font-size: 0.75rem; background: #2a2a2a; border: none; color: #fff; cursor: pointer; text-decoration: none; }
+        .user-menu { display: flex; align-items: center; gap: 10px; }
+        .user-name { color: #fff; font-weight: 600; font-size: 0.85rem; }
+        .logout-btn, .admin-link { padding: 4px 12px; border-radius: 30px; font-size: 0.8rem; background: #2a2a2a; border: none; color: #fff; cursor: pointer; text-decoration: none; }
         .admin-link { background: #5a2e2e; }
         .mobile-menu-toggle { display: none; font-size: 1.6rem; color: #fff; cursor: pointer; }
         .mobile-nav { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: #0f0f0f; z-index: 200; padding: 2rem 1.5rem; transition: left 0.3s; }
         .mobile-nav.active { left: 0; }
         .mobile-nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 150; display: none; }
         .mobile-nav-overlay.active { display: block; }
-        main { flex: 1; padding: 2rem 1rem; max-width: 1400px; margin: 0 auto; width: 100%; }
+        main { flex: 1; padding: 2rem; max-width: 1400px; margin: 0 auto; width: 100%; }
         h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
-        h2 { font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1rem; color: #fff; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin: 2rem 0 1.5rem; color: #fff; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
         .product-card { background: #111; border: 1px solid #222; border-radius: 20px; overflow: hidden; cursor: pointer; transition: 0.2s; }
         .product-card:hover { transform: translateY(-6px); border-color: #444; }
         .product-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #1a1a1a; }
         .product-info { padding: 1rem; }
         .product-info h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; color: #fff; }
         .product-price { font-size: 1.2rem; font-weight: 700; color: #aaa; }
-        .product-category { font-size: 0.7rem; color: #777; background: #1a1a1a; display: inline-block; padding: 0.2rem 0.8rem; border-radius: 20px; }
-        .order-btn-small { background: #2a2a2a; border: none; color: #fff; width: 100%; padding: 0.7rem; border-radius: 40px; font-weight: 600; margin-top: 1rem; cursor: pointer; }
+        .product-category { font-size: 0.7rem; color: #777; background: #1a1a1a; display: inline-block; padding: 0.2rem 0.8rem; border-radius: 20px; margin-top: 0.5rem; }
+        .order-btn-small { background: #2a2a2a; border: none; color: #fff; width: 100%; padding: 0.7rem; border-radius: 40px; font-weight: 600; margin-top: 0.8rem; cursor: pointer; }
         .hero-banner { width: 100%; border-radius: 24px; overflow: hidden; margin-bottom: 2rem; }
-        .hero-banner img { width: 100%; max-height: 300px; object-fit: cover; }
+        .hero-banner img { width: 100%; max-height: 350px; object-fit: cover; }
         .brand-logo-container { text-align: center; margin: 2rem auto; }
-        .brand-logo-container img { max-width: 300px; border-radius: 16px; }
-        .reviews-section { background: #111; border: 1px solid #222; border-radius: 24px; padding: 1.5rem; margin: 2rem 0; }
-        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .brand-logo-container img { max-width: 350px; border-radius: 16px; }
+        .reviews-section { background: #111; border: 1px solid #222; border-radius: 24px; padding: 2rem; margin: 2rem 0; }
+        .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
         .review-card { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 1.2rem; }
         .review-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; }
         .review-author { font-weight: 700; color: #fff; }
-        .review-date { font-size: 0.7rem; color: #777; }
+        .review-date { font-size: 0.75rem; color: #777; }
         .review-rating { color: #ffc107; margin-bottom: 0.8rem; }
         .review-text { color: #bbb; font-size: 0.9rem; }
         .add-review { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #222; }
         .review-form input, .review-form textarea, .review-form select { width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff; }
-        .review-form button { background: #2a2a2a; padding: 0.8rem 1.5rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
+        .review-form button { background: #2a2a2a; padding: 0.8rem 2rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
 
-        .product-page { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; background: #111; border: 1px solid #222; border-radius: 28px; padding: 1.5rem; }
+        .product-page { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; background: #111; border: 1px solid #222; border-radius: 28px; padding: 2rem; }
         .product-gallery { position: sticky; top: 80px; height: fit-content; }
         .main-image { background: #1a1a1a; border-radius: 20px; overflow: hidden; aspect-ratio: 1/1; }
         .main-image img { width: 100%; height: 100%; object-fit: cover; }
-        .thumbnail-list { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-top: 1rem; }
-        .thumbnail { width: 60px; height: 60px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; opacity: 0.7; flex-shrink: 0; }
+        .thumbnail-list { display: flex; gap: 0.8rem; overflow-x: auto; padding-bottom: 0.5rem; margin-top: 1rem; }
+        .thumbnail { width: 70px; height: 70px; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; opacity: 0.7; flex-shrink: 0; }
         .thumbnail.active { border-color: #aaa; opacity: 1; }
         .thumbnail img { width: 100%; height: 100%; object-fit: cover; }
-        .product-info-compact { display: flex; flex-direction: column; gap: 1rem; }
-        .product-title { font-size: 1.8rem; font-weight: 700; color: #fff; }
-        .product-price-compact { font-size: 1.6rem; font-weight: 700; color: #aaa; }
+        .product-info-compact { display: flex; flex-direction: column; gap: 1.2rem; }
+        .product-title { font-size: 2rem; font-weight: 700; color: #fff; }
+        .product-price-compact { font-size: 1.8rem; font-weight: 700; color: #aaa; }
 
-        .specs-block { background: #0a0a0a; border-radius: 16px; padding: 1rem; }
+        .specs-block { background: #0a0a0a; border-radius: 16px; padding: 1.2rem; }
         .specs-title { display: flex; align-items: center; gap: 0.5rem; color: #fff; font-weight: 600; margin-bottom: 1rem; cursor: pointer; }
-        .specs-section { margin-bottom: 1rem; }
-        .specs-section h4 { color: #aaa; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .specs-section { margin-bottom: 1.2rem; }
+        .specs-section h4 { color: #aaa; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .specs-list { display: flex; flex-direction: column; gap: 0.3rem; }
-        .spec-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px dashed #222; font-size: 0.9rem; }
+        .spec-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed #222; font-size: 0.9rem; }
         .spec-row .spec-label { color: #888; }
         .spec-row .spec-value { color: #ddd; font-weight: 500; text-align: right; }
         .specs-collapsed .specs-content { display: none; }
 
-        .variants-compact { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .variant-btn { background: #1a1a1a; border: 1px solid #333; padding: 0.5rem 1rem; border-radius: 40px; color: #ddd; cursor: pointer; font-size: 0.85rem; }
-        .variant-btn.active { background: #3a3a3a; color: #fff; border-color: #5a5a5a; }
-        .buy-section-compact { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 1.2rem; }
-        .buy-price-compact { font-size: 1.4rem; font-weight: 700; color: #aaa; margin-bottom: 1rem; }
-        .buy-form-compact input { width: 100%; padding: 0.7rem; margin-bottom: 0.8rem; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; color: #fff; }
-        .buy-btn-compact { background: #2a2a2a; width: 100%; padding: 0.8rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
+        .variants-compact { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .variant-btn { background: #1a1a1a; border: 1px solid #333; padding: 0.6rem 1.2rem; border-radius: 40px; color: #ddd; cursor: pointer; font-size: 0.9rem; transition: 0.2s; }
+        .variant-btn:hover, .variant-btn.active { background: #3a3a3a; color: #fff; border-color: #5a5a5a; }
+        .buy-section-compact { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 1.5rem; }
+        .buy-price-compact { font-size: 1.6rem; font-weight: 700; color: #aaa; margin-bottom: 1.2rem; }
+        .buy-form-compact input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 12px; color: #fff; }
+        .buy-btn-compact { background: #2a2a2a; width: 100%; padding: 0.9rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; transition: 0.2s; }
+        .buy-btn-compact:hover { background: #3a3a3a; }
 
-        .about-hero { text-align:center; padding:3rem 2rem; background:linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border-radius:32px; margin-bottom:2rem; }
-        .feature-card { background:#111; border:1px solid #222; border-radius:20px; padding:1.5rem; text-align:center; transition:0.2s; }
-        .feature-card:hover { transform:translateY(-5px); border-color:#444; }
-        .feature-card i { font-size:2.5rem; color:#5a5a5a; margin-bottom:1rem; }
-        .stat-card { background:#111; border:1px solid #222; border-radius:16px; padding:1.5rem; text-align:center; }
-        .contact-content { background:#111; border:1px solid #222; border-radius:24px; padding:1.5rem; }
-        .contact-item { display:flex; align-items:center; gap:1rem; padding:1rem; background:#0a0a0a; border-radius:16px; margin-bottom:0.5rem; }
-        .social-links { display:flex; flex-wrap:wrap; gap:1rem; margin-top:1rem; }
-        .social-link { background:#1a1a1a; padding:0.5rem 1.2rem; border-radius:40px; text-decoration:none; color:#ddd; display:inline-flex; align-items:center; gap:8px; transition:0.2s; }
-        .social-link:hover { background:#3a3a3a; color:#fff; transform:translateY(-2px); }
-        footer { background:#0a0a0a; border-top:1px solid #1a1a1a; text-align:center; padding:1.5rem; font-size:0.85rem; color:#777; margin-top:auto; }
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); align-items:flex-end; justify-content:center; z-index:1000; }
-        .modal.active { display:flex; }
-        .modal-content { background:#111; padding:2rem; border-radius:30px 30px 0 0; width:100%; max-width:500px; animation:slideUp 0.3s; }
-        @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
-        .modal-content input { width:100%; padding:0.9rem; margin-bottom:1rem; background:#1a1a1a; border:1px solid #333; border-radius:16px; color:#fff; }
-        .modal-content button { background:#2a2a2a; width:100%; padding:0.9rem; border:none; border-radius:40px; font-weight:600; color:#fff; cursor:pointer; }
-        .close { float:right; font-size:1.8rem; cursor:pointer; color:#aaa; }
+        .about-hero { text-align: center; padding: 3rem 2rem; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%); border-radius: 32px; margin-bottom: 2rem; }
+        .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 2rem 1rem; text-align: center; transition: 0.2s; }
+        .stat-card:hover { transform: translateY(-5px); border-color: #444; }
+        .stat-card .stat-value { font-size: 2.8rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; }
+        .stat-card .stat-label { font-size: 0.9rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .feature-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 1.8rem; text-align: center; transition: 0.2s; }
+        .feature-card:hover { transform: translateY(-5px); border-color: #444; }
+        .feature-card i { font-size: 2.5rem; color: #5a5a5a; margin-bottom: 1.2rem; }
+        .feature-card h3 { margin-bottom: 0.8rem; color: #fff; }
+        .feature-card p { color: #888; font-size: 0.9rem; }
+        .contact-content { background: #111; border: 1px solid #222; border-radius: 24px; padding: 2rem; }
+        .contact-item { display: flex; align-items: center; gap: 1.2rem; padding: 1.2rem; background: #0a0a0a; border-radius: 16px; margin-bottom: 0.8rem; }
+        .contact-item i { font-size: 1.5rem; color: #5a5a5a; width: 30px; }
+        .contact-item h3 { font-size: 1rem; color: #fff; margin-bottom: 0.2rem; }
+        .contact-item p { color: #aaa; }
+        .social-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem; }
+        .social-link { background: #1a1a1a; padding: 0.7rem 1.5rem; border-radius: 40px; text-decoration: none; color: #ddd; display: inline-flex; align-items: center; gap: 10px; transition: 0.2s; border: 1px solid #333; }
+        .social-link:hover { background: #3a3a3a; color: #fff; transform: translateY(-2px); }
+        footer { background: #0a0a0a; border-top: 1px solid #1a1a1a; text-align: center; padding: 1.5rem; font-size: 0.85rem; color: #777; margin-top: auto; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); align-items: flex-end; justify-content: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: #111; padding: 2rem; border-radius: 30px 30px 0 0; width: 100%; max-width: 500px; animation: slideUp 0.3s; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-content input { width: 100%; padding: 0.9rem; margin-bottom: 1rem; background: #1a1a1a; border: 1px solid #333; border-radius: 16px; color: #fff; }
+        .modal-content button { background: #2a2a2a; width: 100%; padding: 0.9rem; border: none; border-radius: 40px; font-weight: 600; color: #fff; cursor: pointer; }
+        .close { float: right; font-size: 1.8rem; cursor: pointer; color: #aaa; }
 
-        @media (max-width: 992px) { .product-page { grid-template-columns: 1fr; } .product-gallery { position: static; } }
-        @media (max-width: 768px) { .desktop-nav { display: none; } .mobile-menu-toggle { display: block; } .logo-text .bottom { font-size: 1rem; } .products-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 480px) { .auth-buttons button span { display: none; } .user-menu .user-name { display: none; } .products-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 992px) {
+            .product-page { grid-template-columns: 1fr; padding: 1.5rem; }
+            .product-gallery { position: static; }
+            .about-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            header { padding: 0.8rem 1rem; }
+            .desktop-nav { display: none; }
+            .mobile-menu-toggle { display: block; }
+            .logo-text .bottom { font-size: 1rem; }
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+            .about-stats { grid-template-columns: repeat(2, 1fr); }
+            .stat-card { padding: 1.5rem 0.5rem; }
+            .stat-card .stat-value { font-size: 2rem; }
+        }
+        @media (max-width: 480px) {
+            .auth-buttons button span { display: none; }
+            .user-menu .user-name { display: none; }
+            .products-grid { grid-template-columns: 1fr; }
+            .about-stats { grid-template-columns: 1fr; }
+            .product-title { font-size: 1.5rem; }
+            .product-price-compact { font-size: 1.4rem; }
+        }
     </style>
 </head>
 <body>
@@ -133,7 +163,11 @@
     <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
     <div class="mobile-nav" id="mobileNav">
         <div class="mobile-nav-header"><span class="mobile-nav-close" id="mobileNavClose">&times;</span></div>
-        <a href="/">Головна</a><a href="/catalog">Каталог</a><a href="/reviews">Відгуки</a><a href="/about">Про нас</a><a href="/contacts">Контакти</a>
+        <a href="/">Головна</a>
+        <a href="/catalog">Каталог</a>
+        <a href="/reviews">Відгуки</a>
+        <a href="/about">Про нас</a>
+        <a href="/contacts">Контакти</a>
     </div>
     <main id="main-content"></main>
     <footer><p>© 2025 Захід Дрон. Всі права захищені.</p></footer>
@@ -151,9 +185,9 @@
         function initMobileMenu() {
             const toggle = document.getElementById('mobileMenuToggle'), close = document.getElementById('mobileNavClose'), nav = document.getElementById('mobileNav'), overlay = document.getElementById('mobileNavOverlay');
             if (!toggle) return;
-            toggle.addEventListener('click', () => { nav.classList.add('active'); overlay.classList.add('active'); });
-            close.addEventListener('click', () => { nav.classList.remove('active'); overlay.classList.remove('active'); });
-            overlay.addEventListener('click', () => { nav.classList.remove('active'); overlay.classList.remove('active'); });
+            toggle.addEventListener('click', () => { nav.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; });
+            close.addEventListener('click', () => { nav.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; });
+            overlay.addEventListener('click', () => { nav.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; });
         }
 
         async function loadData() {
@@ -180,7 +214,7 @@
                 
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
                 updateAuthUI();
-            } catch(e){ console.error('Помилка завантаження:', e); }
+            } catch(e){ console.error('Помилка:', e); }
         }
 
         async function loadLogo() { try { const r = await fetch('/api/logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('headerLogo').src = u; document.getElementById('headerLogo').style.display = 'block'; } } } catch(e){} }
@@ -211,38 +245,34 @@
         }
 
         function renderAbout(main) {
-            const statsArray = [
-                { value: homeStats.dronesSold || '500+', label: 'Проданих дронів' },
-                { value: homeStats.rating || '4.9', label: 'Середня оцінка' },
-                { value: homeStats.support || '24/7', label: 'Підтримка' },
-                { value: homeStats.original || '100%', label: 'Оригінал' }
-            ];
-            
             main.innerHTML = `
                 ${bannerImage ? `<div class="hero-banner"><img src="${bannerImage}"></div>` : ''}
                 ${brandLogoImage ? `<div class="brand-logo-container"><img src="${brandLogoImage}"></div>` : ''}
                 
                 <div class="about-hero">
                     <h1 style="font-size:2.5rem; margin-bottom:1rem;">Про нас</h1>
-                    <p style="color:#aaa; max-width:700px; margin:0 auto;">Ваш надійний партнер у світі професійних дронів та FPV обладнання. Працюємо з 2020 року.</p>
+                    <p style="color:#aaa; max-width:700px; margin:0 auto; font-size:1.1rem;">Ваш надійний партнер у світі професійних дронів та FPV обладнання. Працюємо з 2020 року.</p>
                 </div>
                 
-                <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem;">
-                    ${statsArray.map(s => `<div class="stat-card"><p style="font-size:2.5rem;">${s.value}</p><h3>${s.label}</h3></div>`).join('')}
+                <div class="about-stats">
+                    <div class="stat-card"><div class="stat-value">${homeStats.dronesSold || '500+'}</div><div class="stat-label">Проданих дронів</div></div>
+                    <div class="stat-card"><div class="stat-value">${homeStats.rating || '4.9'}</div><div class="stat-label">Середня оцінка</div></div>
+                    <div class="stat-card"><div class="stat-value">${homeStats.support || '24/7'}</div><div class="stat-label">Підтримка</div></div>
+                    <div class="stat-card"><div class="stat-value">${homeStats.original || '100%'}</div><div class="stat-label">Оригінал</div></div>
                 </div>
                 
                 <div style="background:#111; border-radius:24px; padding:2rem; margin-bottom:2rem;">
                     <h2 style="margin-bottom:1.5rem;">Наша місія</h2>
-                    <div style="color:#bbb; line-height:1.8;">${aboutText.replace(/\n/g, '<br>')}</div>
+                    <div style="color:#bbb; line-height:1.8; font-size:1.05rem;">${aboutText.replace(/\n/g, '<br>')}</div>
                 </div>
                 
-                <h2 style="text-align:center; margin:2rem 0;">Чому обирають нас</h2>
+                <h2 style="text-align:center; margin:2.5rem 0 1.5rem;">Чому обирають нас</h2>
                 <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-bottom:2rem;">
                     ${features.map(f => `
                         <div class="feature-card">
-                            <i class="fas ${f.icon || 'fa-star'}" style="font-size:2.5rem; color:#5a5a5a; margin-bottom:1rem;"></i>
-                            <h3 style="margin-bottom:0.5rem;">${f.title}</h3>
-                            <p style="color:#888;">${f.desc}</p>
+                            <i class="fas ${f.icon || 'fa-star'}"></i>
+                            <h3>${f.title}</h3>
+                            <p>${f.desc}</p>
                         </div>
                     `).join('')}
                 </div>
@@ -250,7 +280,7 @@
                 <div style="background:#111; border-radius:24px; padding:2rem; margin:2rem 0;">
                     <h2 style="text-align:center; margin-bottom:2rem;">Наші партнери</h2>
                     <div style="display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;">
-                        ${partners.map(p => `<span style="color:#666; font-size:1.5rem; font-weight:700;">${p}</span>`).join('')}
+                        ${partners.map(p => `<span style="color:#666; font-size:1.8rem; font-weight:700;">${p}</span>`).join('')}
                     </div>
                 </div>
                 
@@ -258,7 +288,7 @@
                     <h2 style="margin-bottom:1.5rem;">Ми в соціальних мережах</h2>
                     <div class="social-links" style="justify-content:center;">
                         ${socialLinks.filter(s => s.active).map(s => `
-                            <a href="${s.url}" target="_blank" class="social-link" style="font-size:1.1rem; padding:0.8rem 1.5rem;">
+                            <a href="${s.url}" target="_blank" class="social-link">
                                 <i class="${s.icon}"></i> ${s.name}
                             </a>
                         `).join('')}
@@ -277,13 +307,14 @@
                     h += '</div>';
                 }
             });
+            if (!products.length) h += '<p style="text-align:center; padding:3rem; color:#777;">Товари відсутні</p>';
             main.innerHTML = h;
             document.querySelectorAll('.product-card').forEach(c => c.addEventListener('click', e => { const id = c.getAttribute('data-id'); if(id) location.href = `/product/${id}`; }));
         }
 
         function renderReviews(main) {
             const stars = r => '★'.repeat(r)+'☆'.repeat(5-r);
-            main.innerHTML = `<h1>Відгуки</h1><div class="reviews-section"><div class="reviews-grid">${reviews.map(r => `<div class="review-card"><div class="review-header"><span class="review-author">${r.author}</span><span class="review-date">${new Date(r.date).toLocaleDateString()}</span></div><div class="review-rating">${stars(r.rating)}</div><div class="review-text">${r.text}</div></div>`).join('')}</div>${currentUser?`<div class="add-review"><h3>Залишити відгук</h3><form class="review-form" onsubmit="event.preventDefault();addReview()"><input type="text" id="reviewAuthor" value="${currentUser.username}" required><select id="reviewRating"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option></select><textarea id="reviewText" rows="4" required></textarea><button type="submit">Відправити</button></form></div>`:'<p><a href="#" onclick="document.getElementById(\'loginModal\').classList.add(\'active\')">Увійдіть</a>, щоб залишити відгук</p>'}</div>`;
+            main.innerHTML = `<h1>Відгуки</h1><div class="reviews-section"><div class="reviews-grid">${reviews.length ? reviews.map(r => `<div class="review-card"><div class="review-header"><span class="review-author">${r.author}</span><span class="review-date">${new Date(r.date).toLocaleDateString()}</span></div><div class="review-rating">${stars(r.rating)}</div><div class="review-text">${r.text}</div></div>`).join('') : '<p style="color:#777; text-align:center; grid-column:1/-1;">Ще немає відгуків</p>'}</div>${currentUser?`<div class="add-review"><h3>Залишити відгук</h3><form class="review-form" onsubmit="event.preventDefault();addReview()"><input type="text" id="reviewAuthor" value="${currentUser.username}" required><select id="reviewRating"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option><option value="2">★★☆☆☆</option><option value="1">★☆☆☆☆</option></select><textarea id="reviewText" rows="4" placeholder="Ваш відгук..." required></textarea><button type="submit">Відправити</button></form></div>`:'<p style="text-align:center;"><a href="#" onclick="document.getElementById(\'loginModal\').classList.add(\'active\')" style="color:#aaa;">Увійдіть</a>, щоб залишити відгук</p>'}</div>`;
         }
 
         window.addReview = async function() {
@@ -298,15 +329,13 @@
             main.innerHTML = `
                 <h1>Контакти</h1>
                 <div class="contact-content">
-                    <div class="contact-info">
-                        ${lines.map(l => {
-                            if(l.includes('@')) return `<div class="contact-item"><i class="fas fa-envelope"></i><div><h3>Email</h3><p>${l.replace('Email:','').trim()}</p></div></div>`;
-                            if(l.includes('+380')||l.includes('Телефон')) return `<div class="contact-item"><i class="fas fa-phone"></i><div><h3>Телефон</h3><p>${l.replace('Телефон:','').trim()}</p></div></div>`;
-                            if(l.includes('Графік')) return `<div class="contact-item"><i class="fas fa-clock"></i><div><h3>Графік</h3><p>${l.replace('Графік:','').trim()}</p></div></div>`;
-                            if(l.includes('Адреса')) return `<div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h3>Адреса</h3><p>${l.replace('Адреса:','').trim()}</p></div></div>`;
-                            return '';
-                        }).join('')}
-                    </div>
+                    ${lines.map(l => {
+                        if(l.includes('@')) return `<div class="contact-item"><i class="fas fa-envelope"></i><div><h3>Email</h3><p>${l.replace('Email:','').trim()}</p></div></div>`;
+                        if(l.includes('+380')||l.includes('Телефон')) return `<div class="contact-item"><i class="fas fa-phone"></i><div><h3>Телефон</h3><p>${l.replace('Телефон:','').trim()}</p></div></div>`;
+                        if(l.includes('Графік')) return `<div class="contact-item"><i class="fas fa-clock"></i><div><h3>Графік</h3><p>${l.replace('Графік:','').trim()}</p></div></div>`;
+                        if(l.includes('Адреса')) return `<div class="contact-item"><i class="fas fa-map-marker-alt"></i><div><h3>Адреса</h3><p>${l.replace('Адреса:','').trim()}</p></div></div>`;
+                        return '';
+                    }).join('')}
                     
                     <div style="margin-top:2rem;">
                         <h3 style="margin-bottom:1rem;"><i class="fas fa-hashtag"></i> Напишіть нам</h3>
@@ -316,10 +345,10 @@
                     </div>
                     
                     <div style="margin-top:2rem; padding:1.5rem; background:#0a0a0a; border-radius:16px;">
-                        <h3><i class="fas fa-clock"></i> Робочі години</h3>
-                        <p>Пн-Пт: ${workHours.monFri || '10:00 - 19:00'}</p>
-                        <p>Сб: ${workHours.sat || '11:00 - 17:00'}</p>
-                        <p>Нд: ${workHours.sun || 'Вихідний'}</p>
+                        <h3 style="margin-bottom:1rem;"><i class="fas fa-clock"></i> Робочі години</h3>
+                        <p style="color:#aaa;">Пн-Пт: ${workHours.monFri || '10:00 - 19:00'}</p>
+                        <p style="color:#aaa;">Сб: ${workHours.sat || '11:00 - 17:00'}</p>
+                        <p style="color:#aaa;">Нд: ${workHours.sun || 'Вихідний'}</p>
                     </div>
                 </div>
             `;
@@ -353,29 +382,21 @@
             let specsHtml = '';
             sections.forEach(section => {
                 specsHtml += `<div class="specs-section"><h4>${section.title}</h4><div class="specs-list">`;
-                section.items.forEach(item => {
-                    specsHtml += `<div class="spec-row"><span class="spec-label">${item.label}</span><span class="spec-value">${item.value}</span></div>`;
-                });
+                section.items.forEach(item => specsHtml += `<div class="spec-row"><span class="spec-label">${item.label}</span><span class="spec-value">${item.value}</span></div>`);
                 specsHtml += '</div></div>';
             });
             
             let thumbs = `<div class="thumbnail active"><img src="${defaultImage}"></div>`;
             if (p.gallery) p.gallery.forEach(img => thumbs += `<div class="thumbnail"><img src="${img}"></div>`);
             
-            // Формуємо варіанти - ВИПРАВЛЕНО
             let variantsHtml = '';
             if (p.variants && p.variants.length) {
-                variantsHtml = `
-                    <div class="variants-compact" id="variantButtons">
-                        ${p.variants.map(v => {
-                            // Перевіряємо тип варіанту
-                            const variantName = typeof v === 'object' ? v.name : v;
-                            const variantPrice = (typeof v === 'object' && v.price) ? v.price : p.price;
-                            const priceDisplay = variantPrice !== p.price ? ' - ' + parseFloat(variantPrice).toLocaleString() + ' грн' : '';
-                            return `<button class="variant-btn" data-variant="${variantName}" data-price="${variantPrice}">${variantName}${priceDisplay}</button>`;
-                        }).join('')}
-                    </div>
-                `;
+                variantsHtml = `<div class="variants-compact" id="variantButtons">${p.variants.map(v => {
+                    const name = typeof v === 'object' ? v.name : v;
+                    const price = (typeof v === 'object' && v.price) ? v.price : p.price;
+                    const priceDisplay = price !== p.price ? ' - ' + parseFloat(price).toLocaleString() + ' грн' : '';
+                    return `<button class="variant-btn" data-variant="${name}" data-price="${price}">${name}${priceDisplay}</button>`;
+                }).join('')}</div>`;
             }
             
             main.innerHTML = `
@@ -387,20 +408,12 @@
                     <div class="product-info-compact">
                         <h1 class="product-title">${p.name}</h1>
                         <div class="product-price-compact" id="displayPrice">${p.price.toLocaleString()} грн</div>
-                        
                         <div class="specs-block" id="specsBlock">
-                            <div class="specs-title" onclick="this.parentElement.classList.toggle('specs-collapsed')">
-                                <i class="fas fa-chevron-down"></i> <span>Характеристики</span>
-                            </div>
-                            <div class="specs-content">
-                                ${specsHtml || '<div class="spec-row"><span class="spec-label">—</span><span class="spec-value">Не вказано</span></div>'}
-                            </div>
+                            <div class="specs-title" onclick="this.parentElement.classList.toggle('specs-collapsed')"><i class="fas fa-chevron-down"></i> <span>Характеристики</span></div>
+                            <div class="specs-content">${specsHtml || '<div class="spec-row"><span class="spec-label">—</span><span class="spec-value">Не вказано</span></div>'}</div>
                         </div>
-                        
-                        <div class="desc-preview" style="color:#bbb; font-size:0.9rem; max-height:100px; overflow-y:auto;">${p.description || 'Опис відсутній'}</div>
-                        
+                        <div style="color:#bbb; font-size:0.95rem; max-height:100px; overflow-y:auto;">${p.description || 'Опис відсутній'}</div>
                         ${variantsHtml}
-                        
                         <div class="buy-section-compact">
                             <div class="buy-price-compact" id="buyPrice">${p.price.toLocaleString()} грн</div>
                             <div class="buy-form-compact">
@@ -414,7 +427,7 @@
                 </div>
             `;
             
-            document.querySelectorAll('.thumbnail').forEach((t) => t.addEventListener('click', () => {
+            document.querySelectorAll('.thumbnail').forEach(t => t.addEventListener('click', () => {
                 document.querySelectorAll('.thumbnail').forEach(th => th.classList.remove('active'));
                 t.classList.add('active');
                 document.getElementById('mainProductImage').src = t.querySelector('img').src;
@@ -424,12 +437,11 @@
                 document.querySelectorAll('.variant-btn').forEach(v => v.classList.remove('active'));
                 b.classList.add('active');
                 document.getElementById('orderVariantProduct').value = b.getAttribute('data-variant');
-                
                 const price = b.getAttribute('data-price');
                 if (price) {
-                    const formattedPrice = parseFloat(price).toLocaleString() + ' грн';
-                    document.getElementById('displayPrice').textContent = formattedPrice;
-                    document.getElementById('buyPrice').textContent = formattedPrice;
+                    const formatted = parseFloat(price).toLocaleString() + ' грн';
+                    document.getElementById('displayPrice').textContent = formatted;
+                    document.getElementById('buyPrice').textContent = formatted;
                 }
             }));
         }
