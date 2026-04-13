@@ -173,7 +173,6 @@
                 socialLinks = await sRes.json();
                 if(uRes && uRes.ok) currentUser = await uRes.json();
                 
-                // Завантажуємо дані для головної та "Про нас"
                 try { homeStats = await statsRes.json(); } catch(e) {}
                 try { partners = await partnersRes.json(); } catch(e) {}
                 try { features = await featuresRes.json(); } catch(e) {}
@@ -363,6 +362,22 @@
             let thumbs = `<div class="thumbnail active"><img src="${defaultImage}"></div>`;
             if (p.gallery) p.gallery.forEach(img => thumbs += `<div class="thumbnail"><img src="${img}"></div>`);
             
+            // Формуємо варіанти - ВИПРАВЛЕНО
+            let variantsHtml = '';
+            if (p.variants && p.variants.length) {
+                variantsHtml = `
+                    <div class="variants-compact" id="variantButtons">
+                        ${p.variants.map(v => {
+                            // Перевіряємо тип варіанту
+                            const variantName = typeof v === 'object' ? v.name : v;
+                            const variantPrice = (typeof v === 'object' && v.price) ? v.price : p.price;
+                            const priceDisplay = variantPrice !== p.price ? ' - ' + parseFloat(variantPrice).toLocaleString() + ' грн' : '';
+                            return `<button class="variant-btn" data-variant="${variantName}" data-price="${variantPrice}">${variantName}${priceDisplay}</button>`;
+                        }).join('')}
+                    </div>
+                `;
+            }
+            
             main.innerHTML = `
                 <div class="product-page">
                     <div class="product-gallery">
@@ -371,7 +386,7 @@
                     </div>
                     <div class="product-info-compact">
                         <h1 class="product-title">${p.name}</h1>
-                        <div class="product-price-compact">${p.price.toLocaleString()} грн</div>
+                        <div class="product-price-compact" id="displayPrice">${p.price.toLocaleString()} грн</div>
                         
                         <div class="specs-block" id="specsBlock">
                             <div class="specs-title" onclick="this.parentElement.classList.toggle('specs-collapsed')">
@@ -384,14 +399,10 @@
                         
                         <div class="desc-preview" style="color:#bbb; font-size:0.9rem; max-height:100px; overflow-y:auto;">${p.description || 'Опис відсутній'}</div>
                         
-                        ${p.variants?.length ? `
-                        <div class="variants-compact" id="variantButtons">
-                            ${p.variants.map(v => `<button class="variant-btn" data-variant="${v}">${v}</button>`).join('')}
-                        </div>
-                        ` : ''}
+                        ${variantsHtml}
                         
                         <div class="buy-section-compact">
-                            <div class="buy-price-compact">${p.price.toLocaleString()} грн</div>
+                            <div class="buy-price-compact" id="buyPrice">${p.price.toLocaleString()} грн</div>
                             <div class="buy-form-compact">
                                 <input type="text" id="orderNameProduct" placeholder="Ваше ім'я">
                                 <input type="tel" id="orderPhoneProduct" placeholder="Номер телефону">
@@ -413,6 +424,13 @@
                 document.querySelectorAll('.variant-btn').forEach(v => v.classList.remove('active'));
                 b.classList.add('active');
                 document.getElementById('orderVariantProduct').value = b.getAttribute('data-variant');
+                
+                const price = b.getAttribute('data-price');
+                if (price) {
+                    const formattedPrice = parseFloat(price).toLocaleString() + ' грн';
+                    document.getElementById('displayPrice').textContent = formattedPrice;
+                    document.getElementById('buyPrice').textContent = formattedPrice;
+                }
             }));
         }
 
