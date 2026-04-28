@@ -178,14 +178,12 @@
                             </div>
                         </div>
                         <button type="button" class="btn" id="addVariantBtn">+ Додати варіант</button>
-                        <small style="color:#777; display:block; margin-top:0.3rem;">
-                            <i class="fas fa-info-circle"></i> Якщо ціна не вказана - використовується основна ціна товару
-                        </small>
+                        <small style="color:#777; display:block; margin-top:0.3rem;">Якщо ціна не вказана - використовується основна ціна товару</small>
                     </div>
                     <div class="form-group"><label>Головне зображення</label><input type="file" id="productImage" accept="image/*"><img id="imagePreview" class="image-preview"></div>
                     
                     <div class="gallery-container">
-                        <div class="gallery-title" style="display:flex; justify-content:space-between; margin-bottom:1rem;">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:1rem;">
                             <label><i class="fas fa-images"></i> Галерея</label>
                             <span class="badge" id="galleryCount">0 фото</span>
                         </div>
@@ -218,15 +216,17 @@
                 </div>
                 
                 <div class="admin-form">
+                    <h3>Підзаголовок на сторінці "Про нас"</h3>
+                    <textarea id="aboutSubtitle" rows="2" placeholder="Ваш надійний партнер..."></textarea>
+                    <button class="btn" id="saveAboutSubtitleBtn">Зберегти підзаголовок</button>
+                </div>
+                
+                <div class="admin-form">
                     <h3>Статистика на сторінці "Про нас"</h3>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
-                        <input type="text" id="aboutStat1Label" placeholder="Назва 1" value="Проданих дронів">
                         <input type="text" id="aboutStat1Value" placeholder="Значення 1" value="500+">
-                        <input type="text" id="aboutStat2Label" placeholder="Назва 2" value="Середня оцінка">
                         <input type="text" id="aboutStat2Value" placeholder="Значення 2" value="4.9">
-                        <input type="text" id="aboutStat3Label" placeholder="Назва 3" value="Підтримка">
                         <input type="text" id="aboutStat3Value" placeholder="Значення 3" value="24/7">
-                        <input type="text" id="aboutStat4Label" placeholder="Назва 4" value="Оригінал">
                         <input type="text" id="aboutStat4Value" placeholder="Значення 4" value="100%">
                     </div>
                     <button class="btn" id="saveAboutStatsBtn" style="margin-top:1rem;">Зберегти статистику</button>
@@ -379,24 +379,22 @@
             document.getElementById('submitProductBtn')?.addEventListener('click', submitProduct);
             document.getElementById('cancelEditBtn')?.addEventListener('click', cancelEdit);
             document.getElementById('saveAboutBtn')?.addEventListener('click', saveAbout);
+            document.getElementById('saveAboutSubtitleBtn')?.addEventListener('click', saveAboutSubtitle);
             document.getElementById('saveContactBtn')?.addEventListener('click', saveContact);
             document.getElementById('addSocialBtn')?.addEventListener('click', addSocial);
             document.getElementById('updateSocialBtn')?.addEventListener('click', updateSocial);
-            document.getElementById('closeSocialModal')?.addEventListener('click', () => closeModal('editSocialModal'));
+            document.getElementById('closeSocialModal')?.addEventListener('click', function() { closeModal('editSocialModal'); });
             document.getElementById('autoFormatSpecsBtn')?.addEventListener('click', autoFormatSpecs);
             document.getElementById('smartFormatSpecsBtn')?.addEventListener('click', smartFormatSpecs);
             
-            // Попередній перегляд соцмереж
             document.getElementById('socialPlatform')?.addEventListener('change', updateSocialPreview);
             document.getElementById('socialIcon')?.addEventListener('input', updateSocialPreview);
             
-            // Головна сторінка
             document.getElementById('saveStatsBtn')?.addEventListener('click', saveHomeStats);
             document.getElementById('saveHomePartnersBtn')?.addEventListener('click', saveHomePartners);
             document.getElementById('addHomeFeatureBtn')?.addEventListener('click', addHomeFeatureField);
             document.getElementById('saveHomeFeaturesBtn')?.addEventListener('click', saveHomeFeatures);
             
-            // Про нас
             document.getElementById('saveAboutStatsBtn')?.addEventListener('click', saveAboutStats);
             document.getElementById('addAboutFeatureBtn')?.addEventListener('click', addAboutFeatureField);
             document.getElementById('saveAboutFeaturesBtn')?.addEventListener('click', saveAboutFeatures);
@@ -419,15 +417,8 @@
                 messenger: 'fa-brands fa-facebook-messenger'
             };
             
-            const iconClass = customIcon || icons[platform] || 'fa-solid fa-link';
-            previewIcon.className = iconClass;
-            
-            const platformNames = {
-                telegram: 'Telegram', instagram: 'Instagram', facebook: 'Facebook', viber: 'Viber',
-                whatsapp: 'WhatsApp', signal: 'Signal', tiktok: 'TikTok', youtube: 'YouTube',
-                x: 'X (Twitter)', discord: 'Discord', github: 'GitHub', linkedin: 'LinkedIn', messenger: 'Messenger'
-            };
-            previewText.textContent = platformNames[platform] || platform;
+            previewIcon.className = customIcon || icons[platform] || 'fa-solid fa-link';
+            previewText.textContent = platform || 'Telegram';
         }
 
         function autoFormatSpecs() {
@@ -453,12 +444,6 @@
             let lines = text.split('\n');
             let formatted = [];
             
-            const knownSpecs = {
-                'живлення': 'Живлення', 'місткість': 'Місткість батареї, мАгод', 'двигун': 'Тип двигуна',
-                'корпус': 'Складаний корпус', 'захист': 'Ступінь захисту', 'лопаті': 'Захист лопатей',
-                'gps': 'GPS-навігація', 'камера': 'Камера', 'вага': 'Вага, кг', 'бренд': 'Бренд'
-            };
-            
             const sections = ['Літальний апарат', 'Камера', 'Комплектація', 'Основні характеристики', 'Пульт керування', 'Розміри і маса'];
             let i = 0, seenSections = new Set();
             
@@ -466,9 +451,9 @@
                 let line = lines[i].trim();
                 if (!line) { i++; continue; }
                 
-                let foundSection = sections.find(s => line.toLowerCase().includes(s.toLowerCase()));
-                if (foundSection && !line.includes(':')) {
-                    if (!seenSections.has(foundSection)) { formatted.push('## ' + foundSection); seenSections.add(foundSection); }
+                let found = sections.find(s => line.toLowerCase().includes(s.toLowerCase()));
+                if (found && !line.includes(':')) {
+                    if (!seenSections.has(found)) { formatted.push('## ' + found); seenSections.add(found); }
                     i++; continue;
                 }
                 
@@ -478,29 +463,19 @@
                 
                 if (line.includes(':')) { formatted.push(line); i++; continue; }
                 
-                let matchedKey = null;
-                for (let key in knownSpecs) if (line.toLowerCase().includes(key)) { matchedKey = knownSpecs[key]; break; }
-                
                 let nextLine = (i + 1 < lines.length) ? lines[i + 1].trim() : '';
-                
-                if (matchedKey) {
-                    if (nextLine && !nextLine.includes(':')) { formatted.push(matchedKey + ': ' + nextLine); i += 2; }
-                    else { formatted.push(matchedKey + ': '); i++; }
-                    continue;
-                }
-                
                 if (nextLine && !nextLine.includes(':')) { formatted.push(line + ': ' + nextLine); i += 2; }
                 else { formatted.push(line + ': '); i++; }
             }
             
             document.getElementById('productSpecs').value = formatted.join('\n');
-            alert('✅ Характеристики відформатовано за допомогою ШІ!');
+            alert('✅ Характеристики відформатовано ШІ!');
         }
 
         function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
+            return new Promise(function(resolve, reject) {
                 const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
+                reader.onload = function() { resolve(reader.result); };
                 reader.onerror = reject;
                 reader.readAsDataURL(file);
             });
@@ -521,14 +496,16 @@
         async function loadData() {
             if (!await checkAuth()) return;
             try {
-                const [cat, prod, ord, soc, about, cont] = await Promise.all([
+                const [cat, prod, ord, soc, about, cont, subtitleRes] = await Promise.all([
                     fetch('/api/categories'), fetch('/api/products'), fetch('/api/orders'), 
-                    fetch('/api/social'), fetch('/api/about'), fetch('/api/contact')
+                    fetch('/api/social'), fetch('/api/about'), fetch('/api/contact'),
+                    fetch('/api/about-subtitle')
                 ]);
                 categories = await cat.json(); products = await prod.json(); orders = await ord.json(); social = await soc.json();
                 updateDashboard(); updateCategoriesList(); updateProductsList(); updateOrdersList(); updateSocialList(); 
                 updateCategorySelect(); updateCategoryTabs();
                 document.getElementById('aboutText').value = await about.text();
+                document.getElementById('aboutSubtitle').value = await subtitleRes.text();
                 parseContactInfo(await cont.text());
                 await loadLogo(); await loadBanner(); await loadBrandLogo(); await loadBackground(); await loadReviews();
             } catch(e) { console.error(e); }
@@ -537,9 +514,9 @@
         async function loadHomePageData() {
             try {
                 const [stats, partners, features] = await Promise.all([
-                    fetch('/api/home-stats').then(r => r.json()).catch(() => ({})),
-                    fetch('/api/partners').then(r => r.json()).catch(() => []),
-                    fetch('/api/features').then(r => r.json()).catch(() => [])
+                    fetch('/api/home-stats').then(r => r.json()).catch(function() { return {}; }),
+                    fetch('/api/partners').then(r => r.json()).catch(function() { return []; }),
+                    fetch('/api/features').then(r => r.json()).catch(function() { return []; })
                 ]);
                 document.getElementById('statDrones').value = stats.dronesSold || '500+';
                 document.getElementById('statRating').value = stats.rating || '4.9';
@@ -553,10 +530,10 @@
         async function loadAboutPageData() {
             try {
                 const [stats, features, partners, hours] = await Promise.all([
-                    fetch('/api/home-stats').then(r => r.json()).catch(() => ({})),
-                    fetch('/api/features').then(r => r.json()).catch(() => []),
-                    fetch('/api/partners').then(r => r.json()).catch(() => []),
-                    fetch('/api/work-hours').then(r => r.json()).catch(() => ({}))
+                    fetch('/api/home-stats').then(r => r.json()).catch(function() { return {}; }),
+                    fetch('/api/features').then(r => r.json()).catch(function() { return []; }),
+                    fetch('/api/partners').then(r => r.json()).catch(function() { return []; }),
+                    fetch('/api/work-hours').then(r => r.json()).catch(function() { return {}; })
                 ]);
                 document.getElementById('aboutStat1Value').value = stats.dronesSold || '500+';
                 document.getElementById('aboutStat2Value').value = stats.rating || '4.9';
@@ -574,35 +551,25 @@
             const c = document.getElementById('homeFeaturesContainer');
             if (!c) return;
             if (!features || !features.length) { c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг</p>'; return; }
-            c.innerHTML = features.map(f => `
-                <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
-                    <input type="text" value="${f.icon || 'fa-star'}" class="home-feature-icon">
-                    <input type="text" value="${f.title || ''}" class="home-feature-title">
-                    <input type="text" value="${f.desc || ''}" class="home-feature-desc">
-                    <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-                </div>
-            `).join('');
+            c.innerHTML = features.map(function(f) {
+                return '<div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;"><input type="text" value="' + (f.icon || 'fa-star') + '" class="home-feature-icon"><input type="text" value="' + (f.title || '') + '" class="home-feature-title"><input type="text" value="' + (f.desc || '') + '" class="home-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
+            }).join('');
         }
 
         function renderAboutFeaturesList(features) {
             const c = document.getElementById('aboutFeaturesContainer');
             if (!c) return;
             if (!features || !features.length) { c.innerHTML = '<p style="color:#777; text-align:center; padding:1rem;">Немає переваг</p>'; return; }
-            c.innerHTML = features.map(f => `
-                <div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;">
-                    <input type="text" value="${f.icon || 'fa-star'}" class="about-feature-icon">
-                    <input type="text" value="${f.title || ''}" class="about-feature-title">
-                    <input type="text" value="${f.desc || ''}" class="about-feature-desc">
-                    <button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-                </div>
-            `).join('');
+            c.innerHTML = features.map(function(f) {
+                return '<div style="display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;"><input type="text" value="' + (f.icon || 'fa-star') + '" class="about-feature-icon"><input type="text" value="' + (f.title || '') + '" class="about-feature-title"><input type="text" value="' + (f.desc || '') + '" class="about-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
+            }).join('');
         }
 
         function addHomeFeatureField() {
             const c = document.getElementById('homeFeaturesContainer');
             const d = document.createElement('div');
             d.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
-            d.innerHTML = `<input type="text" value="fa-star" class="home-feature-icon"><input type="text" placeholder="Заголовок" class="home-feature-title"><input type="text" placeholder="Опис" class="home-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            d.innerHTML = '<input type="text" value="fa-star" class="home-feature-icon"><input type="text" placeholder="Заголовок" class="home-feature-title"><input type="text" placeholder="Опис" class="home-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
             c.appendChild(d);
         }
 
@@ -610,7 +577,7 @@
             const c = document.getElementById('aboutFeaturesContainer');
             const d = document.createElement('div');
             d.style.cssText = 'display:grid; grid-template-columns:1fr 2fr 3fr 40px; gap:0.5rem; margin-bottom:0.5rem;';
-            d.innerHTML = `<input type="text" value="fa-star" class="about-feature-icon"><input type="text" placeholder="Заголовок" class="about-feature-title"><input type="text" placeholder="Опис" class="about-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            d.innerHTML = '<input type="text" value="fa-star" class="about-feature-icon"><input type="text" placeholder="Заголовок" class="about-feature-title"><input type="text" placeholder="Опис" class="about-feature-desc"><button class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
             c.appendChild(d);
         }
 
@@ -626,14 +593,14 @@
         }
 
         async function saveHomePartners() {
-            const partners = document.getElementById('homePartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
+            const partners = document.getElementById('homePartnersInput').value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
             await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
             alert('✅ Збережено!');
         }
 
         async function saveHomeFeatures() {
             const features = [];
-            document.querySelectorAll('#homeFeaturesContainer > div').forEach(row => {
+            document.querySelectorAll('#homeFeaturesContainer > div').forEach(function(row) {
                 features.push({
                     icon: row.querySelector('.home-feature-icon')?.value || 'fa-star',
                     title: row.querySelector('.home-feature-title')?.value || '',
@@ -657,7 +624,7 @@
 
         async function saveAboutFeatures() {
             const features = [];
-            document.querySelectorAll('#aboutFeaturesContainer > div').forEach(row => {
+            document.querySelectorAll('#aboutFeaturesContainer > div').forEach(function(row) {
                 features.push({
                     icon: row.querySelector('.about-feature-icon')?.value || 'fa-star',
                     title: row.querySelector('.about-feature-title')?.value || '',
@@ -669,7 +636,7 @@
         }
 
         async function saveAboutPartners() {
-            const partners = document.getElementById('aboutPartnersInput').value.split(',').map(s => s.trim()).filter(s => s);
+            const partners = document.getElementById('aboutPartnersInput').value.split(',').map(function(s) { return s.trim(); }).filter(function(s) { return s; });
             await fetch('/api/partners', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(partners) });
             alert('✅ Збережено!');
         }
@@ -688,68 +655,64 @@
         async function loadBanner() { try { const r = await fetch('/api/banner'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('currentBanner').src = u; document.getElementById('currentBanner').style.display = 'block'; document.getElementById('noBannerText').style.display = 'none'; } } } catch(e){} }
         async function loadBrandLogo() { try { const r = await fetch('/api/brand-logo'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('currentBrandLogo').src = u; document.getElementById('currentBrandLogo').style.display = 'block'; document.getElementById('noBrandLogoText').style.display = 'none'; } } } catch(e){} }
         async function loadBackground() { try { const r = await fetch('/api/background'); if(r.ok){ const u = await r.text(); if(u){ document.getElementById('currentBg').src = u; document.getElementById('currentBg').style.display = 'block'; document.getElementById('noBgText').style.display = 'none'; } } } catch(e){} }
-        async function loadReviews() { try { const r = await fetch('/api/reviews'); const rev = await r.json(); document.getElementById('reviewsListAdmin').innerHTML = rev.map(r => `<tr><td>${escapeHtml(r.author)}</td><td>${'★'.repeat(r.rating)}</td><td>${escapeHtml(r.text.substring(0,50))}</td><td>${new Date(r.date).toLocaleDateString()}</td><td><button class="delete-btn" data-id="${r.id}"><i class="fas fa-trash"></i></button></td>`).join(''); document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(b => b.addEventListener('click', () => deleteReview(b.getAttribute('data-id')))); } catch(e){} }
+        async function loadReviews() { try { const r = await fetch('/api/reviews'); const rev = await r.json(); document.getElementById('reviewsListAdmin').innerHTML = rev.map(function(r) { return '<tr><td>' + escapeHtml(r.author) + '</td><td>' + '★'.repeat(r.rating) + '</td><td>' + escapeHtml(r.text.substring(0,50)) + '</td><td>' + new Date(r.date).toLocaleDateString() + '</td><td><button class="delete-btn" data-id="' + r.id + '"><i class="fas fa-trash"></i></button></td>'; }).join(''); document.querySelectorAll('#reviewsListAdmin .delete-btn').forEach(function(b) { b.addEventListener('click', function() { deleteReview(b.getAttribute('data-id')); }); }); } catch(e){} }
 
         function parseContactInfo(t) { 
             const l = t.split('\n'); 
-            document.getElementById('contactPhone').value = l.find(x => x.includes('Телефон'))?.replace('Телефон:','').trim()||''; 
-            document.getElementById('contactEmail').value = l.find(x => x.includes('Email'))?.replace('Email:','').trim()||''; 
-            document.getElementById('contactSchedule').value = l.find(x => x.includes('Графік'))?.replace('Графік:','').trim()||''; 
-            document.getElementById('contactAddress').value = l.find(x => x.includes('Адреса'))?.replace('Адреса:','').trim()||''; 
+            document.getElementById('contactPhone').value = (l.find(function(x) { return x.includes('Телефон'); }) || '').replace('Телефон:','').trim(); 
+            document.getElementById('contactEmail').value = (l.find(function(x) { return x.includes('Email'); }) || '').replace('Email:','').trim(); 
+            document.getElementById('contactSchedule').value = (l.find(function(x) { return x.includes('Графік'); }) || '').replace('Графік:','').trim(); 
+            document.getElementById('contactAddress').value = (l.find(function(x) { return x.includes('Адреса'); }) || '').replace('Адреса:','').trim(); 
         }
 
-        function escapeHtml(s) { return s ? s.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
+        function escapeHtml(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
         function updateDashboard() {
-            document.getElementById('stats').innerHTML = `
-                <div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>${products.length}</p></div>
-                <div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>${categories.length}</p></div>
-                <div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>${orders.length}</p></div>
-            `;
-            document.getElementById('recentOrders').innerHTML = orders.slice(-5).reverse().map(o => { 
-                const p = products.find(p => p.id == o.productId); 
-                return `<tr><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${p?.price||0} грн</td><td>${new Date(o.date).toLocaleString()}</td></tr>`; 
+            document.getElementById('stats').innerHTML = '<div class="stat-card"><i class="fas fa-box"></i><h3>Товарів</h3><p>' + products.length + '</p></div><div class="stat-card"><i class="fas fa-tags"></i><h3>Категорій</h3><p>' + categories.length + '</p></div><div class="stat-card"><i class="fas fa-shopping-cart"></i><h3>Замовлень</h3><p>' + orders.length + '</p></div>';
+            document.getElementById('recentOrders').innerHTML = orders.slice(-5).reverse().map(function(o) { 
+                const p = products.find(function(p) { return p.id == o.productId; }); 
+                return '<tr><td>#' + o.id + '</td><td>' + (p?.name||'?') + '</td><td>' + o.name + '</td><td>' + (p?.price||0) + ' грн</td><td>' + new Date(o.date).toLocaleString() + '</td></tr>'; 
             }).join('');
         }
 
         function updateCategoriesList() {
-            document.getElementById('categoriesList').innerHTML = categories.map(c => `<tr><td>${c}</td><td>${products.filter(p => p.category === c).length}</td><td><button class="delete-btn" data-cat="${c}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            document.querySelectorAll('#categoriesList .delete-btn').forEach(b => b.addEventListener('click', () => deleteCategory(b.getAttribute('data-cat'))));
+            document.getElementById('categoriesList').innerHTML = categories.map(function(c) { return '<tr><td>' + c + '</td><td>' + products.filter(function(p) { return p.category === c; }).length + '</td><td><button class="delete-btn" data-cat="' + c + '"><i class="fas fa-trash"></i></button></td></tr>'; }).join('');
+            document.querySelectorAll('#categoriesList .delete-btn').forEach(function(b) { b.addEventListener('click', function() { deleteCategory(b.getAttribute('data-cat')); }); });
         }
 
         async function addCategory() { const c = document.getElementById('newCategory').value.trim(); if(!c) return alert('Введіть назву'); await fetch('/api/categories',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:c})}); document.getElementById('newCategory').value = ''; loadData(); }
-        async function deleteCategory(c) { if(!confirm('Видалити?')) return; await fetch(`/api/categories/${encodeURIComponent(c)}`,{method:'DELETE'}); loadData(); }
+        async function deleteCategory(c) { if(!confirm('Видалити?')) return; await fetch('/api/categories/' + encodeURIComponent(c),{method:'DELETE'}); loadData(); }
 
-        function updateCategorySelect() { document.getElementById('productCategory').innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join(''); }
+        function updateCategorySelect() { document.getElementById('productCategory').innerHTML = categories.map(function(c) { return '<option value="' + c + '">' + c + '</option>'; }).join(''); }
 
         function updateCategoryTabs() {
-            let h = `<button class="category-tab ${currentCategory==='all'?'active':''}" data-cat="all">Всі</button>`;
-            categories.forEach(c => h += `<button class="category-tab ${currentCategory===c?'active':''}" data-cat="${c}">${c}</button>`);
+            let h = '<button class="category-tab ' + (currentCategory==='all'?'active':'') + '" data-cat="all">Всі</button>';
+            categories.forEach(function(c) { h += '<button class="category-tab ' + (currentCategory===c?'active':'') + '" data-cat="' + c + '">' + c + '</button>'; });
             document.getElementById('categoryTabs').innerHTML = h;
-            document.querySelectorAll('#categoryTabs .category-tab').forEach(t => t.addEventListener('click', () => { currentCategory = t.getAttribute('data-cat'); updateCategoryTabs(); updateProductsList(); }));
+            document.querySelectorAll('#categoryTabs .category-tab').forEach(function(t) { t.addEventListener('click', function() { currentCategory = t.getAttribute('data-cat'); updateCategoryTabs(); updateProductsList(); }); });
         }
 
         function updateProductsList() {
-            const f = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
-            document.getElementById('productsList').innerHTML = f.map(p => `<tr><td><img src="${p.image||'https://via.placeholder.com/50'}" class="table-img"></td><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td><td>${p.price} грн</td><td>${p.gallery?.length||0} фото</td><td class="action-btns"><button class="edit-btn" data-id="${p.id}"><i class="fas fa-edit"></i></button><button class="delete-btn" data-id="${p.id}"><i class="fas fa-trash"></i></button></td></tr>`).join('');
-            document.querySelectorAll('#productsList .edit-btn').forEach(b => b.addEventListener('click', () => editProduct(b.getAttribute('data-id'))));
-            document.querySelectorAll('#productsList .delete-btn').forEach(b => b.addEventListener('click', () => deleteProduct(b.getAttribute('data-id'))));
+            const f = currentCategory === 'all' ? products : products.filter(function(p) { return p.category === currentCategory; });
+            document.getElementById('productsList').innerHTML = f.map(function(p) { return '<tr><td><img src="' + (p.image||'https://via.placeholder.com/50') + '" class="table-img"></td><td>' + escapeHtml(p.name) + '</td><td>' + escapeHtml(p.category) + '</td><td>' + p.price + ' грн</td><td>' + (p.gallery?.length||0) + ' фото</td><td class="action-btns"><button class="edit-btn" data-id="' + p.id + '"><i class="fas fa-edit"></i></button><button class="delete-btn" data-id="' + p.id + '"><i class="fas fa-trash"></i></button></td></tr>'; }).join('');
+            document.querySelectorAll('#productsList .edit-btn').forEach(function(b) { b.addEventListener('click', function() { editProduct(b.getAttribute('data-id')); }); });
+            document.querySelectorAll('#productsList .delete-btn').forEach(function(b) { b.addEventListener('click', function() { deleteProduct(b.getAttribute('data-id')); }); });
         }
 
         function addVariantField() {
             const d = document.createElement('div'); d.className = 'variant-row';
-            d.innerHTML = `<input type="text" placeholder="Назва варіанту" class="variant-name"><input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            d.innerHTML = '<input type="text" placeholder="Назва варіанту" class="variant-name"><input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
             document.getElementById('variantsContainer').appendChild(d);
         }
 
         function initGalleryUpload() {
             const area = document.getElementById('galleryUploadArea'), inp = document.getElementById('galleryInput');
             if (!area) return;
-            area.addEventListener('click', () => inp.click());
-            area.addEventListener('dragover', e => { e.preventDefault(); area.style.borderColor = '#5a5a5a'; });
-            area.addEventListener('dragleave', () => area.style.borderColor = '#333');
-            area.addEventListener('drop', e => { e.preventDefault(); area.style.borderColor = '#333'; handleGalleryFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))); });
-            inp.addEventListener('change', e => { handleGalleryFiles(Array.from(e.target.files).filter(f => f.type.startsWith('image/'))); inp.value = ''; });
+            area.addEventListener('click', function() { inp.click(); });
+            area.addEventListener('dragover', function(e) { e.preventDefault(); area.style.borderColor = '#5a5a5a'; });
+            area.addEventListener('dragleave', function() { area.style.borderColor = '#333'; });
+            area.addEventListener('drop', function(e) { e.preventDefault(); area.style.borderColor = '#333'; handleGalleryFiles(Array.from(e.dataTransfer.files).filter(function(f) { return f.type.startsWith('image/'); })); });
+            inp.addEventListener('change', function(e) { handleGalleryFiles(Array.from(e.target.files).filter(function(f) { return f.type.startsWith('image/'); })); inp.value = ''; });
         }
 
         async function handleGalleryFiles(files) {
@@ -761,14 +724,14 @@
         function renderGallery() {
             const g = document.getElementById('galleryGrid');
             if(!galleryImages.length) { g.innerHTML = '<p style="color:#777;text-align:center;grid-column:1/-1;">Немає фото</p>'; document.getElementById('galleryCount').textContent = '0 фото'; return; }
-            g.innerHTML = galleryImages.map((img, i) => `<div class="gallery-item"><img src="${img.url}"><div class="gallery-item-actions"><button class="gallery-delete" onclick="removeGalleryImage(${i})"><i class="fas fa-trash"></i></button></div></div>`).join('');
-            document.getElementById('galleryCount').textContent = `${galleryImages.length} фото`;
+            g.innerHTML = galleryImages.map(function(img, i) { return '<div class="gallery-item"><img src="' + img.url + '"><div class="gallery-item-actions"><button class="gallery-delete" onclick="removeGalleryImage(' + i + ')"><i class="fas fa-trash"></i></button></div></div>'; }).join('');
+            document.getElementById('galleryCount').textContent = galleryImages.length + ' фото';
         }
 
         window.removeGalleryImage = function(i) { galleryImages.splice(i, 1); renderGallery(); };
 
         function editProduct(id) {
-            const p = products.find(p => p.id == id); if(!p) return;
+            const p = products.find(function(p) { return p.id == id; }); if(!p) return;
             editProductId = id;
             document.getElementById('productCategory').value = p.category;
             document.getElementById('productName').value = p.name;
@@ -778,22 +741,18 @@
             
             const vc = document.getElementById('variantsContainer'); vc.innerHTML = '';
             if (p.variants && p.variants.length) {
-                p.variants.forEach(v => {
+                p.variants.forEach(function(v) {
                     const d = document.createElement('div'); d.className = 'variant-row';
                     if (typeof v === 'object' && v.name) {
-                        d.innerHTML = `<input type="text" value="${v.name}" class="variant-name"><input type="number" value="${v.price || ''}" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                        d.innerHTML = '<input type="text" value="' + v.name + '" class="variant-name"><input type="number" value="' + (v.price || '') + '" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
                     } else {
-                        d.innerHTML = `<input type="text" value="${v}" class="variant-name"><input type="number" placeholder="Ціна" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+                        d.innerHTML = '<input type="text" value="' + v + '" class="variant-name"><input type="number" placeholder="Ціна" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>';
                     }
                     vc.appendChild(d);
                 });
-            } else {
-                const d = document.createElement('div'); d.className = 'variant-row';
-                d.innerHTML = `<input type="text" value="Стандарт" class="variant-name"><input type="number" placeholder="Ціна" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-                vc.appendChild(d);
             }
             
-            galleryImages = (p.gallery || []).map(url => ({ id: Date.now()+Math.random(), url }));
+            galleryImages = (p.gallery || []).map(function(url) { return { id: Date.now()+Math.random(), url: url }; });
             renderGallery();
             document.getElementById('productFormTitle').innerHTML = '<i class="fas fa-edit"></i> Редагувати товар';
             document.getElementById('submitProductBtn').innerHTML = 'Оновити товар';
@@ -806,19 +765,19 @@
             document.getElementById('submitProductBtn').innerHTML = 'Додати товар';
             document.getElementById('cancelEditBtn').style.display = 'none';
             document.getElementById('productName').value = document.getElementById('productPrice').value = document.getElementById('productDescription').value = document.getElementById('productSpecs').value = '';
-            document.getElementById('variantsContainer').innerHTML = `<div class="variant-row"><input type="text" placeholder="Назва варіанту" class="variant-name"><input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>`;
+            document.getElementById('variantsContainer').innerHTML = '<div class="variant-row"><input type="text" placeholder="Назва варіанту" class="variant-name"><input type="number" placeholder="Ціна (грн)" class="variant-price" step="0.01"><button type="button" class="remove-btn" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>';
             renderGallery();
         }
 
         async function submitProduct() {
-            const url = editProductId ? `/api/products/${editProductId}` : '/api/products';
+            const url = editProductId ? '/api/products/' + editProductId : '/api/products';
             const method = editProductId ? 'PUT' : 'POST';
             try {
                 const variants = []; 
-                document.querySelectorAll('#variantsContainer .variant-row').forEach(row => {
+                document.querySelectorAll('#variantsContainer .variant-row').forEach(function(row) {
                     const name = row.querySelector('.variant-name')?.value.trim();
                     const price = row.querySelector('.variant-price')?.value.trim();
-                    if (name) variants.push({ name, price: price ? parseFloat(price) : null });
+                    if (name) variants.push({ name: name, price: price ? parseFloat(price) : null });
                 });
                 
                 let img = null; const f = document.getElementById('productImage').files[0]; if(f) img = await fileToBase64(f);
@@ -830,40 +789,30 @@
                     specs: document.getElementById('productSpecs').value,
                     variants: variants.length ? variants : [{ name: 'Стандарт', price: null }],
                     image: img,
-                    gallery: galleryImages.map(g => g.url)
+                    gallery: galleryImages.map(function(g) { return g.url; })
                 };
                 if(!data.name || !data.category || !data.price) return alert('Заповніть обов\'язкові поля');
-                const res = await fetch(url, { method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
+                const res = await fetch(url, { method: method, headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) });
                 if(res.ok) { alert(editProductId?'Оновлено':'Додано'); cancelEdit(); loadData(); }
                 else { const e = await res.json(); alert(e.error || 'Помилка'); }
             } catch(e) { alert('Помилка'); }
         }
 
-        async function deleteProduct(id) { if(!confirm('Видалити?')) return; await fetch(`/api/products/${id}`,{method:'DELETE'}); loadData(); }
+        async function deleteProduct(id) { if(!confirm('Видалити?')) return; await fetch('/api/products/' + id,{method:'DELETE'}); loadData(); }
 
         function updateOrdersList() { 
-            document.getElementById('ordersList').innerHTML = orders.sort((a,b) => new Date(b.date) - new Date(a.date)).map(o => { 
-                const p = products.find(p => p.id == o.productId); 
-                return `<tr><td>#${o.id}</td><td>${p?.name||'?'}</td><td>${o.name}</td><td>${o.phone}</td><td>${o.variant||'-'}</td><td>${new Date(o.date).toLocaleString()}</td><td><span class="badge">нове</span></td></tr>`; 
+            document.getElementById('ordersList').innerHTML = orders.sort(function(a,b) { return new Date(b.date) - new Date(a.date); }).map(function(o) { 
+                const p = products.find(function(p) { return p.id == o.productId; }); 
+                return '<tr><td>#' + o.id + '</td><td>' + (p?.name||'?') + '</td><td>' + o.name + '</td><td>' + o.phone + '</td><td>' + (o.variant||'-') + '</td><td>' + new Date(o.date).toLocaleString() + '</td><td><span class="badge">нове</span></td></tr>'; 
             }).join(''); 
         }
 
         function updateSocialList() {
-            document.getElementById('socialList').innerHTML = social.map(s => `
-                <tr>
-                    <td><i class="${s.icon}" style="font-size:1.5rem;"></i></td>
-                    <td>${s.platform}</td>
-                    <td>${s.name}</td>
-                    <td><a href="${s.url}" target="_blank">${s.url.substring(0,25)}...</a></td>
-                    <td>${s.active ? '<span class="badge" style="background:#2e7a5e;">Активна</span>' : '<span class="badge" style="background:#7a2e2e;">Неактивна</span>'}</td>
-                    <td class="action-btns">
-                        <button class="edit-btn" data-platform="${s.platform}"><i class="fas fa-edit"></i></button>
-                        <button class="delete-btn" data-platform="${s.platform}"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-            document.querySelectorAll('#socialList .edit-btn').forEach(b => b.addEventListener('click', () => openEditSocial(b.getAttribute('data-platform'))));
-            document.querySelectorAll('#socialList .delete-btn').forEach(b => b.addEventListener('click', () => deleteSocial(b.getAttribute('data-platform'))));
+            document.getElementById('socialList').innerHTML = social.map(function(s) {
+                return '<tr><td><i class="' + s.icon + '" style="font-size:1.5rem;"></i></td><td>' + s.platform + '</td><td>' + s.name + '</td><td><a href="' + s.url + '" target="_blank">' + s.url.substring(0,25) + '...</a></td><td>' + (s.active ? '<span class="badge" style="background:#2e7a5e;">Активна</span>' : '<span class="badge" style="background:#7a2e2e;">Неактивна</span>') + '</td><td class="action-btns"><button class="edit-btn" data-platform="' + s.platform + '"><i class="fas fa-edit"></i></button><button class="delete-btn" data-platform="' + s.platform + '"><i class="fas fa-trash"></i></button></td></tr>';
+            }).join('');
+            document.querySelectorAll('#socialList .edit-btn').forEach(function(b) { b.addEventListener('click', function() { openEditSocial(b.getAttribute('data-platform')); }); });
+            document.querySelectorAll('#socialList .delete-btn').forEach(function(b) { b.addEventListener('click', function() { deleteSocial(b.getAttribute('data-platform')); }); });
         }
 
         async function addSocial() {
@@ -884,7 +833,7 @@
         }
 
         function openEditSocial(p) { 
-            const s = social.find(x => x.platform === p); 
+            const s = social.find(function(x) { return x.platform === p; }); 
             if(s) { 
                 document.getElementById('editSocialName').value = s.name; 
                 document.getElementById('editSocialUrl').value = s.url; 
@@ -898,18 +847,19 @@
         async function updateSocial() {
             if(!currentEditPlatform) return;
             const n = document.getElementById('editSocialName').value, u = document.getElementById('editSocialUrl').value, i = document.getElementById('editSocialIcon').value, a = document.getElementById('editSocialActive').checked;
-            const upd = social.map(s => s.platform === currentEditPlatform ? {...s, name:n, url:u, icon:i, active:a} : s);
+            const upd = social.map(function(s) { return s.platform === currentEditPlatform ? {...s, name:n, url:u, icon:i, active:a} : s; });
             await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(upd)});
             closeModal('editSocialModal'); loadData(); alert('✅ Оновлено!');
         }
 
-        async function deleteSocial(p) { if(!confirm('Видалити?')) return; await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(social.filter(s => s.platform !== p))}); loadData(); }
+        async function deleteSocial(p) { if(!confirm('Видалити?')) return; await fetch('/api/social',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(social.filter(function(s) { return s.platform !== p; }))}); loadData(); }
 
         async function saveAbout() { await fetch('/api/about',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutText').value})}); alert('✅ Збережено'); }
+        async function saveAboutSubtitle() { await fetch('/api/about-subtitle',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:document.getElementById('aboutSubtitle').value})}); alert('✅ Підзаголовок збережено!'); }
         async function saveContact() {
             const parts = []; 
             const ph = document.getElementById('contactPhone').value, em = document.getElementById('contactEmail').value, sc = document.getElementById('contactSchedule').value, ad = document.getElementById('contactAddress').value;
-            if(ph) parts.push(`Телефон: ${ph}`); if(em) parts.push(`Email: ${em}`); if(sc) parts.push(`Графік: ${sc}`); if(ad) parts.push(`Адреса: ${ad}`);
+            if(ph) parts.push('Телефон: ' + ph); if(em) parts.push('Email: ' + em); if(sc) parts.push('Графік: ' + sc); if(ad) parts.push('Адреса: ' + ad);
             await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:parts.join('\n')})}); alert('✅ Збережено');
         }
 
@@ -930,11 +880,11 @@
             else { const e = await res.json(); alert(e.error); }
         }
 
-        async function deleteReview(id) { await fetch(`/api/reviews/${id}`,{method:'DELETE'}); loadReviews(); }
+        async function deleteReview(id) { await fetch('/api/reviews/' + id,{method:'DELETE'}); loadReviews(); }
         function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         function initPreviewImages() {
-            ['productImage','logoFile','bannerFile','brandLogoFile','bgFile'].forEach(id => {
+            ['productImage','logoFile','bannerFile','brandLogoFile','bgFile'].forEach(function(id) {
                 const inp = document.getElementById(id); if(!inp) return;
                 inp.addEventListener('change', function(e) {
                     const reader = new FileReader(); 
